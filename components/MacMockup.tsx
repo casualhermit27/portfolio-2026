@@ -7,21 +7,22 @@ type MacMockupProps = {
 export default function MacMockup({ src, alt, empty = false }: MacMockupProps) {
   return (
     <div
-      className={`relative flex-shrink-0 rounded-[10px] overflow-hidden border transition-transform duration-300 ease-out hover:-translate-y-1.5 ${
-        empty
-          ? "border-[#D8D2CA] bg-[#F2EFE9]"
-          : "border-[#2A2A2A] bg-[#1A1A1A]"
-      }`}
-      style={{ width: "380px", height: "240px" }}
+      className="relative flex-shrink-0 rounded-[10px] overflow-hidden border transition-transform duration-300 ease-out hover:-translate-y-1.5"
+      style={{
+        width: "clamp(300px, 48vw, 680px)",
+        height: "clamp(190px, 30vw, 430px)",
+        borderColor: empty ? "var(--logo-border-empty)" : "#2A2A2A",
+        background: empty ? "var(--logo-bg-empty)" : "#1A1A1A",
+      }}
     >
       {/* Title bar */}
       <div
-        className={`flex items-center px-3 border-b ${
-          empty
-            ? "bg-[#EAE6E0] border-[#D8D2CA]"
-            : "bg-[#2A2A2A] border-[#3A3A3A]"
-        }`}
-        style={{ height: "28px" }}
+        className="flex items-center px-3 border-b"
+        style={{
+          height: "28px",
+          background: empty ? "var(--logo-bg-empty)" : "#2A2A2A",
+          borderColor: empty ? "var(--logo-border-empty)" : "#3A3A3A",
+        }}
       >
         {/* Traffic lights */}
         <div className="flex items-center gap-[6px]">
@@ -30,7 +31,7 @@ export default function MacMockup({ src, alt, empty = false }: MacMockupProps) {
             style={{
               width: "10px",
               height: "10px",
-              background: empty ? "#D8D2CA" : "#FF5F57",
+              background: empty ? "var(--logo-border-empty)" : "#FF5F57",
             }}
           />
           <div
@@ -38,7 +39,7 @@ export default function MacMockup({ src, alt, empty = false }: MacMockupProps) {
             style={{
               width: "10px",
               height: "10px",
-              background: empty ? "#D8D2CA" : "#FEBC2E",
+              background: empty ? "var(--logo-border-empty)" : "#FEBC2E",
             }}
           />
           <div
@@ -46,7 +47,7 @@ export default function MacMockup({ src, alt, empty = false }: MacMockupProps) {
             style={{
               width: "10px",
               height: "10px",
-              background: empty ? "#D8D2CA" : "#28C840",
+              background: empty ? "var(--logo-border-empty)" : "#28C840",
             }}
           />
         </div>
@@ -64,7 +65,10 @@ export default function MacMockup({ src, alt, empty = false }: MacMockupProps) {
         />
       ) : (
         <div className="flex items-end justify-center pb-7" style={{ height: "calc(100% - 28px)" }}>
-          <span className="text-[10px] tracking-[0.18em] uppercase text-[#C4BDB5]">
+          <span
+            className="text-[10px] tracking-[0.18em] uppercase"
+            style={{ color: "var(--text-muted)" }}
+          >
             soon
           </span>
         </div>

@@ -13,6 +13,48 @@ body {
   height: 100%;
 }
 
+/* ── Design tokens ── */
+:root {
+  --bg: #F8F6F2;
+  --bg-sticky: #F8F6F2;
+  --border: #E2DDD5;
+  --border-active: #D4CFC7;
+  --border-pill: #DDD8CF;
+  --pill-bg: #E8E3DB;
+  --text-primary: #1C1C1C;
+  --text-secondary: #A09A93;
+  --text-muted: #B8B1A9;
+  --text-faint: #C0BAB0;
+  --nav-hover: #6B6560;
+  --logo-bg-empty: #F2EFE9;
+  --logo-border-empty: #D8D2CA;
+  --section-divider: #E2DDD5;
+}
+
+html.dark {
+  --bg: #111110;
+  --bg-sticky: #111110;
+  --border: #2A2826;
+  --border-active: #3A3733;
+  --border-pill: #333030;
+  --pill-bg: #1E1D1B;
+  --text-primary: #F0EDE8;
+  --text-secondary: #7A746E;
+  --text-muted: #5A5550;
+  --text-faint: #4A4540;
+  --nav-hover: #A09A93;
+  --logo-bg-empty: #1A1917;
+  --logo-border-empty: #2E2C29;
+  --section-divider: #242220;
+}
+
+/* Global token application */
+body {
+  background-color: var(--bg);
+  color: var(--text-primary);
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 0px;
@@ -22,4 +64,19 @@ body {
 ::selection {
   background: #DDD8CD;
   color: #1C1C1C;
+}
+
+html.dark ::selection {
+  background: #2E2C29;
+  color: #F0EDE8;
+}
+
+/* Hide scrollbar for horizontal-scroll nav */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }

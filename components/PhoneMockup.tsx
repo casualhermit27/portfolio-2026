@@ -7,12 +7,16 @@ type PhoneMockupProps = {
 export default function PhoneMockup({ src, alt, empty = false }: PhoneMockupProps) {
   return (
     <div
-      className={`relative flex-shrink-0 rounded-[36px] overflow-hidden border transition-transform duration-300 ease-out hover:-translate-y-1.5 ${
-        empty
-          ? "border-[#D8D2CA] bg-[#F2EFE9]"
-          : "border-[#2A2A2A] bg-[#0A0A0A]"
-      }`}
-      style={{ width: "220px", height: "476px" }}
+      className={`relative flex-shrink-0 overflow-hidden border transition-transform duration-300 ease-out hover:-translate-y-1.5
+        w-[150px] h-[325px] rounded-[24px]
+        sm:w-[170px] sm:h-[368px] sm:rounded-[28px]
+        md:w-[200px] md:h-[433px] md:rounded-[32px]
+        lg:w-[230px] lg:h-[498px] lg:rounded-[36px]
+        xl:w-[260px] xl:h-[563px] xl:rounded-[40px]`}
+      style={{
+        borderColor: empty ? "var(--logo-border-empty)" : "#2A2A2A",
+        background: empty ? "var(--logo-bg-empty)" : "#0A0A0A",
+      }}
     >
       {/* Screen content */}
       {!empty && src ? (
@@ -25,7 +29,10 @@ export default function PhoneMockup({ src, alt, empty = false }: PhoneMockupProp
         />
       ) : (
         <div className="w-full h-full flex flex-col items-center justify-end pb-9">
-          <span className="text-[10px] tracking-[0.18em] uppercase text-[#C4BDB5]">
+          <span
+            className="text-[10px] tracking-[0.18em] uppercase"
+            style={{ color: "var(--text-muted)" }}
+          >
             soon
           </span>
         </div>
