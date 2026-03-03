@@ -28,6 +28,14 @@ const apps: App[] = [
     ],
   },
   {
+    id: "can",
+    name: "can",
+    tagline: "convert anything now — drop to dock",
+    logo: "/logos/can 2.jpg",
+    platform: "mac",
+    screens: [],
+  },
+  {
     id: "boba",
     name: "boba",
     tagline: "something is brewing",
@@ -49,14 +57,6 @@ const apps: App[] = [
     tagline: "step tracking & habit streaks",
     logo: "/logos/plod logo.png",
     platform: "ios",
-    screens: [],
-  },
-  {
-    id: "can",
-    name: "can",
-    tagline: "convert anything now — drop to dock",
-    logo: "/logos/can 2.jpg",
-    platform: "mac",
     screens: [],
   },
 ];
@@ -115,14 +115,26 @@ export default function Home() {
   useEffect(() => {
     const onScroll = () => {
       if (isScrollingRef.current) return;
+      const lastAppId = apps[apps.length - 1].id;
 
-      // If at (or within 4px of) bottom of page, activate last section
+      // If near bottom, activate last section.
       const atBottom =
-        window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4;
+        window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 24;
 
       if (atBottom) {
-        setActiveApp(apps[apps.length - 1].id);
+        setActiveApp((prev) => (prev === lastAppId ? prev : lastAppId));
         return;
+      }
+
+      // Short final sections may never reach the marker line, so switch once
+      // the final section header is clearly within the viewport.
+      const lastSection = document.getElementById(`section-${lastAppId}`);
+      if (lastSection) {
+        const lastTop = lastSection.getBoundingClientRect().top;
+        if (lastTop <= window.innerHeight * 0.65) {
+          setActiveApp((prev) => (prev === lastAppId ? prev : lastAppId));
+          return;
+        }
       }
 
       const scrollY = window.scrollY + STICKY_HEIGHT + window.innerHeight * 0.25;
@@ -136,7 +148,7 @@ export default function Home() {
         }
       }
 
-      setActiveApp(current);
+      setActiveApp((prev) => (prev === current ? prev : current));
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -149,7 +161,10 @@ export default function Home() {
     isScrollingRef.current = true;
     setActiveApp(id);
     const el = document.getElementById(`section-${id}`);
-    if (!el) return;
+    if (!el) {
+      isScrollingRef.current = false;
+      return;
+    }
     const top = el.getBoundingClientRect().top + window.scrollY - STICKY_HEIGHT;
     window.scrollTo({ top, behavior: "smooth" });
 
