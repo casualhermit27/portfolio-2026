@@ -85,16 +85,14 @@ export default function SubdomainLanding({
       buttonBorder: "#EAC7D9",
       buttonText: "#5D4757",
       buttonHover: "#F4D3E3",
-      glow: "rgba(243, 205, 225, 0.55)",
       dot: "#E3A9C5",
     }
     : {
-      buttonBg: "#DDF3E8",
-      buttonBorder: "#BFDCCB",
-      buttonText: "#3F5950",
-      buttonHover: "#D1EBDE",
-      glow: "rgba(182, 229, 207, 0.5)",
-      dot: "#8FC5AA",
+      buttonBg: "#DDEBFB",
+      buttonBorder: "#C1D7F4",
+      buttonText: "#3F5574",
+      buttonHover: "#D1E3F8",
+      dot: "#8FB1E0",
     };
 
   useEffect(() => {
@@ -151,12 +149,7 @@ export default function SubdomainLanding({
           </button>
         </div>
 
-        <div className="relative">
-          <div
-            className="pointer-events-none absolute left-1/2 top-10 h-28 w-[72%] -translate-x-1/2 rounded-full blur-3xl"
-            style={{ background: accent.glow }}
-          />
-
+        <div>
           {platform === "iOS" ? (
             <div className="overflow-x-auto scrollbar-hide pb-2">
               <div className="mb-3 text-center">
@@ -249,11 +242,15 @@ export default function SubdomainLanding({
             Features
           </p>
 
-          <ul className="mx-auto max-w-3xl space-y-2.5 text-left">
+          <ul className="mx-auto max-w-3xl space-y-2.5 text-center">
             {bullets.map((item) => (
-              <li key={item} className="flex items-start gap-3 text-[14px] leading-relaxed sm:text-[15px]" style={{ color: "var(--text-primary)" }}>
+              <li
+                key={item}
+                className="flex items-center justify-center gap-2.5 text-[14px] leading-relaxed sm:text-[15px]"
+                style={{ color: "var(--text-primary)" }}
+              >
                 <span
-                  className="mt-1 inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-md border"
+                  className="inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-md border"
                   style={{ borderColor: "var(--border)", background: "var(--pill-bg)", color: accent.dot }}
                 >
                   <DotIcon />

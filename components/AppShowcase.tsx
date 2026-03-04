@@ -51,11 +51,11 @@ export default function AppShowcase({ app }: AppShowcaseProps) {
       hoverBorder: "#DDB4CA",
     }
     : {
-      bg: "#DEF0E7",
-      border: "#C4DECF",
-      text: "#445852",
-      hoverBg: "#D2EADD",
-      hoverBorder: "#B2D2C1",
+      bg: "#DDEBFB",
+      border: "#C1D7F4",
+      text: "#3F5574",
+      hoverBg: "#D1E3F8",
+      hoverBorder: "#AFCBF0",
     };
   const ctaVariants = {
     rest: {
