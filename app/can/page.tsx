@@ -16,10 +16,10 @@ export default function CanPage() {
       logoSrc="/logos/can 2.jpg"
       screens={[]}
       bullets={[
-        "Drag, drop, and convert with zero friction",
-        "Fast local processing with a minimal interface",
-        "Designed for repeat workflows on macOS",
-        "Public release details coming soon",
+        "Drag in files and convert in one clean flow",
+        "Optimized for repetitive desktop workflows on macOS",
+        "Fast local processing with a distraction-free interface",
+        "Launch details and release build coming soon",
       ]}
     />
   );
