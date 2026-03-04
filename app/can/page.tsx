@@ -15,13 +15,13 @@ export default function CanPage() {
       logoSrc="/logos/can 2.jpg"
       screens={[]}
       bullets={[
-        "Drop files and convert in one clean focused flow",
-        "Built for repeat desktop workflows with almost zero setup",
-        "Local-first processing for speed and privacy",
-        "Native macOS interactions with keyboard-friendly controls",
-        "Keeps your desk workflow fast without opening heavy tools",
-        "Built to feel lightweight while handling practical conversions",
-        "Ready for power users who want speed with visual simplicity",
+        "Drop files and convert in **one clean flow**",
+        "Built for **repeat desktop workflows** with almost zero setup",
+        "**Local-first processing** for speed and privacy",
+        "Native macOS interactions with **keyboard-friendly controls**",
+        "Keeps your desk workflow fast without opening **heavy tools**",
+        "Built to feel lightweight while handling **practical conversions**",
+        "Ready for power users who want **speed with simplicity**",
       ]}
     />
   );

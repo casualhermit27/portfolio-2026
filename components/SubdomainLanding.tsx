@@ -17,6 +17,23 @@ type SubdomainLandingProps = {
   builtByUrl?: string;
 };
 
+function renderFeatureText(text: string, highlightBg: string, highlightText: string) {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g).filter(Boolean);
+  return parts.map((part, index) => {
+    const isHighlight = part.startsWith("**") && part.endsWith("**");
+    if (!isHighlight) return <span key={`${part}-${index}`}>{part}</span>;
+    return (
+      <span
+        key={`${part}-${index}`}
+        className="rounded-[6px] px-1.5 py-0.5"
+        style={{ background: highlightBg, color: highlightText }}
+      >
+        {part.slice(2, -2)}
+      </span>
+    );
+  });
+}
+
 function SunIcon() {
   return (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -86,6 +103,8 @@ export default function SubdomainLanding({
       buttonText: "#5D4757",
       buttonHover: "#F4D3E3",
       dot: "#E3A9C5",
+      highlightBg: "#F5D8E6",
+      highlightText: "#5D4757",
     }
     : {
       buttonBg: "#DDEBFB",
@@ -93,6 +112,8 @@ export default function SubdomainLanding({
       buttonText: "#3F5574",
       buttonHover: "#D1E3F8",
       dot: "#8FB1E0",
+      highlightBg: "#D5E6FB",
+      highlightText: "#3F5574",
     };
 
   useEffect(() => {
@@ -255,7 +276,7 @@ export default function SubdomainLanding({
                 >
                   <DotIcon />
                 </span>
-                <span>{item}</span>
+                <span>{renderFeatureText(item, accent.highlightBg, accent.highlightText)}</span>
               </li>
             ))}
           </ul>
