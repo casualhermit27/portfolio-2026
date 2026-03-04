@@ -26,6 +26,7 @@ export default function MochiPage() {
         "Minimal interface designed for clarity, not noise",
         "Thoughtful weekly history that makes trends easy to notice",
         "Private by default with a focused single-user experience",
+        "Built to feel light and fast across everyday iPhone use",
       ]}
       ctaUrl="https://apps.apple.com/us/app/mochi-spent-tracker/id6758880826"
       ctaLabel="Download"

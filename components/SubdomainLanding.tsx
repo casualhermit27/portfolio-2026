@@ -13,6 +13,8 @@ type SubdomainLandingProps = {
   ctaUrl?: string;
   ctaLabel?: string;
   ctaHint?: string;
+  builtByName?: string;
+  builtByUrl?: string;
 };
 
 function SunIcon() {
@@ -47,6 +49,19 @@ function AppleIcon() {
   );
 }
 
+function MailIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="m3 7 9 6 9-6" />
+    </svg>
+  );
+}
+
+function DotIcon() {
+  return <span className="h-1.5 w-1.5 rounded-full bg-current" aria-hidden />;
+}
+
 export default function SubdomainLanding({
   name,
   description,
@@ -55,142 +70,174 @@ export default function SubdomainLanding({
   screens = [],
   bullets,
   ctaUrl,
-  ctaLabel = "View on App Store",
+  ctaLabel = "Download",
   ctaHint,
+  builtByName = "Harsha Chaganti",
+  builtByUrl = "https://harshachaganti.com",
 }: SubdomainLandingProps) {
   const [dark, setDark] = useState(false);
+  const [email, setEmail] = useState("");
+  const [subscribed, setSubscribed] = useState(false);
+
+  const accent = platform === "iOS"
+    ? {
+      buttonBg: "#F9DFEA",
+      buttonBorder: "#EAC7D9",
+      buttonText: "#5D4757",
+      buttonHover: "#F4D3E3",
+      glow: "rgba(243, 205, 225, 0.55)",
+      dot: "#E3A9C5",
+    }
+    : {
+      buttonBg: "#DDF3E8",
+      buttonBorder: "#BFDCCB",
+      buttonText: "#3F5950",
+      buttonHover: "#D1EBDE",
+      glow: "rgba(182, 229, 207, 0.5)",
+      dot: "#8FC5AA",
+    };
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", dark);
   }, [dark]);
+
+  const onNewsletterSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!email.trim()) return;
+    setSubscribed(true);
+    setEmail("");
+  };
 
   return (
     <main
       className="min-h-screen transition-colors duration-300"
       style={{ background: "var(--bg)", color: "var(--text-primary)" }}
     >
-      <section className="mx-auto w-full max-w-6xl px-6 py-8 sm:px-10 sm:py-12">
-        <div className="relative mb-8 sm:mb-10">
+      <section className="mx-auto w-full max-w-[1600px] px-8 py-10 sm:px-14 md:px-24 lg:px-32 xl:px-40">
+        <div className="relative mb-10 sm:mb-12">
           <div className="mx-auto flex w-fit items-center gap-3">
             <div
-              className="h-11 w-11 overflow-hidden rounded-[12px] border"
+              className="h-12 w-12 overflow-hidden rounded-[13px] border"
               style={{ borderColor: "var(--border)" }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={logoSrc} alt={`${name} logo`} className="h-full w-full object-cover" />
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-[30px] font-light leading-none tracking-[-0.02em] lowercase sm:text-[36px]">
-                  {name}
-                </h1>
-                <span
-                  className="text-[9px] font-medium uppercase tracking-[0.1em] border rounded-full px-2.5 py-1"
-                  style={{ color: "var(--text-muted)", borderColor: "var(--border)" }}
-                >
-                  {platform}
-                </span>
-              </div>
+            <div className="flex items-center gap-2.5">
+              <h1 className="text-[32px] font-light leading-none tracking-[-0.02em] lowercase sm:text-[38px]">
+                {name}
+              </h1>
+              <span
+                className="text-[9px] font-medium uppercase tracking-[0.1em] border rounded-full px-2.5 py-1"
+                style={{ color: "var(--text-muted)", borderColor: "var(--border)" }}
+              >
+                {platform}
+              </span>
             </div>
           </div>
 
-          <div className="absolute right-0 top-1/2 flex -translate-y-1/2 items-center gap-2">
-            <button
-              onClick={() => setDark((d) => !d)}
-              className="inline-flex h-8 w-8 items-center justify-center rounded-full border transition-opacity duration-150 hover:opacity-80"
-              style={{
-                borderColor: "var(--border)",
-                background: "var(--pill-bg)",
-                color: "var(--text-secondary)",
-              }}
-              aria-label="Toggle theme"
-              title={dark ? "Switch to light mode" : "Switch to dark mode"}
-            >
-              {dark ? <SunIcon /> : <MoonIcon />}
-            </button>
-          </div>
+          <button
+            onClick={() => setDark((d) => !d)}
+            className="absolute right-0 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border transition-opacity duration-150 hover:opacity-80"
+            style={{
+              borderColor: "var(--border)",
+              background: "var(--pill-bg)",
+              color: "var(--text-secondary)",
+            }}
+            aria-label="Toggle theme"
+            title={dark ? "Switch to light mode" : "Switch to dark mode"}
+          >
+            {dark ? <SunIcon /> : <MoonIcon />}
+          </button>
         </div>
 
-        {platform === "iOS" ? (
-          <div className="overflow-x-auto scrollbar-hide">
-            <div className="mb-3 text-center">
-              <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>
-                Screens
-              </p>
+        <div className="relative">
+          <div
+            className="pointer-events-none absolute left-1/2 top-10 h-28 w-[72%] -translate-x-1/2 rounded-full blur-3xl"
+            style={{ background: accent.glow }}
+          />
+
+          {platform === "iOS" ? (
+            <div className="overflow-x-auto scrollbar-hide pb-2">
+              <div className="mb-3 text-center">
+                <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>
+                  Screens
+                </p>
+              </div>
+              <div className="flex w-max snap-x snap-mandatory items-start gap-4 px-1 mx-auto sm:gap-5 md:gap-6">
+                {screens.length > 0
+                  ? screens.map((src, i) => (
+                    <div
+                      key={src}
+                      className="snap-center flex-shrink-0 overflow-hidden rounded-[26px] border w-[176px] h-[381px] sm:w-[202px] sm:h-[437px] md:w-[228px] md:h-[494px] lg:w-[246px] lg:h-[533px]"
+                      style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={src}
+                        alt={`${name} screen ${i + 1}`}
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
+                  ))
+                  : (
+                    <div
+                      className="flex h-[381px] w-[176px] flex-shrink-0 items-end justify-center rounded-[26px] border pb-6 sm:h-[437px] sm:w-[202px] md:h-[494px] md:w-[228px] lg:h-[533px] lg:w-[246px]"
+                      style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
+                    >
+                      <span
+                        className="text-[10px] tracking-[0.18em] uppercase"
+                        style={{ color: "var(--text-muted)" }}
+                      >
+                        soon
+                      </span>
+                    </div>
+                  )}
+              </div>
             </div>
-            <div className="flex w-max snap-x snap-mandatory items-start gap-3 px-1 mx-auto sm:gap-4 md:gap-5">
-              {screens.length > 0
-                ? screens.map((src, i) => (
+          ) : (
+            <div className="overflow-x-auto scrollbar-hide pb-2">
+              <div className="mb-3 text-center">
+                <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>
+                  Preview
+                </p>
+              </div>
+              <div className="flex w-max snap-x snap-mandatory items-start gap-2 px-1 mx-auto sm:gap-3">
+                {(screens.length > 0 ? screens : [logoSrc]).map((src, i) => (
                   <div
-                    key={src}
-                    className="snap-center flex-shrink-0 overflow-hidden rounded-[24px] border w-[164px] h-[355px] sm:w-[188px] sm:h-[406px] md:w-[214px] md:h-[462px] lg:w-[234px] lg:h-[506px]"
+                    key={`${src}-${i}`}
+                    className="snap-center flex-shrink-0 overflow-hidden rounded-[12px] border w-[470px] h-[293px] sm:w-[580px] sm:h-[361px] md:w-[700px] md:h-[436px]"
                     style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
                   >
+                    <div
+                      className="flex items-center px-2.5 border-b"
+                      style={{
+                        height: "24px",
+                        borderColor: "var(--border)",
+                        background: "var(--pill-bg)",
+                      }}
+                    >
+                      <div className="flex items-center gap-1.5">
+                        <span className="h-2 w-2 rounded-full" style={{ background: "#FF5F57" }} />
+                        <span className="h-2 w-2 rounded-full" style={{ background: "#FEBC2E" }} />
+                        <span className="h-2 w-2 rounded-full" style={{ background: "#28C840" }} />
+                      </div>
+                    </div>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={src}
                       alt={`${name} screen ${i + 1}`}
-                      className="h-full w-full object-cover"
+                      className="w-full object-cover"
+                      style={{ height: "calc(100% - 24px)" }}
                     />
                   </div>
-                ))
-                : (
-                  <div
-                    className="flex h-[355px] w-[164px] flex-shrink-0 items-end justify-center rounded-[24px] border pb-6 sm:h-[406px] sm:w-[188px] md:h-[462px] md:w-[214px] lg:h-[506px] lg:w-[234px]"
-                    style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
-                  >
-                    <span
-                      className="text-[10px] tracking-[0.18em] uppercase"
-                      style={{ color: "var(--text-muted)" }}
-                    >
-                      soon
-                    </span>
-                  </div>
-                )}
+                ))}
+              </div>
             </div>
-          </div>
-        ) : (
-          <div className="overflow-x-auto scrollbar-hide">
-            <div className="mb-3 text-center">
-              <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>
-                Preview
-              </p>
-            </div>
-            <div className="flex w-max snap-x snap-mandatory items-start gap-2 px-1 mx-auto sm:gap-2.5">
-              {(screens.length > 0 ? screens : [logoSrc]).map((src, i) => (
-                <div
-                  key={`${src}-${i}`}
-                  className="snap-center flex-shrink-0 overflow-hidden rounded-[10px] border w-[420px] h-[262px] sm:w-[520px] sm:h-[324px] md:w-[640px] md:h-[398px]"
-                  style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
-                >
-                  <div
-                    className="flex items-center px-2.5 border-b"
-                    style={{
-                      height: "24px",
-                      borderColor: "var(--border)",
-                      background: "var(--pill-bg)",
-                    }}
-                  >
-                    <div className="flex items-center gap-1.5">
-                      <span className="h-2 w-2 rounded-full" style={{ background: "#FF5F57" }} />
-                      <span className="h-2 w-2 rounded-full" style={{ background: "#FEBC2E" }} />
-                      <span className="h-2 w-2 rounded-full" style={{ background: "#28C840" }} />
-                    </div>
-                  </div>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={src}
-                    alt={`${name} screen ${i + 1}`}
-                    className="h-[calc(100%-24px)] w-full object-cover"
-                    style={{ height: "calc(100% - 24px)" }}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+          )}
+        </div>
 
-        <div className="mt-9 space-y-4 text-center sm:mt-11">
+        <div className="mt-10 space-y-5 text-center sm:mt-12">
           <p
             className="mx-auto max-w-2xl text-[14px] leading-relaxed sm:text-[15px]"
             style={{ color: "var(--text-secondary)" }}
@@ -202,47 +249,137 @@ export default function SubdomainLanding({
             Features
           </p>
 
-          <ul className="mx-auto max-w-2xl space-y-2.5">
+          <ul className="mx-auto max-w-3xl space-y-2.5 text-left">
             {bullets.map((item) => (
-              <li
-                key={item}
-                className="text-[14px] leading-relaxed sm:text-[15px]"
-                style={{ color: "var(--text-primary)" }}
-              >
-                <span style={{ color: "var(--text-muted)" }}>- </span>
-                {item}
+              <li key={item} className="flex items-start gap-3 text-[14px] leading-relaxed sm:text-[15px]" style={{ color: "var(--text-primary)" }}>
+                <span
+                  className="mt-1 inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-md border"
+                  style={{ borderColor: "var(--border)", background: "var(--pill-bg)", color: accent.dot }}
+                >
+                  <DotIcon />
+                </span>
+                <span>{item}</span>
               </li>
             ))}
           </ul>
 
-          {ctaUrl ? (
-            <div className="pt-2 flex flex-col items-center">
+          <div className="pt-2 flex flex-col items-center">
+            {ctaUrl ? (
               <motion.a
                 href={ctaUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-[11px] border px-4 py-2.5 text-[15px] font-medium tracking-[-0.01em]"
+                className="inline-flex items-center gap-2 rounded-[16px] border px-6 py-3.5 text-[17px] font-semibold tracking-[-0.01em]"
                 style={{
-                  borderColor: "var(--border-active)",
-                  background: "var(--bg)",
-                  color: "var(--text-primary)",
+                  borderColor: accent.buttonBorder,
+                  background: accent.buttonBg,
+                  color: accent.buttonText,
                 }}
-                whileHover={{ y: -1, backgroundColor: "var(--pill-bg)" }}
-                whileTap={{ scale: 0.985 }}
-                transition={{ type: "spring", stiffness: 500, damping: 28 }}
+                whileHover={{ y: -2, scale: 1.03, backgroundColor: accent.buttonHover }}
+                whileTap={{ scale: 0.96 }}
+                transition={{ type: "spring", stiffness: 520, damping: 24 }}
               >
                 {platform === "iOS" && <AppleIcon />}
                 {ctaLabel}
               </motion.a>
-              {ctaHint && (
-                <p className="mt-2 text-[12px]" style={{ color: "var(--text-muted)" }}>
-                  {ctaHint}
-                </p>
-              )}
+            ) : (
+              <motion.button
+                type="button"
+                disabled
+                className="inline-flex items-center gap-2 rounded-[16px] border px-6 py-3.5 text-[17px] font-semibold tracking-[-0.01em] opacity-80"
+                style={{
+                  borderColor: accent.buttonBorder,
+                  background: accent.buttonBg,
+                  color: accent.buttonText,
+                }}
+              >
+                Coming soon
+              </motion.button>
+            )}
+
+            {ctaHint && (
+              <p className="mt-2 text-[12px]" style={{ color: "var(--text-muted)" }}>
+                {ctaHint}
+              </p>
+            )}
+          </div>
+        </div>
+
+        <div className="mt-9 flex flex-col items-center gap-2">
+          <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>
+            Built by
+          </p>
+          <a
+            href={builtByUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-[12px] border px-3.5 py-2"
+            style={{ borderColor: "var(--border)", background: "var(--bg-sticky)", color: "var(--text-primary)" }}
+          >
+            <span
+              className="inline-flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-medium"
+              style={{ background: "var(--pill-bg)", color: "var(--text-secondary)" }}
+            >
+              HC
+            </span>
+            <span className="text-[14px] font-medium">{builtByName}</span>
+          </a>
+        </div>
+
+        <div
+          className="mx-auto mt-10 w-full max-w-xl rounded-[18px] border p-4 sm:p-5"
+          style={{ borderColor: "var(--border)", background: "var(--bg-sticky)" }}
+        >
+          <div className="flex items-start gap-3">
+            <span
+              className="inline-flex h-8 w-8 items-center justify-center rounded-full border"
+              style={{ borderColor: "var(--border)", background: "var(--pill-bg)", color: "var(--text-secondary)" }}
+            >
+              <MailIcon />
+            </span>
+            <div className="text-left">
+              <p className="text-[13px] font-medium" style={{ color: "var(--text-primary)" }}>
+                Join the tiny newsletter
+              </p>
+              <p className="mt-1 text-[12px]" style={{ color: "var(--text-secondary)" }}>
+                Occasional product updates, builds, and launch notes.
+              </p>
             </div>
-          ) : (
-            <p className="pt-2 text-[12px]" style={{ color: "var(--text-muted)" }}>
-              Link coming soon
+          </div>
+
+          <form onSubmit={onNewsletterSubmit} className="mt-4 flex flex-col gap-2 sm:flex-row">
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              className="w-full rounded-[11px] border px-3 py-2.5 text-[14px] outline-none"
+              style={{
+                borderColor: "var(--border)",
+                background: "var(--bg)",
+                color: "var(--text-primary)",
+              }}
+              required
+            />
+            <motion.button
+              type="submit"
+              className="rounded-[11px] border px-4 py-2.5 text-[14px] font-medium"
+              style={{
+                borderColor: accent.buttonBorder,
+                background: accent.buttonBg,
+                color: accent.buttonText,
+              }}
+              whileHover={{ y: -1, scale: 1.02, backgroundColor: accent.buttonHover }}
+              whileTap={{ scale: 0.97 }}
+              transition={{ type: "spring", stiffness: 520, damping: 24 }}
+            >
+              Subscribe
+            </motion.button>
+          </form>
+
+          {subscribed && (
+            <p className="mt-3 text-[12px]" style={{ color: "var(--text-muted)" }}>
+              Thanks. You are on the list.
             </p>
           )}
         </div>

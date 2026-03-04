@@ -21,6 +21,7 @@ export default function CanPage() {
         "Native macOS interactions with keyboard-friendly controls",
         "Keeps your desk workflow fast without opening heavy tools",
         "Built to feel lightweight while handling practical conversions",
+        "Ready for power users who want speed with visual simplicity",
       ]}
     />
   );
