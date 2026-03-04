@@ -58,10 +58,23 @@ function MoonIcon() {
   );
 }
 
-function AppleIcon() {
+function AppStoreIcon() {
   return (
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-      <path d="M16.36 12.64c.01 2.11 1.85 2.81 1.87 2.82-.02.05-.29 1-.95 1.99-.58.86-1.19 1.72-2.14 1.74-.93.02-1.23-.55-2.3-.55-1.07 0-1.41.53-2.28.57-.92.03-1.62-.93-2.2-1.79-1.19-1.72-2.1-4.86-.88-7 .6-1.06 1.67-1.73 2.83-1.75.88-.02 1.71.59 2.3.59.59 0 1.69-.72 2.85-.61.48.02 1.82.19 2.69 1.46-.07.04-1.6.94-1.59 2.53zM14.59 5.53c.49-.59.83-1.41.74-2.23-.71.03-1.57.47-2.08 1.06-.46.53-.86 1.38-.75 2.19.79.06 1.6-.4 2.09-1.02z" />
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+      <path d="M8.6 7.3 14.8 17.7" />
+      <path d="M15.4 7.3 9.2 17.7" />
+      <path d="M7 17.7h10" />
     </svg>
   );
 }
@@ -297,7 +310,7 @@ export default function SubdomainLanding({
                 whileTap={{ scale: 0.96 }}
                 transition={{ type: "spring", stiffness: 520, damping: 24 }}
               >
-                {platform === "iOS" && <AppleIcon />}
+                {platform === "iOS" && <AppStoreIcon />}
                 {ctaLabel}
               </motion.a>
             ) : (
