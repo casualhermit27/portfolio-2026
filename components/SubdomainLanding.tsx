@@ -7,7 +7,6 @@ type SubdomainLandingProps = {
   name: string;
   description: string;
   platform: "iOS" | "macOS";
-  status: string;
   logoSrc: string;
   screens?: string[];
   bullets: string[];
@@ -44,7 +43,6 @@ export default function SubdomainLanding({
   name,
   description,
   platform,
-  status,
   logoSrc,
   screens = [],
   bullets,
@@ -74,31 +72,33 @@ export default function SubdomainLanding({
               <img src={logoSrc} alt={`${name} logo`} className="h-full w-full object-cover" />
             </div>
             <div>
-              <p
-                className="text-[10px] font-medium uppercase tracking-[0.16em]"
-                style={{ color: "var(--text-muted)" }}
-              >
-                {platform}
-              </p>
-              <h1 className="text-[30px] font-semibold leading-none tracking-[-0.02em] lowercase sm:text-[36px]">
+              <h1 className="text-[30px] font-light leading-none tracking-[-0.02em] lowercase sm:text-[36px]">
                 {name}
               </h1>
             </div>
           </div>
 
-          <button
-            onClick={() => setDark((d) => !d)}
-            className="absolute right-0 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border transition-opacity duration-150 hover:opacity-80"
-            style={{
-              borderColor: "var(--border)",
-              background: "var(--pill-bg)",
-              color: "var(--text-secondary)",
-            }}
-            aria-label="Toggle theme"
-            title={dark ? "Switch to light mode" : "Switch to dark mode"}
-          >
-            {dark ? <SunIcon /> : <MoonIcon />}
-          </button>
+          <div className="absolute right-0 top-1/2 flex -translate-y-1/2 items-center gap-2">
+            <span
+              className="text-[9px] font-medium uppercase tracking-[0.1em] border rounded-full px-2.5 py-1"
+              style={{ color: "var(--text-muted)", borderColor: "var(--border)" }}
+            >
+              {platform}
+            </span>
+            <button
+              onClick={() => setDark((d) => !d)}
+              className="inline-flex h-8 w-8 items-center justify-center rounded-full border transition-opacity duration-150 hover:opacity-80"
+              style={{
+                borderColor: "var(--border)",
+                background: "var(--pill-bg)",
+                color: "var(--text-secondary)",
+              }}
+              aria-label="Toggle theme"
+              title={dark ? "Switch to light mode" : "Switch to dark mode"}
+            >
+              {dark ? <SunIcon /> : <MoonIcon />}
+            </button>
+          </div>
         </div>
 
         {platform === "iOS" ? (
@@ -108,7 +108,7 @@ export default function SubdomainLanding({
                 ? screens.map((src, i) => (
                   <div
                     key={src}
-                    className="flex-shrink-0 overflow-hidden rounded-[22px] border w-[122px] h-[264px] sm:w-[142px] sm:h-[307px] md:w-[160px] md:h-[346px] lg:w-[170px] lg:h-[368px]"
+                    className="flex-shrink-0 overflow-hidden rounded-[24px] border w-[136px] h-[294px] sm:w-[156px] sm:h-[338px] md:w-[178px] md:h-[386px] lg:w-[190px] lg:h-[412px]"
                     style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -121,7 +121,7 @@ export default function SubdomainLanding({
                 ))
                 : (
                   <div
-                    className="flex h-[264px] w-[122px] flex-shrink-0 items-end justify-center rounded-[22px] border pb-6 sm:h-[307px] sm:w-[142px] md:h-[346px] md:w-[160px] lg:h-[368px] lg:w-[170px]"
+                    className="flex h-[294px] w-[136px] flex-shrink-0 items-end justify-center rounded-[24px] border pb-6 sm:h-[338px] sm:w-[156px] md:h-[386px] md:w-[178px] lg:h-[412px] lg:w-[190px]"
                     style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
                   >
                     <span
@@ -140,7 +140,7 @@ export default function SubdomainLanding({
               {(screens.length > 0 ? screens : [logoSrc]).map((src, i) => (
                 <div
                   key={`${src}-${i}`}
-                  className="flex-shrink-0 overflow-hidden rounded-[10px] border w-[290px] h-[182px] sm:w-[360px] sm:h-[224px] md:w-[420px] md:h-[262px]"
+                  className="flex-shrink-0 overflow-hidden rounded-[10px] border w-[320px] h-[200px] sm:w-[390px] sm:h-[244px] md:w-[460px] md:h-[288px]"
                   style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
                 >
                   <div
@@ -178,17 +178,14 @@ export default function SubdomainLanding({
             {description}
           </p>
 
-          <ul className="mx-auto max-w-2xl space-y-2">
+          <ul className="mx-auto max-w-2xl space-y-2.5">
             {bullets.map((item) => (
               <li
                 key={item}
-                className="rounded-[11px] border px-4 py-2.5 text-[13px] leading-relaxed sm:text-[14px]"
-                style={{
-                  color: "var(--text-primary)",
-                  borderColor: "var(--border)",
-                  background: "var(--bg-sticky)",
-                }}
+                className="text-[14px] leading-relaxed sm:text-[15px]"
+                style={{ color: "var(--text-primary)" }}
               >
+                <span style={{ color: "var(--text-muted)" }}>- </span>
                 {item}
               </li>
             ))}
@@ -223,10 +220,6 @@ export default function SubdomainLanding({
               Link coming soon
             </p>
           )}
-
-          <p className="pt-1 text-[10px] uppercase tracking-[0.14em]" style={{ color: "var(--text-faint)" }}>
-            {status}
-          </p>
         </div>
       </section>
     </main>

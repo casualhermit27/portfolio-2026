@@ -12,7 +12,6 @@ export default function MochiPage() {
       name="mochi"
       platform="iOS"
       description="A quiet, mindful way to track spending, check patterns, and reflect on habits."
-      status="Available now"
       logoSrc="/logos/mochi.jpg.jpeg"
       screens={[
         "/open-log-close-screen1 (1).png",
