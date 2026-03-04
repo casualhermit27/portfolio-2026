@@ -20,10 +20,10 @@ export default function MochiPage() {
         "/widget-screen4 (1).png",
       ]}
       bullets={[
-        "Fast, low-friction logging built for daily consistency",
-        "Reflection and history that reveal spending patterns over time",
-        "Home screen widgets that keep your habit visible",
-        "Purposefully minimal iOS experience with no visual noise",
+        "Log expenses in under two taps with a calm daily flow",
+        "Timeline and reflection views reveal patterns over time",
+        "Widget-first reminders keep the habit visible each day",
+        "Minimal interface designed for clarity, not noise",
       ]}
       ctaUrl="https://apps.apple.com/us/app/mochi-spent-tracker/id6758880826"
       ctaLabel="Download"

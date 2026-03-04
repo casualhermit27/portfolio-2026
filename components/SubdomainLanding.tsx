@@ -39,6 +39,14 @@ function MoonIcon() {
   );
 }
 
+function AppleIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+      <path d="M16.36 12.64c.01 2.11 1.85 2.81 1.87 2.82-.02.05-.29 1-.95 1.99-.58.86-1.19 1.72-2.14 1.74-.93.02-1.23-.55-2.3-.55-1.07 0-1.41.53-2.28.57-.92.03-1.62-.93-2.2-1.79-1.19-1.72-2.1-4.86-.88-7 .6-1.06 1.67-1.73 2.83-1.75.88-.02 1.71.59 2.3.59.59 0 1.69-.72 2.85-.61.48.02 1.82.19 2.69 1.46-.07.04-1.6.94-1.59 2.53zM14.59 5.53c.49-.59.83-1.41.74-2.23-.71.03-1.57.47-2.08 1.06-.46.53-.86 1.38-.75 2.19.79.06 1.6-.4 2.09-1.02z" />
+    </svg>
+  );
+}
+
 export default function SubdomainLanding({
   name,
   description,
@@ -103,12 +111,17 @@ export default function SubdomainLanding({
 
         {platform === "iOS" ? (
           <div className="overflow-x-auto scrollbar-hide">
-            <div className="flex w-max items-start gap-3 px-1 mx-auto sm:gap-4 md:gap-5">
+            <div className="mb-3 text-center">
+              <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>
+                Screens
+              </p>
+            </div>
+            <div className="flex w-max snap-x snap-mandatory items-start gap-3 px-1 mx-auto sm:gap-4 md:gap-5">
               {screens.length > 0
                 ? screens.map((src, i) => (
                   <div
                     key={src}
-                    className="flex-shrink-0 overflow-hidden rounded-[24px] border w-[136px] h-[294px] sm:w-[156px] sm:h-[338px] md:w-[178px] md:h-[386px] lg:w-[190px] lg:h-[412px]"
+                    className="snap-center flex-shrink-0 overflow-hidden rounded-[24px] border w-[150px] h-[325px] sm:w-[170px] sm:h-[368px] md:w-[200px] md:h-[433px] lg:w-[210px] lg:h-[455px]"
                     style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -121,7 +134,7 @@ export default function SubdomainLanding({
                 ))
                 : (
                   <div
-                    className="flex h-[294px] w-[136px] flex-shrink-0 items-end justify-center rounded-[24px] border pb-6 sm:h-[338px] sm:w-[156px] md:h-[386px] md:w-[178px] lg:h-[412px] lg:w-[190px]"
+                    className="flex h-[325px] w-[150px] flex-shrink-0 items-end justify-center rounded-[24px] border pb-6 sm:h-[368px] sm:w-[170px] md:h-[433px] md:w-[200px] lg:h-[455px] lg:w-[210px]"
                     style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
                   >
                     <span
@@ -136,11 +149,16 @@ export default function SubdomainLanding({
           </div>
         ) : (
           <div className="overflow-x-auto scrollbar-hide">
-            <div className="flex w-max items-start gap-2.5 px-1 mx-auto sm:gap-3">
+            <div className="mb-3 text-center">
+              <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>
+                Preview
+              </p>
+            </div>
+            <div className="flex w-max snap-x snap-mandatory items-start gap-2 px-1 mx-auto sm:gap-2.5">
               {(screens.length > 0 ? screens : [logoSrc]).map((src, i) => (
                 <div
                   key={`${src}-${i}`}
-                  className="flex-shrink-0 overflow-hidden rounded-[10px] border w-[320px] h-[200px] sm:w-[390px] sm:h-[244px] md:w-[460px] md:h-[288px]"
+                  className="snap-center flex-shrink-0 overflow-hidden rounded-[10px] border w-[360px] h-[225px] sm:w-[460px] sm:h-[286px] md:w-[560px] md:h-[348px]"
                   style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
                 >
                   <div
@@ -170,7 +188,7 @@ export default function SubdomainLanding({
           </div>
         )}
 
-        <div className="mt-8 space-y-4 text-center sm:mt-10">
+        <div className="mt-9 space-y-4 text-center sm:mt-11">
           <p
             className="mx-auto max-w-2xl text-[14px] leading-relaxed sm:text-[15px]"
             style={{ color: "var(--text-secondary)" }}
@@ -197,7 +215,7 @@ export default function SubdomainLanding({
                 href={ctaUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center rounded-[11px] border px-4 py-2.5 text-[15px] font-medium tracking-[-0.01em]"
+                className="inline-flex items-center gap-2 rounded-[11px] border px-4 py-2.5 text-[15px] font-medium tracking-[-0.01em]"
                 style={{
                   borderColor: "var(--border-active)",
                   background: "var(--bg)",
@@ -207,6 +225,7 @@ export default function SubdomainLanding({
                 whileTap={{ scale: 0.985 }}
                 transition={{ type: "spring", stiffness: 500, damping: 28 }}
               >
+                {platform === "iOS" && <AppleIcon />}
                 {ctaLabel}
               </motion.a>
               {ctaHint && (
