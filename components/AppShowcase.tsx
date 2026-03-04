@@ -42,13 +42,51 @@ export default function AppShowcase({ app }: AppShowcaseProps) {
   const platform = app.platform ?? "ios";
   const isMac = platform === "mac";
   const emptyCount = EMPTY_COUNTS[platform] ?? 3;
+  const goToButtonPalette = app.id === "mochi"
+    ? {
+      bg: "#F7DFEA",
+      border: "#E7C7D8",
+      text: "#584955",
+      hoverBg: "#F2D3E2",
+      hoverBorder: "#DDB4CA",
+    }
+    : {
+      bg: "#DEF0E7",
+      border: "#C4DECF",
+      text: "#445852",
+      hoverBg: "#D2EADD",
+      hoverBorder: "#B2D2C1",
+    };
+  const ctaVariants = {
+    rest: {
+      y: 0,
+      scale: 1,
+      backgroundColor: goToButtonPalette.bg,
+      borderColor: goToButtonPalette.border,
+    },
+    hover: {
+      y: -1.5,
+      scale: 1.015,
+      backgroundColor: goToButtonPalette.hoverBg,
+      borderColor: goToButtonPalette.hoverBorder,
+    },
+    tap: {
+      y: 0,
+      scale: 0.985,
+    },
+  };
+  const arrowVariants = {
+    rest: { x: 0 },
+    hover: { x: 2.5 },
+    tap: { x: 1 },
+  };
 
   return (
     <div>
 
       {/* App header */}
       <div className="mb-8 sm:mb-10 md:mb-12">
-        <div className="flex items-start gap-3 sm:gap-4 md:gap-5">
+        <div className="flex items-start gap-3 sm:gap-4 md:gap-5 min-w-0">
           <div
             className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-[12px] sm:rounded-[14px] md:rounded-[16px] overflow-hidden flex-shrink-0 border mt-1"
             style={{ borderColor: "var(--border)" }}
@@ -60,8 +98,8 @@ export default function AppShowcase({ app }: AppShowcaseProps) {
               className="w-full h-full object-cover"
             />
           </div>
-          <div className="pt-1 sm:pt-1.5">
-            <div className="flex items-center gap-2 sm:gap-3">
+          <div className="pt-1 sm:pt-1.5 min-w-0">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
               <h1
                 className="text-[32px] sm:text-[40px] md:text-[52px] font-light tracking-[-0.025em] leading-none"
                 style={{ color: "var(--text-primary)" }}
@@ -92,13 +130,42 @@ export default function AppShowcase({ app }: AppShowcaseProps) {
         style={{ borderColor: "var(--border)" }}
       />
 
-      {/* Screens label */}
-      <p
-        className="text-[10px] font-semibold tracking-[0.14em] uppercase mb-5 sm:mb-6 md:mb-8"
-        style={{ color: "var(--text-muted)" }}
-      >
-        {hasScreens ? "Screens" : "Preview"}
-      </p>
+      {/* Screens label + action */}
+      <div className="flex items-center justify-between gap-3 mb-5 sm:mb-6 md:mb-8">
+        <p
+          className="text-[10px] font-semibold tracking-[0.14em] uppercase"
+          style={{ color: "var(--text-muted)" }}
+        >
+          {hasScreens ? "Screens" : "Preview"}
+        </p>
+        {app.liveUrl && (
+          <motion.a
+            href={app.liveUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex items-center justify-center gap-1.5 border rounded-[8px] px-3.5 sm:px-4 py-1.5 sm:py-2 text-[11px] font-medium leading-none"
+            style={{
+              color: goToButtonPalette.text,
+            }}
+            variants={ctaVariants}
+            initial="rest"
+            animate="rest"
+            whileHover="hover"
+            whileTap="tap"
+            transition={{ type: "spring", stiffness: 520, damping: 26, mass: 0.5 }}
+          >
+            Go to
+            <motion.span
+              aria-hidden
+              className="inline-block text-[11px]"
+              variants={arrowVariants}
+              transition={{ type: "spring", stiffness: 560, damping: 30, mass: 0.45 }}
+            >
+              →
+            </motion.span>
+          </motion.a>
+        )}
+      </div>
 
       {/* Mockups — stagger on mount */}
       <motion.div

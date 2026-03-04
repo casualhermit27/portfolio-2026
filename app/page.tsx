@@ -11,6 +11,7 @@ export type App = {
   logo: string;
   screens: string[];
   platform?: "ios" | "mac";
+  liveUrl?: string;
 };
 
 const apps: App[] = [
@@ -20,6 +21,7 @@ const apps: App[] = [
     tagline: "a mindful journaling app",
     logo: "/logos/mochi.jpg.jpeg",
     platform: "ios",
+    liveUrl: "https://mochi.harshachaganti.com",
     screens: [
       "/open-log-close-screen1 (1).png",
       "/reflection-screen2 (1).png",
@@ -33,6 +35,7 @@ const apps: App[] = [
     tagline: "convert anything now — drop to dock",
     logo: "/logos/can 2.jpg",
     platform: "mac",
+    liveUrl: "https://can.harshachaganti.com",
     screens: [],
   },
   {
