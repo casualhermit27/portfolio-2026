@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import PhoneMockup from "@/components/PhoneMockup";
+import MacMockup from "@/components/MacMockup";
 
 type SubdomainLandingProps = {
   name: string;
@@ -9,8 +11,7 @@ type SubdomainLandingProps = {
   platform: "iOS" | "macOS";
   status: string;
   logoSrc: string;
-  heroImageSrc: string;
-  galleryImages?: string[];
+  screens?: string[];
   bullets: string[];
   ctaUrl?: string;
   ctaLabel?: string;
@@ -47,8 +48,7 @@ export default function SubdomainLanding({
   platform,
   status,
   logoSrc,
-  heroImageSrc,
-  galleryImages = [],
+  screens = [],
   bullets,
   ctaUrl,
   ctaLabel = "View on App Store",
@@ -65,8 +65,8 @@ export default function SubdomainLanding({
       className="min-h-screen transition-colors duration-300"
       style={{ background: "var(--bg)", color: "var(--text-primary)" }}
     >
-      <section className="mx-auto w-full max-w-5xl px-6 py-8 sm:px-10 sm:py-12">
-        <div className="mb-6 flex items-center justify-between sm:mb-8">
+      <section className="mx-auto w-full max-w-6xl px-6 py-8 sm:px-10 sm:py-12">
+        <div className="mb-8 flex items-center justify-between sm:mb-10">
           <div className="flex items-center gap-3">
             <div
               className="h-11 w-11 overflow-hidden rounded-[12px] border"
@@ -82,7 +82,7 @@ export default function SubdomainLanding({
               >
                 {platform}
               </p>
-              <h1 className="text-[30px] font-semibold leading-none tracking-[-0.02em] lowercase sm:text-[34px]">
+              <h1 className="text-[30px] font-semibold leading-none tracking-[-0.02em] lowercase sm:text-[36px]">
                 {name}
               </h1>
             </div>
@@ -104,43 +104,25 @@ export default function SubdomainLanding({
         </div>
 
         <div
-          className="overflow-hidden rounded-[22px] border p-3 sm:p-5"
-          style={{
-            borderColor: "var(--border)",
-            background: "linear-gradient(180deg, var(--pill-bg) 0%, var(--bg) 100%)",
-          }}
+          className="rounded-[20px] border p-5 sm:p-7"
+          style={{ borderColor: "var(--border)", background: "var(--bg-sticky)" }}
         >
-          <div
-            className="overflow-hidden rounded-[16px] border"
-            style={{ borderColor: "var(--border-active)" }}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={heroImageSrc}
-              alt={`${name} hero`}
-              className="h-[260px] w-full object-cover sm:h-[420px]"
-            />
-          </div>
+          {platform === "iOS" ? (
+            <div className="flex flex-wrap items-start justify-center gap-4 sm:gap-5 md:gap-6">
+              {screens.length > 0
+                ? screens.map((src, i) => (
+                  <PhoneMockup key={src} src={src} alt={`${name} screen ${i + 1}`} />
+                ))
+                : <PhoneMockup empty />}
+            </div>
+          ) : (
+            <div className="flex justify-center">
+              {screens[0]
+                ? <MacMockup src={screens[0]} alt={`${name} preview`} />
+                : <MacMockup empty />}
+            </div>
+          )}
         </div>
-
-        {galleryImages.length > 0 && (
-          <div className="mt-3 grid grid-cols-4 gap-2 sm:mt-4 sm:gap-3">
-            {galleryImages.map((imageSrc) => (
-              <div
-                key={imageSrc}
-                className="overflow-hidden rounded-[12px] border"
-                style={{ borderColor: "var(--border)" }}
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={imageSrc}
-                  alt={`${name} preview`}
-                  className="h-[78px] w-full object-cover sm:h-[112px]"
-                />
-              </div>
-            ))}
-          </div>
-        )}
 
         <div className="mt-8 space-y-4 sm:mt-10">
           <p
@@ -175,10 +157,7 @@ export default function SubdomainLanding({
                   background: "var(--bg)",
                   color: "var(--text-primary)",
                 }}
-                whileHover={{
-                  y: -1,
-                  backgroundColor: "var(--pill-bg)",
-                }}
+                whileHover={{ y: -1, backgroundColor: "var(--pill-bg)" }}
                 whileTap={{ scale: 0.985 }}
                 transition={{ type: "spring", stiffness: 500, damping: 28 }}
               >
@@ -196,10 +175,7 @@ export default function SubdomainLanding({
             </p>
           )}
 
-          <p
-            className="pt-1 text-[10px] uppercase tracking-[0.14em]"
-            style={{ color: "var(--text-faint)" }}
-          >
+          <p className="pt-1 text-[10px] uppercase tracking-[0.14em]" style={{ color: "var(--text-faint)" }}>
             {status}
           </p>
         </div>

@@ -14,7 +14,7 @@ export default function CanPage() {
       description="A minimal desktop utility to convert files and formats instantly."
       status="Coming soon"
       logoSrc="/logos/can 2.jpg"
-      heroImageSrc="/logos/can 2.jpg"
+      screens={[]}
       bullets={[
         "Drag, drop, and convert with zero friction",
         "Fast local processing with a minimal interface",

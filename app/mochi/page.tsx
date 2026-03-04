@@ -14,8 +14,7 @@ export default function MochiPage() {
       description="A quiet, mindful way to track spending, check patterns, and reflect on habits."
       status="Available now"
       logoSrc="/logos/mochi.jpg.jpeg"
-      heroImageSrc="/open-log-close-screen1 (1).png"
-      galleryImages={[
+      screens={[
         "/open-log-close-screen1 (1).png",
         "/reflection-screen2 (1).png",
         "/history-screen3 (1).png",
