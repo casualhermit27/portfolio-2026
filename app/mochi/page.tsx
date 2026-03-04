@@ -4,6 +4,11 @@ import SubdomainLanding from "@/components/SubdomainLanding";
 export const metadata: Metadata = {
   title: "mochi",
   description: "mochi by Harsha Chaganti",
+  icons: {
+    icon: "/logos/mochi.jpg.jpeg",
+    shortcut: "/logos/mochi.jpg.jpeg",
+    apple: "/logos/mochi.jpg.jpeg",
+  },
 };
 
 export default function MochiPage() {

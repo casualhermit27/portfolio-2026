@@ -4,6 +4,11 @@ import SubdomainLanding from "@/components/SubdomainLanding";
 export const metadata: Metadata = {
   title: "can",
   description: "can by Harsha Chaganti",
+  icons: {
+    icon: "/logos/can 2.jpg",
+    shortcut: "/logos/can 2.jpg",
+    apple: "/logos/can 2.jpg",
+  },
 };
 
 export default function CanPage() {

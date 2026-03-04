@@ -263,15 +263,15 @@ export default function SubdomainLanding({
             Features
           </p>
 
-          <ul className="mx-auto max-w-3xl space-y-2.5 text-center">
+          <ul className="mx-auto w-full max-w-3xl space-y-2.5 md:w-fit">
             {bullets.map((item) => (
               <li
                 key={item}
-                className="flex items-center justify-center gap-2.5 text-[14px] leading-relaxed sm:text-[15px]"
+                className="grid grid-cols-[20px_minmax(0,1fr)] items-start gap-3 text-left text-[14px] leading-relaxed sm:text-[15px]"
                 style={{ color: "var(--text-primary)" }}
               >
                 <span
-                  className="inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-md border"
+                  className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-md border"
                   style={{ borderColor: "var(--border)", background: "var(--pill-bg)", color: accent.dot }}
                 >
                   <DotIcon />
