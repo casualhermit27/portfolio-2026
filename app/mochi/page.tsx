@@ -11,8 +11,11 @@ export default function MochiPage() {
     <SubdomainLanding
       name="mochi"
       platform="iOS"
-      tagline="A mindful journaling app."
+      description="A quiet, mindful way to track spending and reflect on your habits."
       status="Available now"
+      logoSrc="/logos/mochi.jpg.jpeg"
+      storeUrl="https://apps.apple.com/us/app/mochi-spent-tracker/id6758880826"
+      storeLabel="View on App Store"
     />
   );
 }

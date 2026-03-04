@@ -11,8 +11,9 @@ export default function CanPage() {
     <SubdomainLanding
       name="can"
       platform="macOS"
-      tagline="Convert anything now."
+      description="A minimal desktop utility to convert files and formats instantly."
       status="Coming soon"
+      logoSrc="/logos/can 2.jpg"
     />
   );
 }
