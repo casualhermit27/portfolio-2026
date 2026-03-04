@@ -5,9 +5,9 @@ export const metadata: Metadata = {
   title: "can",
   description: "can by Harsha Chaganti",
   icons: {
-    icon: "/favicons/can-rounded.svg",
-    shortcut: "/favicons/can-rounded.svg",
-    apple: "/favicons/can-rounded.svg",
+    icon: "/favicons/can-rounded.png",
+    shortcut: "/favicons/can-rounded.png",
+    apple: "/favicons/can-rounded.png",
   },
 };
 

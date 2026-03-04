@@ -5,9 +5,9 @@ export const metadata: Metadata = {
   title: "mochi",
   description: "mochi by Harsha Chaganti",
   icons: {
-    icon: "/favicons/mochi-rounded.svg",
-    shortcut: "/favicons/mochi-rounded.svg",
-    apple: "/favicons/mochi-rounded.svg",
+    icon: "/favicons/mochi-rounded.png",
+    shortcut: "/favicons/mochi-rounded.png",
+    apple: "/favicons/mochi-rounded.png",
   },
 };
 
