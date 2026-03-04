@@ -24,6 +24,8 @@ export default function MochiPage() {
         "Timeline and reflection views reveal patterns over time",
         "Widget-first reminders keep the habit visible each day",
         "Minimal interface designed for clarity, not noise",
+        "Thoughtful weekly history that makes trends easy to notice",
+        "Private by default with a focused single-user experience",
       ]}
       ctaUrl="https://apps.apple.com/us/app/mochi-spent-tracker/id6758880826"
       ctaLabel="Download"

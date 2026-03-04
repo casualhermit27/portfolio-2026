@@ -80,19 +80,21 @@ export default function SubdomainLanding({
               <img src={logoSrc} alt={`${name} logo`} className="h-full w-full object-cover" />
             </div>
             <div>
-              <h1 className="text-[30px] font-light leading-none tracking-[-0.02em] lowercase sm:text-[36px]">
-                {name}
-              </h1>
+              <div className="flex items-center gap-2">
+                <h1 className="text-[30px] font-light leading-none tracking-[-0.02em] lowercase sm:text-[36px]">
+                  {name}
+                </h1>
+                <span
+                  className="text-[9px] font-medium uppercase tracking-[0.1em] border rounded-full px-2.5 py-1"
+                  style={{ color: "var(--text-muted)", borderColor: "var(--border)" }}
+                >
+                  {platform}
+                </span>
+              </div>
             </div>
           </div>
 
           <div className="absolute right-0 top-1/2 flex -translate-y-1/2 items-center gap-2">
-            <span
-              className="text-[9px] font-medium uppercase tracking-[0.1em] border rounded-full px-2.5 py-1"
-              style={{ color: "var(--text-muted)", borderColor: "var(--border)" }}
-            >
-              {platform}
-            </span>
             <button
               onClick={() => setDark((d) => !d)}
               className="inline-flex h-8 w-8 items-center justify-center rounded-full border transition-opacity duration-150 hover:opacity-80"
@@ -121,7 +123,7 @@ export default function SubdomainLanding({
                 ? screens.map((src, i) => (
                   <div
                     key={src}
-                    className="snap-center flex-shrink-0 overflow-hidden rounded-[24px] border w-[150px] h-[325px] sm:w-[170px] sm:h-[368px] md:w-[200px] md:h-[433px] lg:w-[210px] lg:h-[455px]"
+                    className="snap-center flex-shrink-0 overflow-hidden rounded-[24px] border w-[164px] h-[355px] sm:w-[188px] sm:h-[406px] md:w-[214px] md:h-[462px] lg:w-[234px] lg:h-[506px]"
                     style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -134,7 +136,7 @@ export default function SubdomainLanding({
                 ))
                 : (
                   <div
-                    className="flex h-[325px] w-[150px] flex-shrink-0 items-end justify-center rounded-[24px] border pb-6 sm:h-[368px] sm:w-[170px] md:h-[433px] md:w-[200px] lg:h-[455px] lg:w-[210px]"
+                    className="flex h-[355px] w-[164px] flex-shrink-0 items-end justify-center rounded-[24px] border pb-6 sm:h-[406px] sm:w-[188px] md:h-[462px] md:w-[214px] lg:h-[506px] lg:w-[234px]"
                     style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
                   >
                     <span
@@ -158,7 +160,7 @@ export default function SubdomainLanding({
               {(screens.length > 0 ? screens : [logoSrc]).map((src, i) => (
                 <div
                   key={`${src}-${i}`}
-                  className="snap-center flex-shrink-0 overflow-hidden rounded-[10px] border w-[360px] h-[225px] sm:w-[460px] sm:h-[286px] md:w-[560px] md:h-[348px]"
+                  className="snap-center flex-shrink-0 overflow-hidden rounded-[10px] border w-[420px] h-[262px] sm:w-[520px] sm:h-[324px] md:w-[640px] md:h-[398px]"
                   style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
                 >
                   <div
@@ -194,6 +196,10 @@ export default function SubdomainLanding({
             style={{ color: "var(--text-secondary)" }}
           >
             {description}
+          </p>
+
+          <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>
+            Features
           </p>
 
           <ul className="mx-auto max-w-2xl space-y-2.5">

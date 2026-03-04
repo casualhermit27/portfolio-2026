@@ -19,6 +19,8 @@ export default function CanPage() {
         "Built for repeat desktop workflows with almost zero setup",
         "Local-first processing for speed and privacy",
         "Native macOS interactions with keyboard-friendly controls",
+        "Keeps your desk workflow fast without opening heavy tools",
+        "Built to feel lightweight while handling practical conversions",
       ]}
     />
   );
