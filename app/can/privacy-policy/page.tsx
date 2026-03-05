@@ -45,69 +45,44 @@ export const metadata: Metadata = {
 
 export default function CanPrivacyPolicyPage() {
   return (
-    <main className="min-h-screen px-4 py-6 sm:px-8 sm:py-10">
+    <main className="flex min-h-screen items-center justify-center px-5 py-8 sm:px-8">
       <section
-        className="mx-auto w-full max-w-[1060px] overflow-hidden rounded-[24px] border"
+        className="w-full max-w-[640px] rounded-[14px] border px-6 py-8 sm:px-10 sm:py-10"
         style={{ borderColor: "var(--border)", background: "var(--bg-sticky)" }}
       >
-        <div className="px-6 py-10 sm:px-10 sm:py-14 md:px-14">
-          <div className="flex flex-col items-center">
-            <div
-              className="mb-4 h-14 w-14 overflow-hidden rounded-[15px] border"
-              style={{ borderColor: "var(--border)" }}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logos/can 2.jpg" alt="can app logo" className="h-full w-full object-cover" />
-            </div>
-
-            <div
-              className="mb-8 flex h-[110px] w-[110px] items-center justify-center rounded-[20px] border"
-              style={{ borderColor: "var(--border)", background: "var(--pill-bg)" }}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/can_mascot.png" alt="can mascot" className="h-[66px] w-[66px] object-contain" />
-            </div>
-
-            <h1 className="text-center text-4xl font-semibold tracking-[-0.02em] sm:text-5xl">
-              Privacy Policy
-            </h1>
-            <p
-              className="mt-6 max-w-3xl text-center text-[29px] font-light leading-[1.25] sm:text-[34px]"
-              style={{ color: "var(--text-secondary)" }}
-            >
-              Can is a privacy-first converter. Your files and personal data are yours alone.
-            </p>
-          </div>
-
-          <div className="mx-auto mt-14 max-w-[900px] space-y-10 sm:mt-16 sm:space-y-12">
-            {sections.map((section) => (
-              <div key={section.title}>
-                <h2
-                  className="text-[15px] font-semibold uppercase tracking-[0.12em]"
-                  style={{ color: "var(--text-muted)" }}
-                >
-                  {section.title}
-                </h2>
-                <p className="mt-4 text-[28px] leading-[1.45] tracking-[-0.01em] sm:text-[33px]">
-                  {section.body}
-                </p>
-              </div>
-            ))}
-          </div>
-
+        <div className="text-center">
           <div
-            className="relative mx-auto mt-14 max-w-[900px] border-t pt-8 sm:mt-16 sm:pt-10"
+            className="mx-auto mb-6 h-20 w-20 overflow-hidden rounded-[20px] border"
             style={{ borderColor: "var(--border)" }}
           >
-            <p className="text-center text-2xl sm:text-[30px]" style={{ color: "var(--text-secondary)" }}>
-              Last updated: {LAST_UPDATED}
-            </p>
-
-            <div className="pointer-events-none absolute -bottom-12 right-2 hidden sm:block">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/can_mascot.png" alt="" className="h-[160px] w-[160px] object-contain opacity-95" />
-            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logos/can 2.jpg" alt="Can App Logo" className="h-full w-full object-cover" />
           </div>
+
+          <h1 className="text-[30px] font-semibold tracking-[-0.02em]">Privacy Policy</h1>
+          <p className="mx-auto mt-4 max-w-[500px] text-[17px]" style={{ color: "var(--text-secondary)" }}>
+            Can is a privacy-first converter. Your files and personal data are yours alone.
+          </p>
+        </div>
+
+        <div className="mt-12 space-y-8">
+          {sections.map((section) => (
+            <div key={section.title}>
+              <h2
+                className="text-[13px] font-semibold uppercase tracking-[0.08em]"
+                style={{ color: "var(--text-muted)" }}
+              >
+                {section.title}
+              </h2>
+              <p className="mt-3 text-[16px] leading-[1.6]">{section.body}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-12 border-t pt-8 text-center" style={{ borderColor: "var(--border)" }}>
+          <p className="text-[14px]" style={{ color: "var(--text-secondary)" }}>
+            Last updated: {LAST_UPDATED}
+          </p>
         </div>
       </section>
     </main>
