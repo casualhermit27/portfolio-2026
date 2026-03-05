@@ -35,12 +35,14 @@ export function middleware(request: NextRequest) {
   const targetPath = SUBDOMAIN_TO_PATH[host];
   if (!targetPath) return NextResponse.next();
 
-  if (request.nextUrl.pathname === targetPath) {
+  const pathname = request.nextUrl.pathname;
+
+  if (pathname === targetPath || pathname.startsWith(`${targetPath}/`)) {
     return NextResponse.next();
   }
 
   const url = request.nextUrl.clone();
-  url.pathname = targetPath;
+  url.pathname = pathname === "/" ? targetPath : `${targetPath}${pathname}`;
   return NextResponse.rewrite(url);
 }
 
