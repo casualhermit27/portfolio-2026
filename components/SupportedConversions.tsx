@@ -34,60 +34,54 @@ export default function SupportedConversions() {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <div className="relative w-full flex flex-col items-center">
-            <button
+        <div className="relative inline-block align-middle">
+            <motion.button
                 onMouseEnter={() => setIsOpen(true)}
                 onMouseLeave={() => setIsOpen(false)}
-                className="group relative flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-full border transition-all duration-200"
                 style={{
                     borderColor: 'var(--border)',
-                    background: 'var(--bg-sticky)',
-                    color: 'var(--text-secondary)'
+                    background: isOpen ? 'var(--pill-bg)' : 'transparent',
+                    color: 'var(--text-muted)'
                 }}
-                aria-expanded={isOpen}
+                whileHover={{ borderColor: 'var(--border-active)', color: 'var(--text-secondary)' }}
             >
-                <span className="text-[10px] font-bold uppercase tracking-[0.15em]">
-                    Explore Supported Routes
+                <span className="text-[9px] font-semibold uppercase tracking-[0.12em]">
+                    Routes
                 </span>
-                <motion.span
-                    animate={{ y: isOpen ? 1 : 0, rotate: isOpen ? 180 : 0 }}
-                    className="text-[10px] opacity-40"
-                >
+                <span className={`text-[8px] transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
                     ↓
-                </motion.span>
-
-                {/* Subtle glow effect on hover */}
-                <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-md -z-10"
-                    style={{ background: 'var(--pill-bg)' }} />
-            </button>
+                </span>
+            </motion.button>
 
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
-                        initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                        initial={{ opacity: 0, y: 8, scale: 0.96 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 5, scale: 0.99 }}
-                        transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                        className="absolute top-full mt-4 z-50 w-full max-w-4xl p-8 rounded-[32px] border shadow-2xl backdrop-blur-xl"
+                        exit={{ opacity: 0, y: 4, scale: 0.98 }}
+                        transition={{ type: "spring", stiffness: 450, damping: 28 }}
+                        className="absolute top-full right-0 sm:left-1/2 sm:-translate-x-1/2 mt-2 z-[100] w-[calc(100vw-48px)] sm:w-[480px] p-6 rounded-[24px] border shadow-2xl backdrop-blur-2xl"
                         style={{
                             backgroundColor: 'var(--bg)',
                             borderColor: 'var(--border-active)',
-                            boxShadow: '0 30px 60px -12px rgba(0,0,0,0.15), 0 18px 36px -18px rgba(0,0,0,0.2)'
+                            boxShadow: '0 25px 50px -12px rgba(0,0,0,0.2)'
                         }}
                     >
-                        {/* Inner decorative gradient */}
-                        <div className="absolute inset-0 rounded-[32px] opacity-[0.03] pointer-events-none"
-                            style={{ background: 'radial-gradient(circle at top left, var(--text-primary), transparent 70%)' }} />
+                        {/* Decorative pointer */}
+                        <div className="absolute -top-1.5 right-6 sm:left-1/2 sm:-translate-x-1/2 w-3 h-3 rotate-45 border-l border-t"
+                            style={{ backgroundColor: 'var(--bg)', borderColor: 'var(--border-active)' }} />
 
-                        <div className="relative grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-6 gap-y-10">
+                        <div className="relative grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-8">
                             {CATEGORIES.map((cat) => (
-                                <div key={cat.title} className="flex flex-col items-start translate-z-0">
-                                    <h4 className="text-[9px] font-bold uppercase tracking-[0.12em] mb-4 opacity-30 px-1" style={{ color: 'var(--text-primary)' }}>
+                                <div key={cat.title}>
+                                    <h4 className="text-[10px] font-bold uppercase tracking-[0.1em] mb-2 opacity-30" style={{ color: 'var(--text-primary)' }}>
                                         {cat.title}
                                     </h4>
-                                    <ul className="space-y-1.5">
+                                    <ul className="space-y-1">
                                         {cat.items.map((item) => (
-                                            <li key={item} className="text-[11px] leading-tight font-light opacity-60 hover:opacity-100 transition-opacity whitespace-nowrap px-1" style={{ color: "var(--text-primary)" }}>
+                                            <li key={item} className="text-[11px] font-light opacity-60 flex items-center gap-1.5" style={{ color: "var(--text-primary)" }}>
+                                                <span className="w-0.5 h-0.5 rounded-full bg-current opacity-20" />
                                                 {item}
                                             </li>
                                         ))}
