@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import CapabilitiesHover from "@/components/CapabilitiesHover";
 
 type SubdomainLandingProps = {
   name: string;
@@ -178,6 +179,7 @@ export default function SubdomainLanding({
               >
                 {platform}
               </span>
+              {name === "can" && <CapabilitiesHover />}
             </div>
           </div>
 

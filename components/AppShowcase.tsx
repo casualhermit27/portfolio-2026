@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import PhoneMockup from "@/components/PhoneMockup";
 import MacMockup from "@/components/MacMockup";
 import type { App } from "@/app/page";
+import CapabilitiesHover from "@/components/CapabilitiesHover";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -113,6 +114,11 @@ export default function AppShowcase({ app }: AppShowcaseProps) {
               >
                 {isMac ? "macOS" : "iOS"}
               </span>
+              {app.id === "can" && (
+                <div className="self-end mb-1 sm:mb-2">
+                  <CapabilitiesHover />
+                </div>
+              )}
             </div>
             <p
               className="text-[12px] sm:text-[13px] mt-1.5 sm:mt-2.5 font-light tracking-wide"
