@@ -123,7 +123,11 @@ export default function AppShowcase({ app }: AppShowcaseProps) {
             </p>
             {app.id === "can" && (
               <div className="mt-4">
-                <SupportedConversions />
+                <SupportedConversions accent={{
+                  highlightBg: goToButtonPalette.bg,
+                  highlightText: goToButtonPalette.text,
+                  buttonBorder: goToButtonPalette.border
+                }} />
               </div>
             )}
           </div>

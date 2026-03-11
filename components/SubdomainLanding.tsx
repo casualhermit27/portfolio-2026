@@ -314,7 +314,7 @@ export default function SubdomainLanding({
                 >
                   <DotIcon />
                 </span>
-                <SupportedConversions />
+                <SupportedConversions accent={accent} />
               </li>
             )}
           </ul>

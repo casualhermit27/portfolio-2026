@@ -30,34 +30,41 @@ const CATEGORIES = [
     }
 ];
 
-export default function SupportedConversions() {
+type SupportedConversionsProps = {
+    accent?: {
+        highlightBg: string;
+        highlightText: string;
+        buttonBorder?: string;
+    };
+};
+
+export default function SupportedConversions({ accent }: SupportedConversionsProps) {
     const [isOpen, setIsOpen] = useState(false);
+
+    // Default to 'can' blue style if not provided
+    const bg = accent?.highlightBg || "#D5E6FB";
+    const color = accent?.highlightText || "#3F5574";
+    const border = accent?.buttonBorder || "#C1D7F4";
 
     return (
         <div className="relative inline-block">
             <button
                 onMouseEnter={() => setIsOpen(true)}
                 onMouseLeave={() => setIsOpen(false)}
-                className="group flex items-center gap-2 text-[13px] sm:text-[14px] font-light transition-all duration-200"
-                style={{ color: 'var(--text-primary)' }}
+                className="group flex items-center gap-2 px-1.5 py-0.5 rounded-[6px] text-[13px] sm:text-[14px] font-medium transition-all duration-200 border"
+                style={{
+                    background: bg,
+                    color: color,
+                    borderColor: isOpen ? border : 'transparent'
+                }}
             >
-                <span className="text-[9px] font-bold uppercase tracking-[0.14em] opacity-30">
-                    Conversions
-                </span>
-                <span className="relative py-0.5">
-                    View all supported routes
-                    <motion.span
-                        className="absolute bottom-0 left-0 w-full h-[1px] opacity-20"
-                        style={{ background: 'currentColor' }}
-                        initial={{ scaleX: 0.4, opacity: 0.1 }}
-                        animate={{ scaleX: isOpen ? 1 : 0.4, opacity: isOpen ? 0.3 : 0.1 }}
-                    />
-                </span>
+                <span>View all supported routes</span>
                 <motion.span
-                    animate={{ y: isOpen ? 1 : 0, opacity: isOpen ? 0.6 : 0.2 }}
-                    className="text-[10px]"
+                    animate={{ x: isOpen ? 3 : 0 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                    className="text-[11px] opacity-60"
                 >
-                    ↓
+                    →
                 </motion.span>
             </button>
 
@@ -79,7 +86,7 @@ export default function SupportedConversions() {
                         <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 rotate-45 border-r border-b"
                             style={{ backgroundColor: 'var(--bg)', borderColor: 'var(--border-active)' }} />
 
-                        <div className="relative grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-8">
+                        <div className="relative grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-8 text-left">
                             {CATEGORIES.map((cat) => (
                                 <div key={cat.title}>
                                     <h4 className="text-[10px] font-bold uppercase tracking-[0.12em] mb-3 opacity-30" style={{ color: 'var(--text-primary)' }}>
