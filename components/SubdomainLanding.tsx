@@ -179,7 +179,6 @@ export default function SubdomainLanding({
               >
                 {platform}
               </span>
-              {name === "can" && <SupportedConversions />}
             </div>
           </div>
 
@@ -307,6 +306,17 @@ export default function SubdomainLanding({
                 <span>{renderFeatureText(item, accent.highlightBg, accent.highlightText)}</span>
               </li>
             ))}
+            {name === "can" && (
+              <li className="grid grid-cols-[20px_minmax(0,1fr)] items-center gap-3 text-left">
+                <span
+                  className="inline-flex h-5 w-5 items-center justify-center rounded-md border"
+                  style={{ borderColor: "var(--border)", background: "var(--pill-bg)", color: accent.dot }}
+                >
+                  <DotIcon />
+                </span>
+                <SupportedConversions />
+              </li>
+            )}
           </ul>
 
           <div className="pt-2 flex flex-col items-center">

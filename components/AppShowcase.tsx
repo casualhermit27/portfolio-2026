@@ -114,7 +114,6 @@ export default function AppShowcase({ app }: AppShowcaseProps) {
               >
                 {isMac ? "macOS" : "iOS"}
               </span>
-              {app.id === "can" && <SupportedConversions />}
             </div>
             <p
               className="text-[12px] sm:text-[13px] mt-1.5 sm:mt-2.5 font-light tracking-wide"
@@ -122,6 +121,11 @@ export default function AppShowcase({ app }: AppShowcaseProps) {
             >
               {app.tagline}
             </p>
+            {app.id === "can" && (
+              <div className="mt-4">
+                <SupportedConversions />
+              </div>
+            )}
           </div>
         </div>
       </div>
