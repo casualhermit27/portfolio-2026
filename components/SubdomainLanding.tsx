@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import CapabilitiesHover from "@/components/CapabilitiesHover";
+import SupportedConversions from "@/components/SupportedConversions";
 
 type SubdomainLandingProps = {
   name: string;
@@ -179,7 +179,6 @@ export default function SubdomainLanding({
               >
                 {platform}
               </span>
-              {name === "can" && <CapabilitiesHover />}
             </div>
           </div>
 
@@ -349,6 +348,8 @@ export default function SubdomainLanding({
               </p>
             )}
           </div>
+
+          {name === "can" && <SupportedConversions />}
         </div>
 
         <div className="mt-9 flex flex-col items-center gap-2">
