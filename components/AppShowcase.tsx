@@ -191,7 +191,9 @@ export default function AppShowcase({ app }: AppShowcaseProps) {
           ))}
       </motion.div>
 
-      {app.id === "can" && <SupportedConversions />}
+      <div className="mt-8">
+        {app.id === "can" && <SupportedConversions />}
+      </div>
     </div>
   );
 }

@@ -347,89 +347,89 @@ export default function SubdomainLanding({
                 {ctaHint}
               </p>
             )}
-          </div>
-
-          {name === "can" && <SupportedConversions />}
-        </div>
-
-        <div className="mt-9 flex flex-col items-center gap-2">
-          <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>
-            Built by
-          </p>
-          <a
-            href={builtByUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-[12px] border px-3.5 py-2"
-            style={{ borderColor: "var(--border)", background: "var(--bg-sticky)", color: "var(--text-primary)" }}
-          >
-            <span
-              className="inline-flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-medium"
-              style={{ background: "var(--pill-bg)", color: "var(--text-secondary)" }}
-            >
-              HC
-            </span>
-            <span className="text-[14px] font-medium">{builtByName}</span>
-          </a>
-        </div>
-
-        <div
-          className="mx-auto mt-10 w-full max-w-xl rounded-[18px] border p-4 sm:p-5"
-          style={{ borderColor: "var(--border)", background: "var(--bg-sticky)" }}
-        >
-          <div className="flex items-start gap-3">
-            <span
-              className="inline-flex h-8 w-8 items-center justify-center rounded-full border"
-              style={{ borderColor: "var(--border)", background: "var(--pill-bg)", color: "var(--text-secondary)" }}
-            >
-              <MailIcon />
-            </span>
-            <div className="text-left">
-              <p className="text-[13px] font-medium" style={{ color: "var(--text-primary)" }}>
-                Join the tiny newsletter
-              </p>
-              <p className="mt-1 text-[12px]" style={{ color: "var(--text-secondary)" }}>
-                Occasional product updates, builds, and launch notes.
-              </p>
+            <div className="mt-12">
+              {name === "can" && <SupportedConversions />}
             </div>
           </div>
 
-          <form onSubmit={onNewsletterSubmit} className="mt-4 flex flex-col gap-2 sm:flex-row">
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              className="w-full rounded-[11px] border px-3 py-2.5 text-[14px] outline-none"
-              style={{
-                borderColor: "var(--border)",
-                background: "var(--bg)",
-                color: "var(--text-primary)",
-              }}
-              required
-            />
-            <motion.button
-              type="submit"
-              className="rounded-[11px] border px-4 py-2.5 text-[14px] font-medium"
-              style={{
-                borderColor: accent.buttonBorder,
-                background: accent.buttonBg,
-                color: accent.buttonText,
-              }}
-              whileHover={{ y: -1, scale: 1.02, backgroundColor: accent.buttonHover }}
-              whileTap={{ scale: 0.97 }}
-              transition={{ type: "spring", stiffness: 520, damping: 24 }}
-            >
-              Subscribe
-            </motion.button>
-          </form>
-
-          {subscribed && (
-            <p className="mt-3 text-[12px]" style={{ color: "var(--text-muted)" }}>
-              Thanks. You are on the list.
+          <div className="mt-9 flex flex-col items-center gap-2">
+            <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>
+              Built by
             </p>
-          )}
-        </div>
+            <a
+              href={builtByUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-[12px] border px-3.5 py-2"
+              style={{ borderColor: "var(--border)", background: "var(--bg-sticky)", color: "var(--text-primary)" }}
+            >
+              <span
+                className="inline-flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-medium"
+                style={{ background: "var(--pill-bg)", color: "var(--text-secondary)" }}
+              >
+                HC
+              </span>
+              <span className="text-[14px] font-medium">{builtByName}</span>
+            </a>
+          </div>
+
+          <div
+            className="mx-auto mt-10 w-full max-w-xl rounded-[18px] border p-4 sm:p-5"
+            style={{ borderColor: "var(--border)", background: "var(--bg-sticky)" }}
+          >
+            <div className="flex items-start gap-3">
+              <span
+                className="inline-flex h-8 w-8 items-center justify-center rounded-full border"
+                style={{ borderColor: "var(--border)", background: "var(--pill-bg)", color: "var(--text-secondary)" }}
+              >
+                <MailIcon />
+              </span>
+              <div className="text-left">
+                <p className="text-[13px] font-medium" style={{ color: "var(--text-primary)" }}>
+                  Join the tiny newsletter
+                </p>
+                <p className="mt-1 text-[12px]" style={{ color: "var(--text-secondary)" }}>
+                  Occasional product updates, builds, and launch notes.
+                </p>
+              </div>
+            </div>
+
+            <form onSubmit={onNewsletterSubmit} className="mt-4 flex flex-col gap-2 sm:flex-row">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                className="w-full rounded-[11px] border px-3 py-2.5 text-[14px] outline-none"
+                style={{
+                  borderColor: "var(--border)",
+                  background: "var(--bg)",
+                  color: "var(--text-primary)",
+                }}
+                required
+              />
+              <motion.button
+                type="submit"
+                className="rounded-[11px] border px-4 py-2.5 text-[14px] font-medium"
+                style={{
+                  borderColor: accent.buttonBorder,
+                  background: accent.buttonBg,
+                  color: accent.buttonText,
+                }}
+                whileHover={{ y: -1, scale: 1.02, backgroundColor: accent.buttonHover }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ type: "spring", stiffness: 520, damping: 24 }}
+              >
+                Subscribe
+              </motion.button>
+            </form>
+
+            {subscribed && (
+              <p className="mt-3 text-[12px]" style={{ color: "var(--text-muted)" }}>
+                Thanks. You are on the list.
+              </p>
+            )}
+          </div>
       </section>
     </main>
   );
