@@ -201,149 +201,155 @@ export default function SubdomainLanding({
           </button>
         </div>
 
-        <div className="mx-auto flex max-w-2xl flex-col items-center gap-3 text-center">
-          {tagline && (
-            <p className="text-[18px] font-medium leading-tight sm:text-[20px]" style={{ color: "var(--text-primary)" }}>
-              {tagline}
+        <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-12">
+          <div
+            className={`flex flex-col ${platform === "macOS" ? "items-start text-left" : "items-center text-center"} gap-3 lg:pt-2`}
+          >
+            {tagline && (
+              <p className="text-[18px] font-medium leading-tight sm:text-[20px]" style={{ color: "var(--text-primary)" }}>
+                {tagline}
+              </p>
+            )}
+            <p className="text-[14px] leading-relaxed sm:text-[15px]" style={{ color: "var(--text-secondary)" }}>
+              {description}
             </p>
-          )}
-          <p className="text-[14px] leading-relaxed sm:text-[15px]" style={{ color: "var(--text-secondary)" }}>
-            {description}
-          </p>
-          {latestDate && (
-            <div
-              className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[11px] uppercase tracking-[0.14em]"
-              style={{ borderColor: "var(--border)", color: "var(--text-muted)", background: "var(--bg-sticky)" }}
-            >
-              <DotIcon />
-              <span>{latestLabel}</span>
-              <span className="text-[12px] normal-case tracking-normal" style={{ color: "var(--text-secondary)" }}>
-                <time dateTime={latestDateIso ?? latestDate}>{latestDate}</time>
-              </span>
-            </div>
-          )}
-        </div>
-
-        <div className="mt-6 flex flex-col items-center">
-          {ctaUrl ? (
-            <motion.a
-              href={ctaUrl}
-              target={isExternalCta ? "_blank" : undefined}
-              rel={isExternalCta ? "noopener noreferrer" : undefined}
-              className="inline-flex items-center gap-2 rounded-[16px] border px-6 py-3.5 text-[17px] font-semibold tracking-[-0.01em] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg)]"
-              style={{
-                borderColor: accent.buttonBorder,
-                background: accent.buttonBg,
-                color: accent.buttonText,
-              }}
-              whileHover={{ y: -2, scale: 1.03, backgroundColor: accent.buttonHover }}
-              whileTap={{ scale: 0.96 }}
-              transition={{ type: "spring", stiffness: 520, damping: 24 }}
-            >
-              {platform === "iOS" && <AppStoreIcon />}
-              {ctaLabel}
-            </motion.a>
-          ) : (
-            <motion.button
-              type="button"
-              disabled
-              className="inline-flex items-center gap-2 rounded-[16px] border px-6 py-3.5 text-[17px] font-semibold tracking-[-0.01em] opacity-80"
-              style={{
-                borderColor: accent.buttonBorder,
-                background: accent.buttonBg,
-                color: accent.buttonText,
-              }}
-            >
-              {comingSoonLabel}
-            </motion.button>
-          )}
-
-          {ctaHint && (
-            <p className="mt-2 text-[12px]" style={{ color: "var(--text-muted)" }}>
-              {ctaHint}
-            </p>
-          )}
-        </div>
-
-        <div className="mt-10">
-          {platform === "iOS" ? (
-            <div className="overflow-x-auto scrollbar-hide pb-2">
-              <div className="mb-3 text-center">
-                <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>
-                  Screens
-                </p>
+            {latestDate && (
+              <div
+                className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[11px] uppercase tracking-[0.14em] ${
+                  platform === "macOS" ? "" : "mx-auto"
+                }`}
+                style={{ borderColor: "var(--border)", color: "var(--text-muted)", background: "var(--bg-sticky)" }}
+              >
+                <DotIcon />
+                <span>{latestLabel}</span>
+                <span className="text-[12px] normal-case tracking-normal" style={{ color: "var(--text-secondary)" }}>
+                  <time dateTime={latestDateIso ?? latestDate}>{latestDate}</time>
+                </span>
               </div>
-              <div className="flex w-max snap-x snap-mandatory items-start gap-4 px-1 mx-auto sm:gap-5 md:gap-6">
-                {screens.length > 0
-                  ? screens.map((src, i) => (
+            )}
+
+            <div className={`mt-3 flex flex-col ${platform === "macOS" ? "items-start" : "items-center"}`}>
+              {ctaUrl ? (
+                <motion.a
+                  href={ctaUrl}
+                  target={isExternalCta ? "_blank" : undefined}
+                  rel={isExternalCta ? "noopener noreferrer" : undefined}
+                  className="inline-flex items-center gap-2 rounded-[16px] border px-6 py-3.5 text-[17px] font-semibold tracking-[-0.01em] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg)]"
+                  style={{
+                    borderColor: accent.buttonBorder,
+                    background: accent.buttonBg,
+                    color: accent.buttonText,
+                  }}
+                  whileHover={{ y: -2, scale: 1.03, backgroundColor: accent.buttonHover }}
+                  whileTap={{ scale: 0.96 }}
+                  transition={{ type: "spring", stiffness: 520, damping: 24 }}
+                >
+                  {platform === "iOS" && <AppStoreIcon />}
+                  {ctaLabel}
+                </motion.a>
+              ) : (
+                <motion.button
+                  type="button"
+                  disabled
+                  className="inline-flex items-center gap-2 rounded-[16px] border px-6 py-3.5 text-[17px] font-semibold tracking-[-0.01em] opacity-80"
+                  style={{
+                    borderColor: accent.buttonBorder,
+                    background: accent.buttonBg,
+                    color: accent.buttonText,
+                  }}
+                >
+                  {comingSoonLabel}
+                </motion.button>
+              )}
+
+              {ctaHint && (
+                <p className="mt-2 text-[12px]" style={{ color: "var(--text-muted)" }}>
+                  {ctaHint}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div className="mt-2 lg:mt-0">
+            {platform === "iOS" ? (
+              <div className="overflow-x-auto scrollbar-hide pb-2">
+                <div className="mb-3 text-center">
+                  <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>
+                    Screens
+                  </p>
+                </div>
+                <div className="flex w-max snap-x snap-mandatory items-start gap-4 px-1 mx-auto sm:gap-5 md:gap-6">
+                  {screens.length > 0
+                    ? screens.map((src, i) => (
+                      <div
+                        key={src}
+                        className="snap-center flex-shrink-0 overflow-hidden rounded-[26px] border w-[176px] h-[381px] sm:w-[202px] sm:h-[437px] md:w-[228px] md:h-[494px] lg:w-[246px] lg:h-[533px]"
+                        style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={src}
+                          alt={`${name} screen ${i + 1}`}
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+                    ))
+                    : (
+                      <div
+                        className="flex h-[381px] w-[176px] flex-shrink-0 items-end justify-center rounded-[26px] border pb-6 sm:h-[437px] sm:w-[202px] md:h-[494px] md:w-[228px] lg:h-[533px] lg:w-[246px]"
+                        style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
+                      >
+                        <span
+                          className="text-[10px] tracking-[0.18em] uppercase"
+                          style={{ color: "var(--text-muted)" }}
+                        >
+                          soon
+                        </span>
+                      </div>
+                    )}
+                </div>
+              </div>
+            ) : (
+              <div className="overflow-x-auto scrollbar-hide pb-2">
+                <div className="mb-3 text-center lg:text-left">
+                  <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>
+                    Preview
+                  </p>
+                </div>
+                <div className="flex w-max snap-x snap-mandatory items-start gap-2 px-1 mx-auto lg:mx-0 sm:gap-3">
+                  {(screens.length > 0 ? screens : [logoSrc]).map((src, i) => (
                     <div
-                      key={src}
-                      className="snap-center flex-shrink-0 overflow-hidden rounded-[26px] border w-[176px] h-[381px] sm:w-[202px] sm:h-[437px] md:w-[228px] md:h-[494px] lg:w-[246px] lg:h-[533px]"
+                      key={`${src}-${i}`}
+                      className="snap-center flex-shrink-0 overflow-hidden rounded-[12px] border w-[470px] h-[293px] sm:w-[580px] sm:h-[361px] md:w-[700px] md:h-[436px]"
                       style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
                     >
+                      <div
+                        className="flex items-center px-2.5 border-b"
+                        style={{
+                          height: "24px",
+                          borderColor: "var(--border)",
+                          background: "var(--pill-bg)",
+                        }}
+                      >
+                        <div className="flex items-center gap-1.5">
+                          <span className="h-2 w-2 rounded-full" style={{ background: "#FF5F57" }} />
+                          <span className="h-2 w-2 rounded-full" style={{ background: "#FEBC2E" }} />
+                          <span className="h-2 w-2 rounded-full" style={{ background: "#28C840" }} />
+                        </div>
+                      </div>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={src}
                         alt={`${name} screen ${i + 1}`}
-                        className="h-full w-full object-cover"
+                        className="w-full object-cover"
+                        style={{ height: "calc(100% - 24px)" }}
                       />
                     </div>
-                  ))
-                  : (
-                    <div
-                      className="flex h-[381px] w-[176px] flex-shrink-0 items-end justify-center rounded-[26px] border pb-6 sm:h-[437px] sm:w-[202px] md:h-[494px] md:w-[228px] lg:h-[533px] lg:w-[246px]"
-                      style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
-                    >
-                      <span
-                        className="text-[10px] tracking-[0.18em] uppercase"
-                        style={{ color: "var(--text-muted)" }}
-                      >
-                        soon
-                      </span>
-                    </div>
-                  )}
+                  ))}
+                </div>
               </div>
-            </div>
-          ) : (
-            <div className="overflow-x-auto scrollbar-hide pb-2">
-              <div className="mb-3 text-center">
-                <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>
-                  Preview
-                </p>
-              </div>
-              <div className="flex w-max snap-x snap-mandatory items-start gap-2 px-1 mx-auto sm:gap-3">
-                {(screens.length > 0 ? screens : [logoSrc]).map((src, i) => (
-                  <div
-                    key={`${src}-${i}`}
-                    className="snap-center flex-shrink-0 overflow-hidden rounded-[12px] border w-[470px] h-[293px] sm:w-[580px] sm:h-[361px] md:w-[700px] md:h-[436px]"
-                    style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
-                  >
-                    <div
-                      className="flex items-center px-2.5 border-b"
-                      style={{
-                        height: "24px",
-                        borderColor: "var(--border)",
-                        background: "var(--pill-bg)",
-                      }}
-                    >
-                      <div className="flex items-center gap-1.5">
-                        <span className="h-2 w-2 rounded-full" style={{ background: "#FF5F57" }} />
-                        <span className="h-2 w-2 rounded-full" style={{ background: "#FEBC2E" }} />
-                        <span className="h-2 w-2 rounded-full" style={{ background: "#28C840" }} />
-                      </div>
-                    </div>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={src}
-                      alt={`${name} screen ${i + 1}`}
-                      className="w-full object-cover"
-                      style={{ height: "calc(100% - 24px)" }}
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
         <div className="mt-10 space-y-5 text-center sm:mt-12">
@@ -351,11 +357,7 @@ export default function SubdomainLanding({
             Features
           </p>
 
-          <ul
-            className={`mx-auto w-full max-w-3xl space-y-2.5 md:w-fit ${
-              name === "can" ? "md:w-full md:max-w-4xl md:grid md:grid-cols-2 md:gap-x-6 md:gap-y-3 md:space-y-0" : ""
-            }`}
-          >
+          <ul className="mx-auto w-full max-w-3xl space-y-2.5 md:w-fit">
             {bullets.map((item) => (
               <li
                 key={item}
@@ -372,7 +374,7 @@ export default function SubdomainLanding({
               </li>
             ))}
             {name === "can" && (
-              <li className="grid grid-cols-[20px_minmax(0,1fr)] items-center gap-3 text-left md:col-span-2">
+              <li className="grid grid-cols-[20px_minmax(0,1fr)] items-center gap-3 text-left">
                 <span
                   className="inline-flex h-5 w-5 items-center justify-center rounded-md border"
                   style={{ borderColor: "var(--border)", background: "var(--pill-bg)", color: accent.dot }}
