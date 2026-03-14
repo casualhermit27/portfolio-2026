@@ -31,13 +31,8 @@ export default function CanPage() {
       ]}
       latestDate="March 14, 2026"
       latestDateIso="2026-03-14"
-      ctaUrl="#newsletter"
-      ctaLabel="Join waitlist"
-      ctaHint="We will email you when the build is ready."
-      newsletterTitle="Join the can waitlist"
-      newsletterBody="Be first to know when the macOS build is ready."
-      newsletterCtaLabel="Join waitlist"
-      newsletterSuccess="Thanks. You are on the early list."
+      comingSoonLabel="Brewing now"
+      ctaHint="A small macOS tool, nearly ready to pour."
     />
   );
 }

@@ -15,13 +15,10 @@ type SubdomainLandingProps = {
   ctaUrl?: string;
   ctaLabel?: string;
   ctaHint?: string;
+  comingSoonLabel?: string;
   latestLabel?: string;
   latestDate?: string;
   latestDateIso?: string;
-  newsletterTitle?: string;
-  newsletterBody?: string;
-  newsletterCtaLabel?: string;
-  newsletterSuccess?: string;
   builtByName?: string;
   builtByUrl?: string;
 };
@@ -101,15 +98,6 @@ function AppStoreIcon() {
   );
 }
 
-function MailIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <rect x="3" y="5" width="18" height="14" rx="2" />
-      <path d="m3 7 9 6 9-6" />
-    </svg>
-  );
-}
-
 function DotIcon() {
   return <span className="h-1.5 w-1.5 rounded-full bg-current" aria-hidden />;
 }
@@ -125,20 +113,14 @@ export default function SubdomainLanding({
   ctaUrl,
   ctaLabel = "Download",
   ctaHint,
+  comingSoonLabel = "Coming soon",
   latestLabel = "Latest update",
   latestDate,
   latestDateIso,
-  newsletterTitle = "Join the tiny newsletter",
-  newsletterBody = "Occasional product updates, builds, and launch notes.",
-  newsletterCtaLabel = "Subscribe",
-  newsletterSuccess = "Thanks. You are on the list.",
   builtByName = "Harsha Chaganti",
   builtByUrl = "https://harshachaganti.com",
 }: SubdomainLandingProps) {
   const [dark, setDark] = useState(false);
-  const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-  const [errorMessage, setErrorMessage] = useState("");
 
   const accent = platform === "iOS"
     ? {
@@ -173,33 +155,6 @@ export default function SubdomainLanding({
     document.documentElement.classList.toggle("dark", dark);
     window.localStorage.setItem("subdomain-theme", dark ? "dark" : "light");
   }, [dark]);
-
-  const onNewsletterSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!email.trim() || status === "loading") return;
-    setStatus("loading");
-    setErrorMessage("");
-
-    try {
-      const response = await fetch("/api/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, source: name }),
-      });
-
-      if (!response.ok) {
-        const payload = await response.json().catch(() => ({}));
-        throw new Error(payload?.error ?? "Subscription failed");
-      }
-
-      setStatus("success");
-      setEmail("");
-    } catch (error) {
-      const message = error instanceof Error ? error.message : "Subscription failed";
-      setStatus("error");
-      setErrorMessage(message);
-    }
-  };
 
   const isExternalCta = !!ctaUrl && /^https?:\/\//i.test(ctaUrl);
 
@@ -299,7 +254,7 @@ export default function SubdomainLanding({
                 color: accent.buttonText,
               }}
             >
-              Coming soon
+              {comingSoonLabel}
             </motion.button>
           )}
 
@@ -445,80 +400,6 @@ export default function SubdomainLanding({
             </span>
             <span className="text-[14px] font-medium">{builtByName}</span>
           </a>
-        </div>
-
-        <div
-          id="newsletter"
-          className="mx-auto mt-10 w-full max-w-xl rounded-[18px] border p-4 sm:p-5"
-          style={{ borderColor: "var(--border)", background: "var(--bg-sticky)" }}
-        >
-          <div className="flex items-start gap-3">
-            <span
-              className="inline-flex h-8 w-8 items-center justify-center rounded-full border"
-              style={{ borderColor: "var(--border)", background: "var(--pill-bg)", color: "var(--text-secondary)" }}
-            >
-              <MailIcon />
-            </span>
-            <div className="text-left">
-              <p className="text-[13px] font-medium" style={{ color: "var(--text-primary)" }}>
-                {newsletterTitle}
-              </p>
-              <p className="mt-1 text-[12px]" style={{ color: "var(--text-secondary)" }}>
-                {newsletterBody}
-              </p>
-            </div>
-          </div>
-
-          <form onSubmit={onNewsletterSubmit} className="mt-4 flex flex-col gap-2 sm:flex-row">
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                if (status !== "idle") {
-                  setStatus("idle");
-                  setErrorMessage("");
-                }
-              }}
-              placeholder="you@example.com"
-              autoComplete="email"
-              name="email"
-              className="w-full rounded-[11px] border px-3 py-2.5 text-[14px] outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg)]"
-              style={{
-                borderColor: "var(--border)",
-                background: "var(--bg)",
-                color: "var(--text-primary)",
-              }}
-              required
-            />
-            <motion.button
-              type="submit"
-              className="rounded-[11px] border px-4 py-2.5 text-[14px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg)]"
-              style={{
-                borderColor: accent.buttonBorder,
-                background: accent.buttonBg,
-                color: accent.buttonText,
-              }}
-              whileHover={{ y: -1, scale: 1.02, backgroundColor: accent.buttonHover }}
-              whileTap={{ scale: 0.97 }}
-              transition={{ type: "spring", stiffness: 520, damping: 24 }}
-              disabled={status === "loading"}
-              aria-busy={status === "loading"}
-            >
-              {status === "loading" ? "Submitting..." : newsletterCtaLabel}
-            </motion.button>
-          </form>
-
-          {status === "success" && (
-            <p className="mt-3 text-[12px]" style={{ color: "var(--text-muted)" }} aria-live="polite">
-              {newsletterSuccess}
-            </p>
-          )}
-          {status === "error" && (
-            <p className="mt-3 text-[12px]" style={{ color: "var(--text-muted)" }} aria-live="polite">
-              {errorMessage || "Could not subscribe right now. Please try again."}
-            </p>
-          )}
         </div>
       </section>
     </main>
