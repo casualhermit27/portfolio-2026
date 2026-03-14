@@ -16,6 +16,7 @@ export default function CanPage() {
     <SubdomainLanding
       name="can"
       platform="macOS"
+      tagline="Instant file conversions without heavy tools."
       description="A minimal desktop utility to convert files and formats instantly."
       logoSrc="/logos/can 2.jpg"
       screens={[]}
@@ -28,6 +29,15 @@ export default function CanPage() {
         "Built to feel lightweight while handling **practical conversions**",
         "Ready for power users who want **speed with simplicity**",
       ]}
+      latestDate="March 14, 2026"
+      latestDateIso="2026-03-14"
+      ctaUrl="#newsletter"
+      ctaLabel="Join waitlist"
+      ctaHint="We will email you when the build is ready."
+      newsletterTitle="Join the can waitlist"
+      newsletterBody="Be first to know when the macOS build is ready."
+      newsletterCtaLabel="Join waitlist"
+      newsletterSuccess="Thanks. You are on the early list."
     />
   );
 }

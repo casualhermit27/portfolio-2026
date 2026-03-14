@@ -6,6 +6,7 @@ import SupportedConversions from "@/components/SupportedConversions";
 
 type SubdomainLandingProps = {
   name: string;
+  tagline?: string;
   description: string;
   platform: "iOS" | "macOS";
   logoSrc: string;
@@ -14,6 +15,13 @@ type SubdomainLandingProps = {
   ctaUrl?: string;
   ctaLabel?: string;
   ctaHint?: string;
+  latestLabel?: string;
+  latestDate?: string;
+  latestDateIso?: string;
+  newsletterTitle?: string;
+  newsletterBody?: string;
+  newsletterCtaLabel?: string;
+  newsletterSuccess?: string;
   builtByName?: string;
   builtByUrl?: string;
 };
@@ -108,6 +116,7 @@ function DotIcon() {
 
 export default function SubdomainLanding({
   name,
+  tagline,
   description,
   platform,
   logoSrc,
@@ -116,12 +125,20 @@ export default function SubdomainLanding({
   ctaUrl,
   ctaLabel = "Download",
   ctaHint,
+  latestLabel = "Latest update",
+  latestDate,
+  latestDateIso,
+  newsletterTitle = "Join the tiny newsletter",
+  newsletterBody = "Occasional product updates, builds, and launch notes.",
+  newsletterCtaLabel = "Subscribe",
+  newsletterSuccess = "Thanks. You are on the list.",
   builtByName = "Harsha Chaganti",
   builtByUrl = "https://harshachaganti.com",
 }: SubdomainLandingProps) {
   const [dark, setDark] = useState(false);
   const [email, setEmail] = useState("");
-  const [subscribed, setSubscribed] = useState(false);
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const accent = platform === "iOS"
     ? {
@@ -144,15 +161,47 @@ export default function SubdomainLanding({
     };
 
   useEffect(() => {
+    const stored = window.localStorage.getItem("subdomain-theme");
+    if (stored === "dark" || stored === "light") {
+      setDark(stored === "dark");
+    } else if (window.matchMedia?.("(prefers-color-scheme: dark)").matches) {
+      setDark(true);
+    }
+  }, []);
+
+  useEffect(() => {
     document.documentElement.classList.toggle("dark", dark);
+    window.localStorage.setItem("subdomain-theme", dark ? "dark" : "light");
   }, [dark]);
 
-  const onNewsletterSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onNewsletterSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!email.trim()) return;
-    setSubscribed(true);
-    setEmail("");
+    if (!email.trim() || status === "loading") return;
+    setStatus("loading");
+    setErrorMessage("");
+
+    try {
+      const response = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, source: name }),
+      });
+
+      if (!response.ok) {
+        const payload = await response.json().catch(() => ({}));
+        throw new Error(payload?.error ?? "Subscription failed");
+      }
+
+      setStatus("success");
+      setEmail("");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Subscription failed";
+      setStatus("error");
+      setErrorMessage(message);
+    }
   };
+
+  const isExternalCta = !!ctaUrl && /^https?:\/\//i.test(ctaUrl);
 
   return (
     <main
@@ -184,7 +233,7 @@ export default function SubdomainLanding({
 
           <button
             onClick={() => setDark((d) => !d)}
-            className="absolute right-0 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border transition-opacity duration-150 hover:opacity-80"
+            className="absolute right-0 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border transition-opacity duration-150 hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg)]"
             style={{
               borderColor: "var(--border)",
               background: "var(--pill-bg)",
@@ -197,7 +246,71 @@ export default function SubdomainLanding({
           </button>
         </div>
 
-        <div>
+        <div className="mx-auto flex max-w-2xl flex-col items-center gap-3 text-center">
+          {tagline && (
+            <p className="text-[18px] font-medium leading-tight sm:text-[20px]" style={{ color: "var(--text-primary)" }}>
+              {tagline}
+            </p>
+          )}
+          <p className="text-[14px] leading-relaxed sm:text-[15px]" style={{ color: "var(--text-secondary)" }}>
+            {description}
+          </p>
+          {latestDate && (
+            <div
+              className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[11px] uppercase tracking-[0.14em]"
+              style={{ borderColor: "var(--border)", color: "var(--text-muted)", background: "var(--bg-sticky)" }}
+            >
+              <DotIcon />
+              <span>{latestLabel}</span>
+              <span className="text-[12px] normal-case tracking-normal" style={{ color: "var(--text-secondary)" }}>
+                <time dateTime={latestDateIso ?? latestDate}>{latestDate}</time>
+              </span>
+            </div>
+          )}
+        </div>
+
+        <div className="mt-6 flex flex-col items-center">
+          {ctaUrl ? (
+            <motion.a
+              href={ctaUrl}
+              target={isExternalCta ? "_blank" : undefined}
+              rel={isExternalCta ? "noopener noreferrer" : undefined}
+              className="inline-flex items-center gap-2 rounded-[16px] border px-6 py-3.5 text-[17px] font-semibold tracking-[-0.01em] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg)]"
+              style={{
+                borderColor: accent.buttonBorder,
+                background: accent.buttonBg,
+                color: accent.buttonText,
+              }}
+              whileHover={{ y: -2, scale: 1.03, backgroundColor: accent.buttonHover }}
+              whileTap={{ scale: 0.96 }}
+              transition={{ type: "spring", stiffness: 520, damping: 24 }}
+            >
+              {platform === "iOS" && <AppStoreIcon />}
+              {ctaLabel}
+            </motion.a>
+          ) : (
+            <motion.button
+              type="button"
+              disabled
+              className="inline-flex items-center gap-2 rounded-[16px] border px-6 py-3.5 text-[17px] font-semibold tracking-[-0.01em] opacity-80"
+              style={{
+                borderColor: accent.buttonBorder,
+                background: accent.buttonBg,
+                color: accent.buttonText,
+              }}
+            >
+              Coming soon
+            </motion.button>
+          )}
+
+          {ctaHint && (
+            <p className="mt-2 text-[12px]" style={{ color: "var(--text-muted)" }}>
+              {ctaHint}
+            </p>
+          )}
+        </div>
+
+        <div className="mt-10">
           {platform === "iOS" ? (
             <div className="overflow-x-auto scrollbar-hide pb-2">
               <div className="mb-3 text-center">
@@ -279,13 +392,6 @@ export default function SubdomainLanding({
         </div>
 
         <div className="mt-10 space-y-5 text-center sm:mt-12">
-          <p
-            className="mx-auto max-w-2xl text-[14px] leading-relaxed sm:text-[15px]"
-            style={{ color: "var(--text-secondary)" }}
-          >
-            {description}
-          </p>
-
           <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>
             Features
           </p>
@@ -318,47 +424,6 @@ export default function SubdomainLanding({
               </li>
             )}
           </ul>
-
-          <div className="pt-2 flex flex-col items-center">
-            {ctaUrl ? (
-              <motion.a
-                href={ctaUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-[16px] border px-6 py-3.5 text-[17px] font-semibold tracking-[-0.01em]"
-                style={{
-                  borderColor: accent.buttonBorder,
-                  background: accent.buttonBg,
-                  color: accent.buttonText,
-                }}
-                whileHover={{ y: -2, scale: 1.03, backgroundColor: accent.buttonHover }}
-                whileTap={{ scale: 0.96 }}
-                transition={{ type: "spring", stiffness: 520, damping: 24 }}
-              >
-                {platform === "iOS" && <AppStoreIcon />}
-                {ctaLabel}
-              </motion.a>
-            ) : (
-              <motion.button
-                type="button"
-                disabled
-                className="inline-flex items-center gap-2 rounded-[16px] border px-6 py-3.5 text-[17px] font-semibold tracking-[-0.01em] opacity-80"
-                style={{
-                  borderColor: accent.buttonBorder,
-                  background: accent.buttonBg,
-                  color: accent.buttonText,
-                }}
-              >
-                Coming soon
-              </motion.button>
-            )}
-
-            {ctaHint && (
-              <p className="mt-2 text-[12px]" style={{ color: "var(--text-muted)" }}>
-                {ctaHint}
-              </p>
-            )}
-          </div>
         </div>
 
         <div className="mt-9 flex flex-col items-center gap-2">
@@ -369,7 +434,7 @@ export default function SubdomainLanding({
             href={builtByUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-[12px] border px-3.5 py-2"
+            className="inline-flex items-center gap-2 rounded-[12px] border px-3.5 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg)]"
             style={{ borderColor: "var(--border)", background: "var(--bg-sticky)", color: "var(--text-primary)" }}
           >
             <span
@@ -383,6 +448,7 @@ export default function SubdomainLanding({
         </div>
 
         <div
+          id="newsletter"
           className="mx-auto mt-10 w-full max-w-xl rounded-[18px] border p-4 sm:p-5"
           style={{ borderColor: "var(--border)", background: "var(--bg-sticky)" }}
         >
@@ -395,10 +461,10 @@ export default function SubdomainLanding({
             </span>
             <div className="text-left">
               <p className="text-[13px] font-medium" style={{ color: "var(--text-primary)" }}>
-                Join the tiny newsletter
+                {newsletterTitle}
               </p>
               <p className="mt-1 text-[12px]" style={{ color: "var(--text-secondary)" }}>
-                Occasional product updates, builds, and launch notes.
+                {newsletterBody}
               </p>
             </div>
           </div>
@@ -407,9 +473,17 @@ export default function SubdomainLanding({
             <input
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (status !== "idle") {
+                  setStatus("idle");
+                  setErrorMessage("");
+                }
+              }}
               placeholder="you@example.com"
-              className="w-full rounded-[11px] border px-3 py-2.5 text-[14px] outline-none"
+              autoComplete="email"
+              name="email"
+              className="w-full rounded-[11px] border px-3 py-2.5 text-[14px] outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg)]"
               style={{
                 borderColor: "var(--border)",
                 background: "var(--bg)",
@@ -419,7 +493,7 @@ export default function SubdomainLanding({
             />
             <motion.button
               type="submit"
-              className="rounded-[11px] border px-4 py-2.5 text-[14px] font-medium"
+              className="rounded-[11px] border px-4 py-2.5 text-[14px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg)]"
               style={{
                 borderColor: accent.buttonBorder,
                 background: accent.buttonBg,
@@ -428,14 +502,21 @@ export default function SubdomainLanding({
               whileHover={{ y: -1, scale: 1.02, backgroundColor: accent.buttonHover }}
               whileTap={{ scale: 0.97 }}
               transition={{ type: "spring", stiffness: 520, damping: 24 }}
+              disabled={status === "loading"}
+              aria-busy={status === "loading"}
             >
-              Subscribe
+              {status === "loading" ? "Submitting..." : newsletterCtaLabel}
             </motion.button>
           </form>
 
-          {subscribed && (
-            <p className="mt-3 text-[12px]" style={{ color: "var(--text-muted)" }}>
-              Thanks. You are on the list.
+          {status === "success" && (
+            <p className="mt-3 text-[12px]" style={{ color: "var(--text-muted)" }} aria-live="polite">
+              {newsletterSuccess}
+            </p>
+          )}
+          {status === "error" && (
+            <p className="mt-3 text-[12px]" style={{ color: "var(--text-muted)" }} aria-live="polite">
+              {errorMessage || "Could not subscribe right now. Please try again."}
             </p>
           )}
         </div>

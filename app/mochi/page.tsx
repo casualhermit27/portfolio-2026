@@ -16,6 +16,7 @@ export default function MochiPage() {
     <SubdomainLanding
       name="mochi"
       platform="iOS"
+      tagline="Mindful spending, without the noise."
       description="A quiet, mindful way to track spending, check patterns, and reflect on habits."
       logoSrc="/logos/mochi.jpg.jpeg"
       screens={[
@@ -33,6 +34,8 @@ export default function MochiPage() {
         "**Private by default** with a focused single-user experience",
         "Built to feel **light and fast** across everyday iPhone use",
       ]}
+      latestDate="March 14, 2026"
+      latestDateIso="2026-03-14"
       ctaUrl="https://apps.apple.com/us/app/mochi-spent-tracker/id6758880826"
       ctaLabel="Download"
       ctaHint="Available on the App Store"

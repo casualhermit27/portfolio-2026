@@ -25,6 +25,7 @@ body {
   --text-secondary: #A09A93;
   --text-muted: #B8B1A9;
   --text-faint: #C0BAB0;
+  --focus-ring: #B6AFA6;
   --nav-hover: #6B6560;
   --logo-bg-empty: #F2EFE9;
   --logo-border-empty: #D8D2CA;
@@ -42,6 +43,7 @@ html.dark {
   --text-secondary: #7A746E;
   --text-muted: #5A5550;
   --text-faint: #4A4540;
+  --focus-ring: #6E6A64;
   --nav-hover: #A09A93;
   --logo-bg-empty: #1A1917;
   --logo-border-empty: #2E2C29;
