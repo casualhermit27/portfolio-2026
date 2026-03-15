@@ -230,87 +230,99 @@ export default function SubdomainLanding({
             </div>
           )}
           {latestDate && changelog.length > 0 && (
-            <button
-              type="button"
-              onClick={() => setChangelogOpen((open) => !open)}
-              className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[11px] uppercase tracking-[0.14em] transition-all duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg)]"
+            <motion.div
+              layout
+              className={`mx-auto ${changelogOpen ? "w-full max-w-3xl" : "w-fit"}`}
               style={{
                 borderColor: "var(--border)",
-                color: "var(--text-muted)",
                 background: "var(--bg-sticky)",
-                boxShadow: changelogOpen ? "0 0 0 1px var(--border)" : "none",
+                borderWidth: 1,
+                borderStyle: "solid",
+                borderRadius: changelogOpen ? 18 : 9999,
+                padding: changelogOpen ? "16px" : "6px 12px",
+                boxShadow: changelogOpen
+                  ? "0 0 0 1px var(--border), 0 0 26px rgba(136, 122, 110, 0.38)"
+                  : "0 0 0 0 rgba(0,0,0,0)",
               }}
-              aria-expanded={changelogOpen}
-              aria-controls="changelog-panel"
+              transition={{ type: "spring", stiffness: 360, damping: 28 }}
             >
-              <DotIcon />
-              <span>{latestLabel}</span>
-              <span className="text-[12px] normal-case tracking-normal" style={{ color: "var(--text-secondary)" }}>
-                <time dateTime={latestDateIso ?? latestDate}>{latestDate}</time>
-              </span>
-              <span
-                className={`ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full border transition-transform duration-200 ${
-                  changelogOpen ? "rotate-180" : ""
-                }`}
-                style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}
-                aria-hidden
+              <button
+                type="button"
+                onClick={() => setChangelogOpen((open) => !open)}
+                className="flex w-full items-center gap-2 text-[11px] uppercase tracking-[0.14em] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg)]"
+                style={{ color: "var(--text-muted)" }}
+                aria-expanded={changelogOpen}
+                aria-controls="changelog-panel"
               >
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="6 9 12 15 18 9" />
-                </svg>
-              </span>
-            </button>
-          )}
-          {changelog.length > 0 && (
-            <motion.div
-              id="changelog-panel"
-              initial={false}
-              animate={{ height: changelogOpen ? "auto" : 0, opacity: changelogOpen ? 1 : 0 }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
-              style={{ overflow: "hidden", width: "100%" }}
-            >
-              <div
-                className="mx-auto mt-3 w-full max-w-3xl rounded-[16px] border p-4 text-left"
-                style={{ borderColor: "var(--border)", background: "var(--bg-sticky)" }}
-              >
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div>
-                    <p className="text-[12px] font-medium" style={{ color: "var(--text-primary)" }}>
-                      {changelogTitle}
-                    </p>
-                    <p className="text-[11px]" style={{ color: "var(--text-secondary)" }}>
-                      {changelogSubtitle}
-                    </p>
-                  </div>
-                  <span
-                    className="rounded-full border px-2.5 py-1 text-[10px] uppercase tracking-[0.14em]"
-                    style={{ borderColor: "var(--border)", color: "var(--text-muted)", background: "var(--pill-bg)" }}
-                  >
-                    fresh bits
-                  </span>
-                </div>
+                <DotIcon />
+                <span>{latestLabel}</span>
+                <span className="text-[12px] normal-case tracking-normal" style={{ color: "var(--text-secondary)" }}>
+                  <time dateTime={latestDateIso ?? latestDate}>{latestDate}</time>
+                </span>
+                <span
+                  className={`ml-auto inline-flex h-4 w-4 items-center justify-center rounded-full border transition-transform duration-200 ${
+                    changelogOpen ? "rotate-180" : ""
+                  }`}
+                  style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}
+                  aria-hidden
+                >
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                </span>
+              </button>
 
-                <ul className="mt-4 space-y-3">
-                  {changelog.map((item) => (
-                    <li key={item.title} className="flex gap-3">
-                      <span
-                        className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-md border text-[10px]"
-                        style={{ borderColor: "var(--border)", background: "var(--pill-bg)", color: accent.dot }}
-                      >
-                        <DotIcon />
-                      </span>
-                      <div>
-                        <p className="text-[13px] font-medium" style={{ color: "var(--text-primary)" }}>
-                          {item.title}
-                        </p>
-                        <p className="text-[12px] leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-                          {item.body}
-                        </p>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              <motion.div
+                id="changelog-panel"
+                initial={false}
+                animate={{
+                  height: changelogOpen ? "auto" : 0,
+                  opacity: changelogOpen ? 1 : 0,
+                  scale: changelogOpen ? 1 : 0.98,
+                }}
+                transition={{ duration: 0.28, ease: "easeOut" }}
+                style={{ overflow: "hidden" }}
+              >
+                <div className="mt-4 text-left">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <p className="text-[12px] font-medium" style={{ color: "var(--text-primary)" }}>
+                        {changelogTitle}
+                      </p>
+                      <p className="text-[11px]" style={{ color: "var(--text-secondary)" }}>
+                        {changelogSubtitle}
+                      </p>
+                    </div>
+                    <span
+                      className="rounded-full border px-2.5 py-1 text-[10px] uppercase tracking-[0.14em]"
+                      style={{ borderColor: "var(--border)", color: "var(--text-muted)", background: "var(--pill-bg)" }}
+                    >
+                      fresh bits
+                    </span>
+                  </div>
+
+                  <ul className="mt-4 space-y-3">
+                    {changelog.map((item) => (
+                      <li key={item.title} className="flex gap-3">
+                        <span
+                          className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-md border text-[10px]"
+                          style={{ borderColor: "var(--border)", background: "var(--pill-bg)", color: accent.dot }}
+                        >
+                          <DotIcon />
+                        </span>
+                        <div>
+                          <p className="text-[13px] font-medium" style={{ color: "var(--text-primary)" }}>
+                            {item.title}
+                          </p>
+                          <p className="text-[12px] leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                            {item.body}
+                          </p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </motion.div>
             </motion.div>
           )}
         </div>
