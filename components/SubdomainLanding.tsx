@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import SupportedConversions from "@/components/SupportedConversions";
 
 type SubdomainLandingProps = {
@@ -261,40 +261,46 @@ export default function SubdomainLanding({
                 </span>
               </button>
 
-              {changelogOpen && (
-                <div
-                  id="changelog-panel"
-                  className="mt-4 w-full rounded-[18px] border p-4 text-left sm:p-5"
-                  style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
-                >
-                  <p className="text-[12px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>
-                    {changelogTitle}
-                  </p>
-                  <p className="mt-1 text-[12px]" style={{ color: "var(--text-secondary)" }}>
-                    {changelogSubtitle}
-                  </p>
-                  <ul className="mt-4 space-y-3">
-                    {changelog.map((item) => (
-                      <li key={item.title} className="flex gap-3">
-                        <span
-                          className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-md border text-[10px]"
-                          style={{ borderColor: "var(--border)", background: "var(--pill-bg)", color: accent.dot }}
-                        >
-                          <DotIcon />
-                        </span>
-                        <div>
-                          <p className="text-[13px] font-medium" style={{ color: "var(--text-primary)" }}>
-                            {item.title}
-                          </p>
-                          <p className="text-[12px] leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-                            {item.body}
-                          </p>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+              <AnimatePresence initial={false}>
+                {changelogOpen && (
+                  <motion.div
+                    id="changelog-panel"
+                    className="mt-4 w-full rounded-[18px] border p-4 text-left sm:p-5"
+                    style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
+                    initial={{ opacity: 0, y: -6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                    transition={{ duration: 0.18, ease: "easeOut" }}
+                  >
+                    <p className="text-[12px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>
+                      {changelogTitle}
+                    </p>
+                    <p className="mt-1 text-[12px]" style={{ color: "var(--text-secondary)" }}>
+                      {changelogSubtitle}
+                    </p>
+                    <ul className="mt-4 space-y-3">
+                      {changelog.map((item) => (
+                        <li key={item.title} className="flex gap-3">
+                          <span
+                            className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-md border text-[10px]"
+                            style={{ borderColor: "var(--border)", background: "var(--pill-bg)", color: accent.dot }}
+                          >
+                            <DotIcon />
+                          </span>
+                          <div>
+                            <p className="text-[13px] font-medium" style={{ color: "var(--text-primary)" }}>
+                              {item.title}
+                            </p>
+                            <p className="text-[12px] leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                              {item.body}
+                            </p>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           )}
         </div>
