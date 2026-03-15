@@ -19,10 +19,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${dmSans.variable} font-sans antialiased bg-[#F8F6F2] text-[#1C1C1C]`}
-      >
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+(() => {
+  try {
+    const stored = localStorage.getItem("subdomain-theme");
+    const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const useDark = stored ? stored === "dark" : prefersDark;
+    if (useDark) document.documentElement.classList.add("dark");
+  } catch {}
+})();
+            `,
+          }}
+        />
+      </head>
+      <body className={`${dmSans.variable} font-sans antialiased`}>
         {children}
       </body>
     </html>

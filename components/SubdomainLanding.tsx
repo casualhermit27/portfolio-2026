@@ -238,13 +238,12 @@ export default function SubdomainLanding({
                   onClick={() => setChangelogOpen(true)}
                   className="mx-auto flex items-center gap-2 rounded-full border px-3 py-1.5 text-[11px] uppercase tracking-[0.14em] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg)]"
                   style={{
-                    borderColor: "var(--border)",
+                    borderColor: "var(--border-active)",
                     color: "var(--text-muted)",
-                    background: "var(--bg-sticky)",
-                    boxShadow: "0 0 0 0 rgba(0,0,0,0)",
+                    background: "var(--pill-bg)",
                   }}
-                  whileHover={{ y: -2 }}
-                  transition={{ type: "spring", stiffness: 280, damping: 26 }}
+                  whileHover={{ y: -1 }}
+                  transition={{ type: "spring", stiffness: 260, damping: 26 }}
                   aria-expanded={false}
                   aria-controls="changelog-panel"
                 >
@@ -268,25 +267,23 @@ export default function SubdomainLanding({
                   layoutId={`${name}-latest-card`}
                   className="w-full rounded-[18px] border p-4 text-left sm:p-5"
                   style={{
-                    borderColor: "var(--border)",
+                    borderColor: "var(--border-active)",
                     background: "var(--bg-sticky)",
-                    boxShadow: "0 0 0 1px var(--border), 0 0 16px rgba(201, 170, 204, 0.22)",
                   }}
                   transition={{ type: "spring", stiffness: 260, damping: 28, mass: 0.9 }}
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <div className="inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-[10px] uppercase tracking-[0.14em]" style={{ borderColor: "var(--border)", color: "var(--text-muted)", background: "var(--pill-bg)" }}>
-                        <DotIcon />
-                        <span>{latestLabel}</span>
-                        <span className="text-[11px] normal-case tracking-normal" style={{ color: "var(--text-secondary)" }}>
+                      <p className="text-[12px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>
+                        {latestLabel}
+                        <span className="ml-2 text-[12px] normal-case tracking-normal" style={{ color: "var(--text-secondary)" }}>
                           <time dateTime={latestDateIso ?? latestDate}>{latestDate}</time>
                         </span>
-                      </div>
-                      <p className="mt-3 text-[12px] font-medium" style={{ color: "var(--text-primary)" }}>
+                      </p>
+                      <p className="mt-2 text-[13px] font-medium" style={{ color: "var(--text-primary)" }}>
                         {changelogTitle}
                       </p>
-                      <p className="text-[11px]" style={{ color: "var(--text-secondary)" }}>
+                      <p className="text-[12px]" style={{ color: "var(--text-secondary)" }}>
                         {changelogSubtitle}
                       </p>
                     </div>
