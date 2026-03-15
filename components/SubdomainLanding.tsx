@@ -231,77 +231,49 @@ export default function SubdomainLanding({
           )}
           {latestDate && changelog.length > 0 && (
             <div className="mx-auto w-full max-w-3xl">
-              {!changelogOpen ? (
-                <motion.button
-                  layoutId={`${name}-latest-card`}
-                  type="button"
-                  onClick={() => setChangelogOpen(true)}
-                  className="mx-auto flex items-center gap-2 rounded-full border px-3 py-1.5 text-[11px] uppercase tracking-[0.14em] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg)]"
-                  style={{
-                    borderColor: "var(--border-active)",
-                    color: "var(--text-muted)",
-                    background: "var(--pill-bg)",
-                  }}
-                  whileHover={{ y: -1 }}
-                  transition={{ type: "spring", stiffness: 260, damping: 26 }}
-                  aria-expanded={false}
-                  aria-controls="changelog-panel"
+              <button
+                type="button"
+                onClick={() => setChangelogOpen((open) => !open)}
+                className="mx-auto flex items-center gap-2 rounded-full border px-3 py-1.5 text-[11px] uppercase tracking-[0.14em] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg)]"
+                style={{
+                  borderColor: "var(--border-active)",
+                  color: "var(--text-muted)",
+                  background: "var(--pill-bg)",
+                }}
+                aria-expanded={changelogOpen}
+                aria-controls="changelog-panel"
+              >
+                <DotIcon />
+                <span>{latestLabel}</span>
+                <span className="text-[12px] normal-case tracking-normal" style={{ color: "var(--text-secondary)" }}>
+                  <time dateTime={latestDateIso ?? latestDate}>{latestDate}</time>
+                </span>
+                <span
+                  className={`ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full border ${
+                    changelogOpen ? "rotate-180" : ""
+                  }`}
+                  style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}
+                  aria-hidden
                 >
-                  <DotIcon />
-                  <span>{latestLabel}</span>
-                  <span className="text-[12px] normal-case tracking-normal" style={{ color: "var(--text-secondary)" }}>
-                    <time dateTime={latestDateIso ?? latestDate}>{latestDate}</time>
-                  </span>
-                  <span
-                    className="ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full border"
-                    style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}
-                    aria-hidden
-                  >
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="6 9 12 15 18 9" />
-                    </svg>
-                  </span>
-                </motion.button>
-              ) : (
-                <motion.div
-                  layoutId={`${name}-latest-card`}
-                  className="w-full rounded-[18px] border p-4 text-left sm:p-5"
-                  style={{
-                    borderColor: "var(--border-active)",
-                    background: "var(--bg-sticky)",
-                  }}
-                  transition={{ type: "spring", stiffness: 260, damping: 28, mass: 0.9 }}
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <p className="text-[12px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>
-                        {latestLabel}
-                        <span className="ml-2 text-[12px] normal-case tracking-normal" style={{ color: "var(--text-secondary)" }}>
-                          <time dateTime={latestDateIso ?? latestDate}>{latestDate}</time>
-                        </span>
-                      </p>
-                      <p className="mt-2 text-[13px] font-medium" style={{ color: "var(--text-primary)" }}>
-                        {changelogTitle}
-                      </p>
-                      <p className="text-[12px]" style={{ color: "var(--text-secondary)" }}>
-                        {changelogSubtitle}
-                      </p>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setChangelogOpen(false)}
-                      className="inline-flex h-7 w-7 items-center justify-center rounded-full border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg)]"
-                      style={{ borderColor: "var(--border)", color: "var(--text-secondary)", background: "var(--pill-bg)" }}
-                      aria-label="Close changelog"
-                    >
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <line x1="18" y1="6" x2="6" y2="18" />
-                        <line x1="6" y1="6" x2="18" y2="18" />
-                      </svg>
-                    </button>
-                  </div>
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                </span>
+              </button>
 
-                  <ul id="changelog-panel" className="mt-4 space-y-3">
+              {changelogOpen && (
+                <div
+                  id="changelog-panel"
+                  className="mt-4 w-full rounded-[18px] border p-4 text-left sm:p-5"
+                  style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
+                >
+                  <p className="text-[12px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>
+                    {changelogTitle}
+                  </p>
+                  <p className="mt-1 text-[12px]" style={{ color: "var(--text-secondary)" }}>
+                    {changelogSubtitle}
+                  </p>
+                  <ul className="mt-4 space-y-3">
                     {changelog.map((item) => (
                       <li key={item.title} className="flex gap-3">
                         <span
@@ -321,7 +293,7 @@ export default function SubdomainLanding({
                       </li>
                     ))}
                   </ul>
-                </motion.div>
+                </div>
               )}
             </div>
           )}
