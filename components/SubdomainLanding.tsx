@@ -232,24 +232,28 @@ export default function SubdomainLanding({
           {latestDate && changelog.length > 0 && (
             <motion.div
               layout
-              className={`mx-auto ${changelogOpen ? "w-full max-w-3xl" : "w-fit"}`}
+              className="mx-auto w-full"
+              animate={{
+                maxWidth: changelogOpen ? 720 : 280,
+                borderRadius: changelogOpen ? 18 : 9999,
+                padding: changelogOpen ? 16 : 6,
+                boxShadow: changelogOpen
+                  ? "0 0 0 1px var(--border), 0 0 16px rgba(201, 170, 204, 0.22)"
+                  : "0 0 0 0 rgba(0,0,0,0)",
+              }}
               style={{
                 borderColor: "var(--border)",
                 background: "var(--bg-sticky)",
                 borderWidth: 1,
                 borderStyle: "solid",
-                borderRadius: changelogOpen ? 18 : 9999,
-                padding: changelogOpen ? "16px" : "6px 12px",
-                boxShadow: changelogOpen
-                  ? "0 0 0 1px var(--border), 0 0 26px rgba(136, 122, 110, 0.38)"
-                  : "0 0 0 0 rgba(0,0,0,0)",
+                width: "100%",
               }}
-              transition={{ type: "spring", stiffness: 360, damping: 28 }}
+              transition={{ type: "spring", stiffness: 320, damping: 30 }}
             >
               <button
                 type="button"
                 onClick={() => setChangelogOpen((open) => !open)}
-                className="flex w-full items-center gap-2 text-[11px] uppercase tracking-[0.14em] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg)]"
+                className="flex w-full items-center gap-2 px-2 text-[11px] uppercase tracking-[0.14em] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg)]"
                 style={{ color: "var(--text-muted)" }}
                 aria-expanded={changelogOpen}
                 aria-controls="changelog-panel"
