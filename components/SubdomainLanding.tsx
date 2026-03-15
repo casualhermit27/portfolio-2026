@@ -235,8 +235,8 @@ export default function SubdomainLanding({
               className="mx-auto w-full"
               animate={{
                 maxWidth: changelogOpen ? 720 : 280,
-                borderRadius: changelogOpen ? 18 : 9999,
-                padding: changelogOpen ? 16 : 6,
+                borderRadius: changelogOpen ? [9999, 32, 18] : [18, 32, 9999],
+                padding: changelogOpen ? [6, 10, 16] : [16, 10, 6],
                 boxShadow: changelogOpen
                   ? "0 0 0 1px var(--border), 0 0 16px rgba(201, 170, 204, 0.22)"
                   : "0 0 0 0 rgba(0,0,0,0)",
@@ -248,7 +248,12 @@ export default function SubdomainLanding({
                 borderStyle: "solid",
                 width: "100%",
               }}
-              transition={{ type: "spring", stiffness: 210, damping: 26, mass: 0.8, bounce: 0.18 }}
+              transition={{
+                maxWidth: { type: "spring", stiffness: 220, damping: 26, mass: 0.8, bounce: 0.15 },
+                borderRadius: { duration: 0.42, ease: [0.22, 1, 0.36, 1], times: [0, 0.6, 1] },
+                padding: { duration: 0.42, ease: [0.22, 1, 0.36, 1], times: [0, 0.6, 1] },
+                boxShadow: { duration: 0.3, ease: "easeOut" },
+              }}
             >
               <button
                 type="button"
