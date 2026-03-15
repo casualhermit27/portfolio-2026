@@ -19,6 +19,9 @@ type SubdomainLandingProps = {
   latestLabel?: string;
   latestDate?: string;
   latestDateIso?: string;
+  changelogTitle?: string;
+  changelogSubtitle?: string;
+  changelog?: { title: string; body: string }[];
   builtByName?: string;
   builtByUrl?: string;
 };
@@ -117,6 +120,9 @@ export default function SubdomainLanding({
   latestLabel = "Latest update",
   latestDate,
   latestDateIso,
+  changelogTitle = "Changelog",
+  changelogSubtitle = "New in this release",
+  changelog = [],
   builtByName = "Harsha Chaganti",
   builtByUrl = "https://harshachaganti.com",
 }: SubdomainLandingProps) {
@@ -380,6 +386,51 @@ export default function SubdomainLanding({
             )}
           </ul>
         </div>
+
+        {changelog.length > 0 && (
+          <div
+            className="mx-auto mt-9 w-full max-w-3xl rounded-[18px] border p-4 text-left sm:p-5"
+            style={{ borderColor: "var(--border)", background: "var(--bg-sticky)" }}
+          >
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p className="text-[12px] font-medium" style={{ color: "var(--text-primary)" }}>
+                  {changelogTitle}
+                </p>
+                <p className="text-[11px]" style={{ color: "var(--text-secondary)" }}>
+                  {changelogSubtitle}
+                </p>
+              </div>
+              <span
+                className="rounded-full border px-2.5 py-1 text-[10px] uppercase tracking-[0.14em]"
+                style={{ borderColor: "var(--border)", color: "var(--text-muted)", background: "var(--pill-bg)" }}
+              >
+                fresh bits
+              </span>
+            </div>
+
+            <ul className="mt-4 space-y-3">
+              {changelog.map((item) => (
+                <li key={item.title} className="flex gap-3">
+                  <span
+                    className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-md border text-[10px]"
+                    style={{ borderColor: "var(--border)", background: "var(--pill-bg)", color: accent.dot }}
+                  >
+                    <DotIcon />
+                  </span>
+                  <div>
+                    <p className="text-[13px] font-medium" style={{ color: "var(--text-primary)" }}>
+                      {item.title}
+                    </p>
+                    <p className="text-[12px] leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                      {item.body}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         <div className="mt-9 flex flex-col items-center gap-2">
           <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>

@@ -36,6 +36,26 @@ export default function MochiPage() {
       ]}
       latestDate="March 14, 2026"
       latestDateIso="2026-03-14"
+      changelogTitle="Changelog"
+      changelogSubtitle="New in this release"
+      changelog={[
+        {
+          title: "Speed Dial Payment Types",
+          body: "Assign specific payment methods to speed dial presets. Long press a number in Settings > Speed Dial to edit.",
+        },
+        {
+          title: "Purple Theme",
+          body: "A new purple theme is now available in Themes.",
+        },
+        {
+          title: "Receipt Scanning",
+          body: "Effortlessly add transactions by scanning receipts directly from the Keypad.",
+        },
+        {
+          title: "Payment Method Icons",
+          body: "See exactly how you paid with visual indicators in History.",
+        },
+      ]}
       ctaUrl="https://apps.apple.com/us/app/mochi-spent-tracker/id6758880826"
       ctaLabel="Download"
       ctaHint="Available on the App Store"
