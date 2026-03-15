@@ -231,7 +231,7 @@ export default function SubdomainLanding({
           )}
           {latestDate && changelog.length > 0 && (
             <motion.div
-              layout
+              layout="size"
               className="mx-auto w-full"
               animate={{
                 maxWidth: changelogOpen ? 720 : 280,
@@ -248,7 +248,7 @@ export default function SubdomainLanding({
                 borderStyle: "solid",
                 width: "100%",
               }}
-              transition={{ type: "spring", stiffness: 320, damping: 30 }}
+              transition={{ type: "spring", stiffness: 210, damping: 26, mass: 0.8, bounce: 0.18 }}
             >
               <button
                 type="button"
@@ -284,7 +284,7 @@ export default function SubdomainLanding({
                   opacity: changelogOpen ? 1 : 0,
                   scale: changelogOpen ? 1 : 0.98,
                 }}
-                transition={{ duration: 0.28, ease: "easeOut" }}
+                transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
                 style={{ overflow: "hidden" }}
               >
                 <div className="mt-4 text-left">
