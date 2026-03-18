@@ -24,6 +24,7 @@ type SubdomainLandingProps = {
   changelog?: { title: string; body: string }[];
   builtByName?: string;
   builtByUrl?: string;
+  screenAspect?: "landscape" | "portrait";
 };
 
 function renderFeatureText(text: string, highlightBg: string, highlightText: string) {
@@ -125,6 +126,7 @@ export default function SubdomainLanding({
   changelog = [],
   builtByName = "Harsha Chaganti",
   builtByUrl = "https://harshachaganti.com",
+  screenAspect = "landscape",
 }: SubdomainLandingProps) {
   const [dark, setDark] = useState(false);
   const [changelogOpen, setChangelogOpen] = useState(false);
@@ -396,7 +398,11 @@ export default function SubdomainLanding({
                 {(screens.length > 0 ? screens : [logoSrc]).map((src, i) => (
                   <div
                     key={`${src}-${i}`}
-                    className="snap-center flex-shrink-0 overflow-hidden rounded-[12px] border w-[470px] h-[293px] sm:w-[580px] sm:h-[361px] md:w-[700px] md:h-[436px]"
+                    className={
+                      screenAspect === "portrait"
+                        ? "snap-center flex-shrink-0 overflow-hidden rounded-[12px] border w-[300px] h-[375px] sm:w-[360px] sm:h-[450px] md:w-[420px] md:h-[525px]"
+                        : "snap-center flex-shrink-0 overflow-hidden rounded-[12px] border w-[470px] h-[293px] sm:w-[580px] sm:h-[361px] md:w-[700px] md:h-[436px]"
+                    }
                     style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
                   >
                     <div
