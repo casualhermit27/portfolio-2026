@@ -144,8 +144,10 @@ export default function SubdomainLanding({
     ? {
       buttonBg: "#F9DFEA",
       buttonBorder: "#EAC7D9",
+      buttonBorderHover: "#D4A0BC",
       buttonText: "#5D4757",
       buttonHover: "#F4D3E3",
+      buttonShadow: "0 8px 28px rgba(227, 169, 197, 0.45)",
       dot: "#E3A9C5",
       highlightBg: "#F5D8E6",
       highlightText: "#5D4757",
@@ -153,8 +155,10 @@ export default function SubdomainLanding({
     : {
       buttonBg: "#DDEBFB",
       buttonBorder: "#C1D7F4",
+      buttonBorderHover: "#90BAE8",
       buttonText: "#3F5574",
       buttonHover: "#D1E3F8",
+      buttonShadow: "0 8px 28px rgba(143, 177, 224, 0.45)",
       dot: "#8FB1E0",
       highlightBg: "#D5E6FB",
       highlightText: "#3F5574",
@@ -328,9 +332,9 @@ export default function SubdomainLanding({
                 background: accent.buttonBg,
                 color: accent.buttonText,
               }}
-              whileHover={{ y: -2, scale: 1.03, backgroundColor: accent.buttonHover }}
-              whileTap={{ scale: 0.96 }}
-              transition={{ type: "spring", stiffness: 520, damping: 24 }}
+              whileHover={{ y: -3, scale: 1.03, backgroundColor: accent.buttonHover, borderColor: accent.buttonBorderHover, boxShadow: accent.buttonShadow }}
+              whileTap={{ scale: 0.97, y: 0, boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}
+              transition={{ type: "spring", stiffness: 500, damping: 22 }}
             >
               {platform === "iOS" && <AppStoreIcon />}
               {ctaLabel}
