@@ -361,7 +361,7 @@ export default function SubdomainLanding({
                   ? screens.map((src, i) => (
                     <div
                       key={src}
-                      className="snap-center flex-shrink-0 overflow-hidden rounded-[26px] border w-[176px] h-[381px] sm:w-[202px] sm:h-[437px] md:w-[228px] md:h-[494px] lg:w-[246px] lg:h-[533px]"
+                      className="snap-center flex-shrink-0 overflow-hidden rounded-[26px] border w-[148px] h-[320px] sm:w-[170px] sm:h-[368px] md:w-[192px] md:h-[415px] lg:w-[207px] lg:h-[449px]"
                       style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
                     >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -374,7 +374,7 @@ export default function SubdomainLanding({
                   ))
                   : (
                     <div
-                      className="flex h-[381px] w-[176px] flex-shrink-0 items-end justify-center rounded-[26px] border pb-6 sm:h-[437px] sm:w-[202px] md:h-[494px] md:w-[228px] lg:h-[533px] lg:w-[246px]"
+                      className="flex h-[320px] w-[148px] flex-shrink-0 items-end justify-center rounded-[26px] border pb-6 sm:h-[368px] sm:w-[170px] md:h-[415px] md:w-[192px] lg:h-[449px] lg:w-[207px]"
                       style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
                     >
                       <span
