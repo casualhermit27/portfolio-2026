@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import SupportedConversions from "@/components/SupportedConversions";
 
@@ -130,6 +130,15 @@ export default function SubdomainLanding({
 }: SubdomainLandingProps) {
   const [dark, setDark] = useState(false);
   const [changelogOpen, setChangelogOpen] = useState(false);
+  const [activeScreen, setActiveScreen] = useState(0);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  const handleScroll = () => {
+    const el = scrollContainerRef.current;
+    if (!el || screens.length <= 1) return;
+    const progress = el.scrollLeft / (el.scrollWidth - el.clientWidth);
+    setActiveScreen(Math.round(progress * (screens.length - 1)));
+  };
 
   const accent = platform === "iOS"
     ? {
@@ -173,8 +182,8 @@ export default function SubdomainLanding({
       style={{ background: "var(--bg)", color: "var(--text-primary)" }}
     >
       <section className="mx-auto w-full max-w-[1600px] px-8 py-10 sm:px-14 md:px-24 lg:px-32 xl:px-40">
-        <div className="relative mb-10 sm:mb-12">
-          <div className="mx-auto flex w-fit items-center gap-3">
+        <div className="flex items-center justify-between mb-10 sm:mb-12">
+          <div className="flex items-center gap-3">
             <div
               className="h-12 w-12 overflow-hidden rounded-[13px] border"
               style={{ borderColor: "var(--border)" }}
@@ -197,7 +206,7 @@ export default function SubdomainLanding({
 
           <button
             onClick={() => setDark((d) => !d)}
-            className="absolute right-0 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border transition-opacity duration-150 hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg)]"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-full border transition-opacity duration-150 hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg)]"
             style={{
               borderColor: "var(--border)",
               background: "var(--pill-bg)",
@@ -342,7 +351,7 @@ export default function SubdomainLanding({
           )}
 
           {ctaHint && (
-            <p className="mt-2 text-[12px]" style={{ color: "var(--text-muted)" }}>
+            <p className="mt-2 text-[13px]" style={{ color: "var(--text-secondary)" }}>
               {ctaHint}
             </p>
           )}
@@ -350,7 +359,7 @@ export default function SubdomainLanding({
 
         <div className="mt-10">
           {platform === "iOS" ? (
-            <div className="overflow-x-auto scrollbar-hide pb-2">
+            <div ref={scrollContainerRef} onScroll={handleScroll} className="overflow-x-auto scrollbar-hide pb-2">
               <div className="mb-3 text-center">
                 <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>
                   Screens
@@ -387,6 +396,20 @@ export default function SubdomainLanding({
                   )}
               </div>
             </div>
+            {screens.length > 1 && (
+              <div className="mt-3 flex justify-center gap-1.5">
+                {screens.map((_, i) => (
+                  <span
+                    key={i}
+                    className="h-1.5 rounded-full transition-all duration-200"
+                    style={{
+                      width: i === activeScreen ? "16px" : "6px",
+                      background: i === activeScreen ? accent.dot : "var(--border-active)",
+                    }}
+                  />
+                ))}
+              </div>
+            )}
           ) : (
             <div className="overflow-x-auto scrollbar-hide pb-2">
               <div className="mb-3 text-center">
@@ -433,7 +456,7 @@ export default function SubdomainLanding({
           )}
         </div>
 
-        <div className="mt-10 space-y-5 text-center sm:mt-12">
+        <div className="mt-10 space-y-5 text-center sm:mt-12 border-t pt-8" style={{ borderColor: "var(--section-divider)" }}>
           <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>
             Features
           </p>
@@ -468,7 +491,7 @@ export default function SubdomainLanding({
           </ul>
         </div>
 
-        <div className="mt-9 flex flex-col items-center gap-2">
+        <div className="mt-9 flex flex-col items-center gap-2 border-t pt-8" style={{ borderColor: "var(--section-divider)" }}>
           <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>
             Built by
           </p>

@@ -16,7 +16,7 @@ body {
 /* ── Design tokens ── */
 :root {
   --bg: #F8F6F2;
-  --bg-sticky: #F8F6F2;
+  --bg-sticky: #EDEBE5;
   --border: #E2DDD5;
   --border-active: #D4CFC7;
   --border-pill: #DDD8CF;
@@ -34,7 +34,7 @@ body {
 
 html.dark {
   --bg: #111110;
-  --bg-sticky: #111110;
+  --bg-sticky: #1C1A18;
   --border: #2A2826;
   --border-active: #3A3733;
   --border-pill: #333030;
