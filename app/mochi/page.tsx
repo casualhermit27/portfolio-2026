@@ -23,6 +23,7 @@ export default function MochiPage() {
         "/open-log-close-screen1 (1).png",
         "/reflection-screen2 (1).png",
         "/ocr-screen3.png",
+        "/history-screen3 (1).png",
         "/widget-screen4 (1).png",
       ]}
       bullets={[
