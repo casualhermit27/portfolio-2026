@@ -23,11 +23,11 @@ export default function CanPage() {
       screenAspect="portrait"
       bullets={[
         "Drop files and convert in **one clean flow**",
-        "Built for **repeat desktop workflows** with almost zero setup",
+        "**PDF Tools** — merge, split, encrypt, decrypt, and optimize. Export pages as **JPEG or PNG**. No Acrobat needed.",
+        "Drop on the **dock icon** — converts instantly in the background with a **notification when done**",
+        "**Batch-ready** — drop 20 files, override formats per file, convert everything at once",
         "**Local-first processing** for speed and privacy",
         "Native macOS interactions with **keyboard-friendly controls**",
-        "Keeps your desk workflow fast without opening **heavy tools**",
-        "Built to feel lightweight while handling **practical conversions**",
         "Ready for power users who want **speed with simplicity**",
       ]}
       latestDate="March 14, 2026"
