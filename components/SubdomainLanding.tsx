@@ -35,8 +35,8 @@ function renderFeatureText(text: string, highlightBg: string, highlightText: str
     return (
       <span
         key={`${part}-${index}`}
-        className="font-medium"
-        style={{ color: highlightText }}
+        className="rounded-[5px] px-1 py-0.5 font-medium"
+        style={{ background: highlightBg, color: highlightText }}
       >
         {part.slice(2, -2)}
       </span>
@@ -463,12 +463,12 @@ export default function SubdomainLanding({
           )}
         </div>
 
-        <div className="mt-10 space-y-5 text-center sm:mt-12 border-t pt-8" style={{ borderColor: "var(--section-divider)" }}>
+        <div className="mt-10 space-y-5 text-center sm:mt-12">
           <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>
-            Features
+            {name === "can" ? "what can offers" : name === "mochi" ? "what mochi does" : "features"}
           </p>
 
-          <ul className="mx-auto w-full max-w-sm space-y-2.5">
+          <ul className="mx-auto w-full max-w-md space-y-2.5">
             {bullets.map((item) => (
               <li
                 key={item}
@@ -488,7 +488,7 @@ export default function SubdomainLanding({
           </ul>
         </div>
 
-        <div className="mt-9 flex flex-col items-center gap-2 border-t pt-8" style={{ borderColor: "var(--section-divider)" }}>
+        <div className="mt-9 flex flex-col items-center gap-2">
           <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>
             Built by
           </p>
