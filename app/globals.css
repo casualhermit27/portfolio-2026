@@ -82,3 +82,19 @@ html.dark ::selection {
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+/* Animated gradient border */
+@property --border-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes border-spin {
+  to { --border-angle: 360deg; }
+}
+
+.border-spin {
+  --border-angle: 0deg;
+  animation: border-spin 4s linear infinite;
+}

@@ -236,11 +236,11 @@ export default function SubdomainLanding({
           {latestDate && changelog.length === 0 && (
             <div
               className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[11px] uppercase tracking-[0.14em]"
-              style={{ borderColor: "var(--border)", color: "var(--text-muted)", background: "var(--bg-sticky)" }}
+              style={{ borderColor: "var(--border-active)", color: "var(--text-secondary)", background: "var(--bg)" }}
             >
               <DotIcon />
               <span>{latestLabel}</span>
-              <span className="text-[12px] normal-case tracking-normal" style={{ color: "var(--text-secondary)" }}>
+              <span className="text-[12px] normal-case tracking-normal" style={{ color: "var(--text-primary)" }}>
                 <time dateTime={latestDateIso ?? latestDate}>{latestDate}</time>
               </span>
             </div>
@@ -253,8 +253,8 @@ export default function SubdomainLanding({
                 className="mx-auto flex items-center gap-2 rounded-full border px-3 py-1.5 text-[11px] uppercase tracking-[0.14em] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg)]"
                 style={{
                   borderColor: "var(--border-active)",
-                  color: "var(--text-muted)",
-                  background: "var(--pill-bg)",
+                  color: "var(--text-secondary)",
+                  background: "var(--bg)",
                 }}
                 aria-expanded={changelogOpen}
                 aria-controls="changelog-panel"

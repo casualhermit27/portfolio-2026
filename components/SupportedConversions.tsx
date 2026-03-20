@@ -70,30 +70,29 @@ export default function SupportedConversions({ accent }: SupportedConversionsPro
       onMouseEnter={() => setIsOpen(true)}
       onMouseLeave={() => setIsOpen(false)}
     >
-      <button
-        className="flex items-center gap-2 px-3 py-1.5 rounded-full text-[12px] sm:text-[13px] font-medium transition-all duration-200 border"
+      <div
+        className={`border-spin p-[1.5px] rounded-full transition-opacity duration-200 ${isOpen ? "opacity-60" : "opacity-100"}`}
         style={{
-          background: isOpen ? bg : "transparent",
-          color: color,
-          borderColor: border,
-          borderStyle: "dashed",
+          background: `conic-gradient(from var(--border-angle), ${border}, ${color}80, ${bg}, ${color}50, ${border})`,
         }}
       >
-        <motion.span
-          animate={{ opacity: isOpen ? 0 : [0.4, 1, 0.4] }}
-          transition={isOpen ? { duration: 0.15 } : { duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-          className="h-1.5 w-1.5 rounded-full flex-shrink-0"
-          style={{ background: color }}
-        />
-        <span>View supported formats</span>
-        <motion.span
-          animate={isOpen ? { x: 3, opacity: 1 } : { x: [0, 3, 0], opacity: 0.5 }}
-          transition={isOpen ? { type: "spring", stiffness: 400, damping: 25 } : { duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-          className="text-[12px]"
+        <button
+          className="flex items-center gap-2 px-3 py-1.5 rounded-full text-[12px] sm:text-[13px] font-medium transition-colors duration-200"
+          style={{
+            background: isOpen ? bg : "var(--bg)",
+            color: color,
+          }}
         >
-          →
-        </motion.span>
-      </button>
+          <span>View supported formats</span>
+          <motion.span
+            animate={isOpen ? { x: 3, opacity: 1 } : { x: [0, 3, 0], opacity: 0.6 }}
+            transition={isOpen ? { type: "spring", stiffness: 400, damping: 25 } : { duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+            className="text-[12px]"
+          >
+            →
+          </motion.span>
+        </button>
+      </div>
 
       <AnimatePresence>
         {isOpen && (
