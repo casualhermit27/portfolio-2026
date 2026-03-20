@@ -95,18 +95,25 @@ export default function SupportedConversions({ accent }: SupportedConversionsPro
       onMouseLeave={() => setIsOpen(false)}
     >
       <button
-        className="group flex items-center gap-2 px-1.5 py-0.5 rounded-[6px] text-[13px] sm:text-[14px] font-medium transition-all duration-200 border"
+        className="group flex items-center gap-2 px-3 py-1.5 rounded-full text-[12px] sm:text-[13px] font-medium transition-all duration-200 border"
         style={{
-          background: bg,
+          background: isOpen ? bg : "transparent",
           color: color,
-          borderColor: isOpen ? border : "transparent",
+          borderColor: border,
+          borderStyle: "dashed",
         }}
       >
-        <span>View all supported routes</span>
         <motion.span
-          animate={{ x: isOpen ? 3 : 0 }}
-          transition={{ type: "spring", stiffness: 400, damping: 25 }}
-          className="text-[11px] opacity-60"
+          animate={{ opacity: isOpen ? 0 : [0.4, 1, 0.4] }}
+          transition={isOpen ? { duration: 0.15 } : { duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+          className="h-1.5 w-1.5 rounded-full flex-shrink-0"
+          style={{ background: color }}
+        />
+        <span>View supported formats</span>
+        <motion.span
+          animate={isOpen ? { x: 3, opacity: 1 } : { x: [0, 3, 0], opacity: 0.5 }}
+          transition={isOpen ? { type: "spring", stiffness: 400, damping: 25 } : { duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+          className="text-[12px]"
         >
           →
         </motion.span>
