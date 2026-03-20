@@ -102,7 +102,7 @@ export default function SupportedConversions({ accent }: SupportedConversionsPro
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 5, scale: 0.99 }}
             transition={{ type: "spring", stiffness: 450, damping: 28 }}
-            className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 z-[100] w-[calc(100vw-48px)] sm:w-[560px] rounded-[24px] border overflow-hidden"
+            className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 z-[100] w-[calc(100vw-48px)] sm:w-[420px] rounded-[20px] border overflow-hidden"
             style={{
               backgroundColor: "var(--bg)",
               borderColor: "var(--border-active)",
@@ -114,61 +114,28 @@ export default function SupportedConversions({ accent }: SupportedConversionsPro
               style={{ backgroundColor: "var(--bg)", borderColor: "var(--border-active)" }}
             />
 
-            {ROUTES.map((section, si) => (
-              <div key={section.category}>
-                {/* Category header */}
-                <div
-                  className="px-5 py-2 flex items-center gap-3"
-                  style={{ borderBottom: "1px solid var(--border)", background: "var(--bg-sticky)" }}
-                >
-                  <span
-                    className="text-[9px] font-semibold uppercase tracking-[0.14em]"
-                    style={{ color, opacity: 0.7 }}
-                  >
+            <div className="p-5 space-y-4">
+              {ROUTES.map((section) => (
+                <div key={section.category}>
+                  <p className="text-[9px] uppercase tracking-[0.14em] mb-2" style={{ color, opacity: 0.5 }}>
                     {section.category}
-                  </span>
-                </div>
-
-                {/* Rows */}
-                <div className="px-5 py-2.5 space-y-1.5">
-                  {section.rows.map((row) => (
-                    <div key={row.from} className="grid items-center gap-3" style={{ gridTemplateColumns: "72px 12px 1fr" }}>
-                      {/* Source */}
-                      <span
-                        className="font-mono text-[10px] font-semibold px-2 py-0.5 rounded-[5px] text-center"
-                        style={{ background: bg, color }}
-                      >
-                        {row.from}
-                      </span>
-
-                      {/* Arrow */}
-                      <span className="text-[10px] text-center" style={{ color: "var(--text-muted)" }}>→</span>
-
-                      {/* Targets */}
-                      <div className="flex flex-wrap gap-1">
-                        {row.to.map((t) => (
-                          <span
-                            key={t}
-                            className="font-mono text-[10px] px-1.5 py-0.5 rounded-[4px] border"
-                            style={{
-                              color: "var(--text-secondary)",
-                              borderColor: "var(--border)",
-                              background: "var(--pill-bg)",
-                            }}
-                          >
-                            {t}
-                          </span>
-                        ))}
+                  </p>
+                  <div className="space-y-1">
+                    {section.rows.map((row) => (
+                      <div key={row.from} className="grid items-baseline gap-2" style={{ gridTemplateColumns: "64px 10px 1fr" }}>
+                        <span className="font-mono text-[11px] font-medium" style={{ color }}>
+                          {row.from}
+                        </span>
+                        <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>→</span>
+                        <span className="font-mono text-[11px]" style={{ color: "var(--text-secondary)" }}>
+                          {row.to.join(" · ")}
+                        </span>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-
-                {si < ROUTES.length - 1 && (
-                  <div style={{ height: "1px", background: "var(--border)" }} />
-                )}
-              </div>
-            ))}
+              ))}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
