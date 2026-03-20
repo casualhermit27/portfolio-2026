@@ -363,6 +363,7 @@ export default function SubdomainLanding({
 
         <div className="mt-10">
           {platform === "iOS" ? (
+            <>
             <div ref={scrollContainerRef} onScroll={handleScroll} className="overflow-x-auto scrollbar-hide pb-2">
               <div className="mb-3 text-center">
                 <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>
@@ -414,6 +415,7 @@ export default function SubdomainLanding({
                 ))}
               </div>
             )}
+            </>
           ) : (
             <div className="overflow-x-auto scrollbar-hide pb-2">
               <div className="mb-3 text-center">
