@@ -187,6 +187,7 @@ export default function SubdomainLanding({
     >
       <section className="mx-auto w-full max-w-[1600px] px-8 py-10 sm:px-14 md:px-24 lg:px-32 xl:px-40">
         <div className="flex items-center justify-between mb-10 sm:mb-12">
+          <div className="w-8 flex-shrink-0" />
           <div className="flex items-center gap-3">
             <div
               className="h-12 w-12 overflow-hidden rounded-[13px] border"
