@@ -35,8 +35,8 @@ function renderFeatureText(text: string, highlightBg: string, highlightText: str
     return (
       <span
         key={`${part}-${index}`}
-        className="rounded-[6px] px-1.5 py-0.5"
-        style={{ background: highlightBg, color: highlightText }}
+        className="font-medium"
+        style={{ color: highlightText }}
       >
         {part.slice(2, -2)}
       </span>
@@ -468,30 +468,20 @@ export default function SubdomainLanding({
             Features
           </p>
 
-          <ul className="mx-auto w-full max-w-3xl space-y-2.5 md:w-fit">
+          <ul className="mx-auto w-full max-w-sm space-y-2.5">
             {bullets.map((item) => (
               <li
                 key={item}
-                className="grid grid-cols-[20px_minmax(0,1fr)] items-start gap-3 text-left text-[14px] leading-relaxed sm:text-[15px]"
+                className="flex items-start gap-2.5 text-left text-[14px] leading-relaxed sm:text-[15px]"
                 style={{ color: "var(--text-primary)" }}
               >
-                <span
-                  className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-md border"
-                  style={{ borderColor: "var(--border)", background: "var(--pill-bg)", color: accent.dot }}
-                >
-                  <DotIcon />
-                </span>
+                <span className="mt-[7px] h-1 w-1 rounded-full flex-shrink-0" style={{ background: accent.dot }} />
                 <span>{renderFeatureText(item, accent.highlightBg, accent.highlightText)}</span>
               </li>
             ))}
             {name === "can" && (
-              <li className="grid grid-cols-[20px_minmax(0,1fr)] items-center gap-3 text-left">
-                <span
-                  className="inline-flex h-5 w-5 items-center justify-center rounded-md border"
-                  style={{ borderColor: "var(--border)", background: "var(--pill-bg)", color: accent.dot }}
-                >
-                  <DotIcon />
-                </span>
+              <li className="flex items-center gap-2.5 text-left">
+                <span className="h-1 w-1 rounded-full flex-shrink-0" style={{ background: accent.dot }} />
                 <SupportedConversions accent={accent} />
               </li>
             )}
