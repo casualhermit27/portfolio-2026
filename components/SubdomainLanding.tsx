@@ -185,7 +185,8 @@ export default function SubdomainLanding({
       className="min-h-screen transition-colors duration-300"
       style={{ background: "var(--bg)", color: "var(--text-primary)" }}
     >
-      <section className="mx-auto w-full max-w-[1600px] px-8 py-10 sm:px-14 md:px-24 lg:px-32 xl:px-40">
+      <section className="mx-auto w-full max-w-2xl px-4 py-8 sm:px-6">
+        <div className="rounded-[28px] border px-8 py-10" style={{ borderColor: "var(--border)" }}>
         <div className="flex items-center justify-between mb-10 sm:mb-12">
           <div className="w-8 flex-shrink-0" />
           <div className="flex items-center gap-3">
@@ -365,13 +366,13 @@ export default function SubdomainLanding({
         <div className="mt-10">
           {platform === "iOS" ? (
             <>
-            <div ref={scrollContainerRef} onScroll={handleScroll} className="overflow-x-auto scrollbar-hide pb-2">
+            <div ref={scrollContainerRef} onScroll={handleScroll} className="overflow-x-auto scrollbar-hide pb-2 mx-auto max-w-[490px] sm:max-w-[560px] md:max-w-[630px]">
               <div className="mb-3 text-center">
                 <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>
                   Screens
                 </p>
               </div>
-              <div className="flex w-max snap-x snap-mandatory items-start gap-4 px-1 mx-auto sm:gap-5 md:gap-6">
+              <div className="flex w-max snap-x snap-mandatory items-start gap-4 px-4 sm:gap-5 md:gap-6">
                 {screens.length > 0
                   ? screens.map((src, i) => (
                     <div
@@ -507,6 +508,7 @@ export default function SubdomainLanding({
             </span>
             <span className="text-[14px] font-medium">{builtByName}</span>
           </a>
+        </div>
         </div>
       </section>
     </main>
