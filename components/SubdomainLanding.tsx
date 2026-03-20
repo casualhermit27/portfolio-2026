@@ -365,7 +365,7 @@ export default function SubdomainLanding({
         <div className="mt-10">
           {platform === "iOS" ? (
             <>
-            <div ref={scrollContainerRef} onScroll={handleScroll} className="overflow-x-auto scrollbar-hide pb-2" style={{ maskImage: "linear-gradient(to right, transparent, black 40px, black calc(100% - 40px), transparent)", WebkitMaskImage: "linear-gradient(to right, transparent, black 40px, black calc(100% - 40px), transparent)" }}>
+            <div ref={scrollContainerRef} onScroll={handleScroll} className="overflow-x-auto scrollbar-hide pb-2">
               <div className="mb-3 text-center">
                 <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>
                   Screens
