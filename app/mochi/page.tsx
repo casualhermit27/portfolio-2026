@@ -60,6 +60,7 @@ export default function MochiPage() {
       ctaUrl="https://apps.apple.com/us/app/mochi-spent-tracker/id6758880826"
       ctaLabel="Download"
       ctaHint="Available on the App Store"
+      noCard
     />
   );
 }
