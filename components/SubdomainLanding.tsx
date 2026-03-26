@@ -238,8 +238,8 @@ export default function SubdomainLanding({
           </p>
           {latestDate && changelog.length === 0 && (
             <div
-              className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[11px] uppercase tracking-[0.14em]"
-              style={{ borderColor: "var(--border-active)", color: "var(--text-secondary)", background: "var(--bg)" }}
+              className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] uppercase tracking-[0.14em]"
+              style={{ boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.07)", color: "var(--text-secondary)", background: "var(--bg)" }}
             >
               <DotIcon />
               <span>{latestLabel}</span>
@@ -253,9 +253,9 @@ export default function SubdomainLanding({
               <button
                 type="button"
                 onClick={() => setChangelogOpen((open) => !open)}
-                className="mx-auto flex items-center gap-2 rounded-full border px-3 py-1.5 text-[11px] uppercase tracking-[0.14em] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg)]"
+                className="mx-auto flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] uppercase tracking-[0.14em] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg)]"
                 style={{
-                  borderColor: "var(--border-active)",
+                  boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.07)",
                   color: "var(--text-secondary)",
                   background: "var(--bg)",
                 }}
