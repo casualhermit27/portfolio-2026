@@ -194,7 +194,7 @@ export default function SubdomainLanding({
           <div className="flex items-center gap-3">
             <div
               className="h-12 w-12 overflow-hidden rounded-[13px] border"
-              style={{ borderColor: "var(--border)" }}
+              style={{ borderColor: "var(--border)", boxShadow: "0 2px 10px rgba(0,0,0,0.08)" }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={logoSrc} alt={`${name} logo`} className="h-full w-full object-cover" />
@@ -324,7 +324,9 @@ export default function SubdomainLanding({
           )}
         </div>
 
-        <div className="mt-6 flex flex-col items-center">
+        <hr className="border-t mt-10 sm:mt-12" style={{ borderColor: "var(--border)" }} />
+
+        <div className="mt-8 flex flex-col items-center">
           {ctaUrl ? (
             <motion.a
               href={ctaUrl}
@@ -365,15 +367,12 @@ export default function SubdomainLanding({
           )}
         </div>
 
+        <hr className="border-t mt-8" style={{ borderColor: "var(--border)" }} />
+
         <div className="mt-10">
           {platform === "iOS" ? (
             <>
             <div ref={scrollContainerRef} onScroll={handleScroll} className="overflow-x-auto scrollbar-hide pb-2 mx-auto max-w-[490px] sm:max-w-[560px] md:max-w-[630px]">
-              <div className="mb-3 text-center">
-                <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>
-                  Screens
-                </p>
-              </div>
               <div className="flex w-max snap-x snap-mandatory items-start gap-4 px-4 sm:gap-5 md:gap-6">
                 {screens.length > 0
                   ? screens.map((src, i) => (
@@ -422,11 +421,6 @@ export default function SubdomainLanding({
             </>
           ) : (
             <div className="overflow-x-auto scrollbar-hide pb-2" style={{ maskImage: "linear-gradient(to right, transparent, black 40px, black calc(100% - 40px), transparent)", WebkitMaskImage: "linear-gradient(to right, transparent, black 40px, black calc(100% - 40px), transparent)" }}>
-              <div className="mb-3 text-center">
-                <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>
-                  Preview
-                </p>
-              </div>
               <div className="flex w-max snap-x snap-mandatory items-start gap-2 px-1 mx-auto sm:gap-3">
                 {(screens.length > 0 ? screens : [logoSrc]).map((src, i) => (
                   <div
@@ -466,11 +460,9 @@ export default function SubdomainLanding({
           )}
         </div>
 
-        <div className="mt-10 space-y-5 text-center sm:mt-12">
-          <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>
-            {name === "can" ? "what can offers" : name === "mochi" ? "what mochi does" : "features"}
-          </p>
+        <hr className="border-t mt-10 sm:mt-12" style={{ borderColor: "var(--border)" }} />
 
+        <div className="mt-10 space-y-5 text-center sm:mt-12">
           <ul className="mx-auto w-full max-w-md space-y-2.5">
             {bullets.map((item) => (
               <li
@@ -491,10 +483,9 @@ export default function SubdomainLanding({
           </ul>
         </div>
 
-        <div className="mt-9 flex flex-col items-center gap-2">
-          <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>
-            Built by
-          </p>
+        <hr className="border-t mt-10" style={{ borderColor: "var(--border)" }} />
+
+        <div className="mt-8 flex flex-col items-center gap-2">
           <a
             href={builtByUrl}
             target="_blank"
