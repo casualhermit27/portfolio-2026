@@ -34,6 +34,7 @@ export default function CanPage() {
       latestDateIso="2026-03-14"
       comingSoonLabel="Brewing now"
       ctaHint="A small macOS tool, nearly ready to pour."
+      noCard
     />
   );
 }

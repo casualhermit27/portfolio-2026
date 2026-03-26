@@ -25,6 +25,7 @@ type SubdomainLandingProps = {
   builtByName?: string;
   builtByUrl?: string;
   screenAspect?: "landscape" | "portrait";
+  noCard?: boolean;
 };
 
 function renderFeatureText(text: string, highlightBg: string, highlightText: string) {
@@ -127,6 +128,7 @@ export default function SubdomainLanding({
   builtByName = "Harsha Chaganti",
   builtByUrl = "https://harshachaganti.com",
   screenAspect = "landscape",
+  noCard = false,
 }: SubdomainLandingProps) {
   const [dark, setDark] = useState(false);
   const [changelogOpen, setChangelogOpen] = useState(false);
@@ -185,8 +187,8 @@ export default function SubdomainLanding({
       className="min-h-screen transition-colors duration-300"
       style={{ background: "var(--bg)", color: "var(--text-primary)" }}
     >
-      <section className="mx-auto w-full max-w-2xl px-4 py-8 sm:px-6">
-        <div className="rounded-[28px] border px-8 py-10" style={{ borderColor: "var(--border)" }}>
+      <section className={`mx-auto w-full max-w-2xl px-4 sm:px-6 ${noCard ? "pt-16 pb-10" : "py-8"}`}>
+        <div className={noCard ? "" : "rounded-[28px] border px-8 py-10"} style={noCard ? {} : { borderColor: "var(--border)" }}>
         <div className="flex items-center justify-between mb-10 sm:mb-12">
           <div className="w-8 flex-shrink-0" />
           <div className="flex items-center gap-3">
