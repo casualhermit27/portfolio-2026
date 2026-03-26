@@ -324,9 +324,7 @@ export default function SubdomainLanding({
           )}
         </div>
 
-        <hr className="border-t mt-10 sm:mt-12" style={{ borderColor: "var(--border)" }} />
-
-        <div className="mt-8 flex flex-col items-center">
+        <div className="mt-6 flex flex-col items-center">
           {ctaUrl ? (
             <motion.a
               href={ctaUrl}
@@ -366,8 +364,6 @@ export default function SubdomainLanding({
             </p>
           )}
         </div>
-
-        <hr className="border-t mt-8" style={{ borderColor: "var(--border)" }} />
 
         <div className="mt-10">
           {platform === "iOS" ? (
@@ -460,8 +456,6 @@ export default function SubdomainLanding({
           )}
         </div>
 
-        <hr className="border-t mt-10 sm:mt-12" style={{ borderColor: "var(--border)" }} />
-
         <div className="mt-10 space-y-5 text-center sm:mt-12">
           <ul className="mx-auto w-full max-w-md space-y-2.5">
             {bullets.map((item) => (
@@ -483,9 +477,7 @@ export default function SubdomainLanding({
           </ul>
         </div>
 
-        <hr className="border-t mt-10" style={{ borderColor: "var(--border)" }} />
-
-        <div className="mt-8 flex flex-col items-center gap-2">
+        <div className="mt-9 flex flex-col items-center gap-2">
           <a
             href={builtByUrl}
             target="_blank"
