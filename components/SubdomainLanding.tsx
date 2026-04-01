@@ -216,10 +216,7 @@ export default function SubdomainLanding({
         {/* Header */}
         <div className={`flex items-center justify-between ${noCard ? "" : "mb-10 sm:mb-12"}`}>
           {noCard ? (
-            <div
-              className="h-14 w-14 overflow-hidden rounded-[16px]"
-              style={{ boxShadow: "0 2px 10px rgba(0,0,0,0.08)" }}
-            >
+            <div className="h-20 w-20 overflow-hidden rounded-[20px]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={logoSrc} alt={`${name} logo`} className="h-full w-full object-cover" />
             </div>
