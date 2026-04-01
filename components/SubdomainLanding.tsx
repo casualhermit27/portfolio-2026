@@ -210,56 +210,105 @@ export default function SubdomainLanding({
         color: "var(--text-primary)",
       }}
     >
-      <section className={`mx-auto w-full max-w-2xl px-4 sm:px-6 ${noCard ? "pt-16 pb-10" : "py-8"}`}>
+      <section className={`mx-auto w-full px-6 sm:px-10 ${noCard ? "max-w-3xl pt-16 pb-16" : "max-w-2xl py-8"}`}>
         <div className={noCard ? "" : "rounded-[28px] border px-8 py-10"} style={noCard ? {} : { borderColor: "var(--border)" }}>
-        <div className="flex items-center justify-between mb-10 sm:mb-12">
-          <div className="w-8 flex-shrink-0" />
-          <div className="flex items-center gap-3">
+
+        {/* Header */}
+        <div className={`flex items-center justify-between ${noCard ? "" : "mb-10 sm:mb-12"}`}>
+          {noCard ? (
             <div
-              className="h-12 w-12 overflow-hidden rounded-[13px] border"
-              style={{ borderColor: "var(--border)", boxShadow: "0 2px 10px rgba(0,0,0,0.08)" }}
+              className="h-14 w-14 overflow-hidden rounded-[16px]"
+              style={{ boxShadow: "0 2px 10px rgba(0,0,0,0.08)" }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={logoSrc} alt={`${name} logo`} className="h-full w-full object-cover" />
             </div>
-            <div className="flex items-center gap-2.5">
-              <h1 className="text-[32px] font-light leading-none tracking-[-0.02em] lowercase sm:text-[38px]">
-                {name}
-              </h1>
-              <span
-                className="text-[9px] font-medium uppercase tracking-[0.1em] border rounded-full px-2.5 py-1"
-                style={{ color: "var(--text-muted)", borderColor: "var(--border)" }}
-              >
-                {platform}
-              </span>
-            </div>
-          </div>
-
+          ) : (
+            <>
+              <div className="w-8 flex-shrink-0" />
+              <div className="flex items-center gap-3">
+                <div
+                  className="h-12 w-12 overflow-hidden rounded-[13px] border"
+                  style={{ borderColor: "var(--border)", boxShadow: "0 2px 10px rgba(0,0,0,0.08)" }}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={logoSrc} alt={`${name} logo`} className="h-full w-full object-cover" />
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <h1 className="text-[32px] font-light leading-none tracking-[-0.02em] lowercase sm:text-[38px]">
+                    {name}
+                  </h1>
+                  <span
+                    className="text-[9px] font-medium uppercase tracking-[0.1em] border rounded-full px-2.5 py-1"
+                    style={{ color: "var(--text-muted)", borderColor: "var(--border)" }}
+                  >
+                    {platform}
+                  </span>
+                </div>
+              </div>
+            </>
+          )}
           <button
             onClick={() => setDark((d) => !d)}
             className="inline-flex h-8 w-8 items-center justify-center rounded-full border transition-opacity duration-150 hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg)]"
-            style={{
-              borderColor: "var(--border)",
-              background: "var(--pill-bg)",
-              color: "var(--text-secondary)",
-            }}
+            style={{ borderColor: "var(--border)", background: "var(--pill-bg)", color: "var(--text-secondary)" }}
             aria-label="Toggle theme"
-            title={dark ? "Switch to light mode" : "Switch to dark mode"}
           >
             {dark ? <SunIcon /> : <MoonIcon />}
           </button>
         </div>
 
-        <div className="mx-auto flex max-w-2xl flex-col items-center gap-3 text-center">
-          {tagline && (
-            <p className="text-[18px] font-medium leading-tight sm:text-[20px]" style={{ color: "var(--text-primary)" }}>
-              {tagline}
+        {/* Hero name (noCard only) */}
+        {noCard && (
+          <div className="mt-10">
+            <div className="flex items-baseline gap-4">
+              <h1
+                className="text-[72px] font-extralight leading-none tracking-[-0.04em] lowercase sm:text-[96px]"
+                style={{ color: "var(--text-primary)" }}
+              >
+                {name}
+              </h1>
+              <span
+                className="text-[10px] font-medium uppercase tracking-[0.12em] border rounded-full px-2.5 py-1 mb-1"
+                style={{ color: "var(--text-muted)", borderColor: "var(--border)" }}
+              >
+                {platform}
+              </span>
+            </div>
+            {tagline && (
+              <p
+                className="mt-5 text-[22px] font-light leading-snug tracking-[-0.01em] sm:text-[26px]"
+                style={{ color: "var(--text-primary)" }}
+              >
+                {tagline}
+              </p>
+            )}
+            <p
+              className="mt-3 text-[15px] leading-relaxed max-w-md"
+              style={{ color: "var(--text-secondary)" }}
+            >
+              {description}
             </p>
-          )}
-          <p className="text-[14px] leading-relaxed sm:text-[15px]" style={{ color: "var(--text-secondary)" }}>
-            {description}
-          </p>
-          {latestDate && changelog.length === 0 && (
+          </div>
+        )}
+
+        {/* Centered tagline/description (card mode only) */}
+        {!noCard && (
+          <div className="mx-auto flex max-w-2xl flex-col items-center gap-3 text-center">
+            {tagline && (
+              <p className="text-[18px] font-medium leading-tight sm:text-[20px]" style={{ color: "var(--text-primary)" }}>
+                {tagline}
+              </p>
+            )}
+            <p className="text-[14px] leading-relaxed sm:text-[15px]" style={{ color: "var(--text-secondary)" }}>
+              {description}
+            </p>
+          </div>
+        )}
+
+        {/* Latest update pill */}
+        {latestDate && changelog.length === 0 && (
+          <div className={noCard ? "mt-6" : "mt-3 flex justify-center"}>
             <div
               className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] uppercase tracking-[0.14em]"
               style={{ boxShadow: dark ? "inset 0 0 0 1px rgba(255,255,255,0.07)" : "inset 0 0 0 1px rgba(0,0,0,0.07)", color: "var(--text-secondary)", background: "transparent" }}
@@ -270,95 +319,92 @@ export default function SubdomainLanding({
                 <time dateTime={latestDateIso ?? latestDate}>{latestDate}</time>
               </span>
             </div>
-          )}
-          {latestDate && changelog.length > 0 && (
-            <div className="mx-auto w-full max-w-3xl">
-              <button
-                type="button"
-                onClick={() => setChangelogOpen((open) => !open)}
-                className="mx-auto flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] uppercase tracking-[0.14em] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg)]"
-                style={{
-                  boxShadow: dark ? "inset 0 0 0 1px rgba(255,255,255,0.07)" : "inset 0 0 0 1px rgba(0,0,0,0.07)",
-                  color: "var(--text-secondary)",
-                  background: "transparent",
-                }}
-                aria-expanded={changelogOpen}
-                aria-controls="changelog-panel"
+          </div>
+        )}
+
+        {/* Changelog pill */}
+        {latestDate && changelog.length > 0 && (
+          <div className={noCard ? "mt-6" : "mt-3 flex justify-center"}>
+            <button
+              type="button"
+              onClick={() => setChangelogOpen((open) => !open)}
+              className="flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] uppercase tracking-[0.14em] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg)]"
+              style={{
+                boxShadow: dark ? "inset 0 0 0 1px rgba(255,255,255,0.07)" : "inset 0 0 0 1px rgba(0,0,0,0.07)",
+                color: "var(--text-secondary)",
+                background: "transparent",
+              }}
+              aria-expanded={changelogOpen}
+              aria-controls="changelog-panel"
+            >
+              <DotIcon />
+              <span>{latestLabel}</span>
+              <span className="text-[12px] normal-case tracking-normal" style={{ color: "var(--text-secondary)" }}>
+                <time dateTime={latestDateIso ?? latestDate}>{latestDate}</time>
+              </span>
+              <span
+                className={`ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full border ${changelogOpen ? "rotate-180" : ""}`}
+                style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}
+                aria-hidden
               >
-                <DotIcon />
-                <span>{latestLabel}</span>
-                <span className="text-[12px] normal-case tracking-normal" style={{ color: "var(--text-secondary)" }}>
-                  <time dateTime={latestDateIso ?? latestDate}>{latestDate}</time>
-                </span>
-                <span
-                  className={`ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full border ${
-                    changelogOpen ? "rotate-180" : ""
-                  }`}
-                  style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}
-                  aria-hidden
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </span>
+            </button>
+
+            <AnimatePresence initial={false}>
+              {changelogOpen && (
+                <motion.div
+                  id="changelog-panel"
+                  className="mt-4 w-full rounded-[18px] border p-4 text-left sm:p-5"
+                  style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  transition={{ duration: 0.18, ease: "easeOut" }}
                 >
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="6 9 12 15 18 9" />
-                  </svg>
-                </span>
-              </button>
+                  <p className="text-[12px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>
+                    {changelogTitle}
+                  </p>
+                  <p className="mt-1 text-[12px]" style={{ color: "var(--text-secondary)" }}>
+                    {changelogSubtitle}
+                  </p>
+                  <ul className="mt-4 space-y-3">
+                    {changelog.map((item) => (
+                      <li key={item.title} className="flex gap-3">
+                        <span
+                          className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-md border text-[10px]"
+                          style={{ borderColor: "var(--border)", background: "var(--pill-bg)", color: accent.dot }}
+                        >
+                          <DotIcon />
+                        </span>
+                        <div>
+                          <p className="text-[13px] font-medium" style={{ color: "var(--text-primary)" }}>
+                            {item.title}
+                          </p>
+                          <p className="text-[12px] leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                            {item.body}
+                          </p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        )}
 
-              <AnimatePresence initial={false}>
-                {changelogOpen && (
-                  <motion.div
-                    id="changelog-panel"
-                    className="mt-4 w-full rounded-[18px] border p-4 text-left sm:p-5"
-                    style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
-                    initial={{ opacity: 0, y: -6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -4 }}
-                    transition={{ duration: 0.18, ease: "easeOut" }}
-                  >
-                    <p className="text-[12px] uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>
-                      {changelogTitle}
-                    </p>
-                    <p className="mt-1 text-[12px]" style={{ color: "var(--text-secondary)" }}>
-                      {changelogSubtitle}
-                    </p>
-                    <ul className="mt-4 space-y-3">
-                      {changelog.map((item) => (
-                        <li key={item.title} className="flex gap-3">
-                          <span
-                            className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-md border text-[10px]"
-                            style={{ borderColor: "var(--border)", background: "var(--pill-bg)", color: accent.dot }}
-                          >
-                            <DotIcon />
-                          </span>
-                          <div>
-                            <p className="text-[13px] font-medium" style={{ color: "var(--text-primary)" }}>
-                              {item.title}
-                            </p>
-                            <p className="text-[12px] leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-                              {item.body}
-                            </p>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          )}
-        </div>
-
-        <div className="mt-6 flex flex-col items-center">
+        {/* CTA */}
+        <div className={`mt-7 flex flex-col ${noCard ? "items-start" : "items-center mt-6"} gap-2`}>
           {ctaUrl ? (
             <motion.a
               href={ctaUrl}
               target={isExternalCta ? "_blank" : undefined}
               rel={isExternalCta ? "noopener noreferrer" : undefined}
               className="inline-flex items-center gap-2 rounded-[16px] border px-6 py-3.5 text-[17px] font-semibold tracking-[-0.01em] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg)]"
-              style={{
-                borderColor: accent.buttonBorder,
-                background: accent.buttonBg,
-                color: accent.buttonText,
-              }}
+              style={{ borderColor: accent.buttonBorder, background: accent.buttonBg, color: accent.buttonText }}
               whileHover={{ y: -3, scale: 1.03, backgroundColor: accent.buttonHover, borderColor: accent.buttonBorderHover, boxShadow: accent.buttonShadow }}
               whileTap={{ scale: 0.97, y: 0, boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}
               transition={{ type: "spring", stiffness: 500, damping: 22 }}
@@ -371,128 +417,98 @@ export default function SubdomainLanding({
               type="button"
               disabled
               className="inline-flex items-center gap-2 rounded-[16px] border px-6 py-3.5 text-[17px] font-semibold tracking-[-0.01em] opacity-80"
-              style={{
-                borderColor: accent.buttonBorder,
-                background: accent.buttonBg,
-                color: accent.buttonText,
-              }}
+              style={{ borderColor: accent.buttonBorder, background: accent.buttonBg, color: accent.buttonText }}
             >
               {comingSoonLabel}
             </motion.button>
           )}
-
           {ctaHint && (
-            <p className="mt-2 text-[13px]" style={{ color: "var(--text-secondary)" }}>
+            <p className="text-[13px]" style={{ color: "var(--text-secondary)" }}>
               {ctaHint}
             </p>
           )}
         </div>
 
-        <div className="mt-10">
+        {/* Screens */}
+        <div className="mt-14">
           {platform === "iOS" ? (
             <>
-            <div ref={scrollContainerRef} onScroll={handleScroll} className="overflow-x-auto scrollbar-hide pb-2 mx-auto max-w-[490px] sm:max-w-[560px] md:max-w-[630px]">
-              <div className="flex w-max snap-x snap-mandatory items-start gap-4 px-4 sm:gap-5 md:gap-6">
-                {screens.length > 0
-                  ? screens.map((src, i) => (
-                    <div
-                      key={src}
-                      className="snap-center flex-shrink-0 overflow-hidden rounded-[26px] border w-[148px] h-[320px] sm:w-[170px] sm:h-[368px] md:w-[192px] md:h-[415px] lg:w-[207px] lg:h-[449px]"
-                      style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
-                    >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={src}
-                        alt={`${name} screen ${i + 1}`}
-                        className="h-full w-full object-cover"
-                      />
-                    </div>
-                  ))
-                  : (
-                    <div
-                      className="flex h-[320px] w-[148px] flex-shrink-0 items-end justify-center rounded-[26px] border pb-6 sm:h-[368px] sm:w-[170px] md:h-[415px] md:w-[192px] lg:h-[449px] lg:w-[207px]"
-                      style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
-                    >
-                      <span
-                        className="text-[10px] tracking-[0.18em] uppercase"
-                        style={{ color: "var(--text-muted)" }}
+              <div ref={scrollContainerRef} onScroll={handleScroll} className="overflow-x-auto scrollbar-hide pb-2">
+                <div className="flex w-max snap-x snap-mandatory items-start gap-4 sm:gap-5 md:gap-6">
+                  {screens.length > 0
+                    ? screens.map((src, i) => (
+                      <div
+                        key={src}
+                        className="snap-center flex-shrink-0 overflow-hidden rounded-[26px] border w-[148px] h-[320px] sm:w-[170px] sm:h-[368px] md:w-[192px] md:h-[415px] lg:w-[207px] lg:h-[449px]"
+                        style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
                       >
-                        soon
-                      </span>
-                    </div>
-                  )}
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={src} alt={`${name} screen ${i + 1}`} className="h-full w-full object-cover" />
+                      </div>
+                    ))
+                    : (
+                      <div
+                        className="flex h-[320px] w-[148px] flex-shrink-0 items-end justify-center rounded-[26px] border pb-6 sm:h-[368px] sm:w-[170px]"
+                        style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
+                      >
+                        <span className="text-[10px] tracking-[0.18em] uppercase" style={{ color: "var(--text-muted)" }}>soon</span>
+                      </div>
+                    )}
+                </div>
               </div>
-            </div>
-            {screens.length > 1 && (
-              <div className="mt-3 flex justify-center gap-1.5">
-                {screens.map((_, i) => (
-                  <span
-                    key={i}
-                    className="h-1.5 rounded-full transition-all duration-200"
-                    style={{
-                      width: i === activeScreen ? "16px" : "6px",
-                      background: i === activeScreen ? accent.dot : "var(--border-active)",
-                    }}
-                  />
-                ))}
-              </div>
-            )}
+              {screens.length > 1 && (
+                <div className="mt-3 flex gap-1.5">
+                  {screens.map((_, i) => (
+                    <span
+                      key={i}
+                      className="h-1.5 rounded-full transition-all duration-200"
+                      style={{ width: i === activeScreen ? "16px" : "6px", background: i === activeScreen ? accent.dot : "var(--border-active)" }}
+                    />
+                  ))}
+                </div>
+              )}
             </>
           ) : (
-            <div className="overflow-x-auto scrollbar-hide pb-2" style={{ maskImage: "linear-gradient(to right, transparent, black 40px, black calc(100% - 40px), transparent)", WebkitMaskImage: "linear-gradient(to right, transparent, black 40px, black calc(100% - 40px), transparent)" }}>
-              <div className="flex w-max snap-x snap-mandatory items-start gap-2 px-1 mx-auto sm:gap-3">
-                {(screens.length > 0 ? screens : [logoSrc]).map((src, i) => (
-                  <div
-                    key={`${src}-${i}`}
-                    className={
-                      screenAspect === "portrait"
-                        ? "snap-center flex-shrink-0 overflow-hidden rounded-[12px] border w-[300px] h-[375px] sm:w-[360px] sm:h-[450px] md:w-[420px] md:h-[525px]"
-                        : "snap-center flex-shrink-0 overflow-hidden rounded-[12px] border w-[470px] h-[293px] sm:w-[580px] sm:h-[361px] md:w-[700px] md:h-[436px]"
-                    }
-                    style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
-                  >
-                    <div
-                      className="flex items-center px-2.5 border-b"
-                      style={{
-                        height: "24px",
-                        borderColor: "var(--border)",
-                        background: "var(--pill-bg)",
-                      }}
-                    >
-                      <div className="flex items-center gap-1.5">
-                        <span className="h-2 w-2 rounded-full" style={{ background: "#FF5F57" }} />
-                        <span className="h-2 w-2 rounded-full" style={{ background: "#FEBC2E" }} />
-                        <span className="h-2 w-2 rounded-full" style={{ background: "#28C840" }} />
-                      </div>
-                    </div>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={src}
-                      alt={`${name} screen ${i + 1}`}
-                      className="w-full object-cover"
-                      style={{ height: "calc(100% - 24px)" }}
-                    />
-                  </div>
-                ))}
+            <div
+              className="overflow-hidden rounded-[16px] border w-full"
+              style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
+            >
+              <div
+                className="flex items-center px-3 border-b"
+                style={{ height: "28px", borderColor: "var(--border)", background: "var(--pill-bg)" }}
+              >
+                <div className="flex items-center gap-1.5">
+                  <span className="h-2.5 w-2.5 rounded-full" style={{ background: "#FF5F57" }} />
+                  <span className="h-2.5 w-2.5 rounded-full" style={{ background: "#FEBC2E" }} />
+                  <span className="h-2.5 w-2.5 rounded-full" style={{ background: "#28C840" }} />
+                </div>
               </div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={screens[0] ?? logoSrc}
+                alt={`${name} screen`}
+                className="w-full object-cover"
+                style={{ maxHeight: "520px" }}
+              />
             </div>
           )}
         </div>
 
-        <div className="mt-10 space-y-5 text-center sm:mt-12">
-          <ul className="mx-auto w-full max-w-md space-y-2.5">
+        {/* Bullets */}
+        <div className="mt-14">
+          <ul className="space-y-3">
             {bullets.map((item) => (
               <li
                 key={item}
-                className="flex items-start gap-2.5 text-left text-[14px] leading-relaxed sm:text-[15px]"
+                className="flex items-start gap-3 text-[15px] leading-relaxed sm:text-[16px]"
                 style={{ color: "var(--text-primary)" }}
               >
-                <span className="mt-[7px] h-1 w-1 rounded-full flex-shrink-0" style={{ background: accent.dot }} />
+                <span className="mt-[9px] h-1 w-1 rounded-full flex-shrink-0" style={{ background: accent.dot }} />
                 <span>{renderFeatureText(item, accent.highlightBg, accent.highlightText)}</span>
               </li>
             ))}
             {name === "can" && (
-              <li className="flex items-center gap-2.5 text-left">
+              <li className="flex items-center gap-3">
                 <span className="h-1 w-1 rounded-full flex-shrink-0" style={{ background: accent.dot }} />
                 <SupportedConversions accent={accent} />
               </li>
@@ -500,7 +516,8 @@ export default function SubdomainLanding({
           </ul>
         </div>
 
-        <div className="mt-9 flex flex-col items-center gap-2">
+        {/* Built by */}
+        <div className="mt-12">
           <a
             href={builtByUrl}
             target="_blank"
@@ -517,6 +534,7 @@ export default function SubdomainLanding({
             <span className="text-[14px] font-medium">{builtByName}</span>
           </a>
         </div>
+
         </div>
       </section>
     </main>
