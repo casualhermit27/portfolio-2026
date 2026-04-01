@@ -22,6 +22,16 @@ const darkAccent = {
   highlightText: "#9BBFDA",
 };
 
+const container = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.07 } },
+};
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 16 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.25, 0.1, 0.25, 1] } },
+};
+
 function renderFeatureText(text: string, accent: typeof lightAccent) {
   const parts = text.split(/(\*\*[^*]+\*\*)/g).filter(Boolean);
   return parts.map((part, index) => {
@@ -94,164 +104,150 @@ export default function CanLanding() {
   return (
     <main
       className="min-h-screen transition-colors duration-300"
-      style={{
-        background: "var(--bg)",
-        color: "var(--text-primary)",
-      }}
+      style={{ background: "var(--bg)", color: "var(--text-primary)" }}
     >
       <section className="mx-auto w-full max-w-3xl px-6 pt-16 pb-16 sm:px-10">
+        <motion.div variants={container} initial="hidden" animate="show">
 
-        {/* Top bar: logo + toggle */}
-        <div className="flex items-center justify-between">
-          <div className="h-20 w-20 overflow-hidden rounded-[20px]" style={{ boxShadow: dark ? "0 0 0 1.5px rgba(255,255,255,0.9)" : "0 0 0 1.5px rgba(0,0,0,0.9)" }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logos/can 2.jpg" alt="can logo" className="h-full w-full object-cover" />
-          </div>
-
-          <button
-            onClick={() => setDark((d) => !d)}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-full border transition-opacity duration-150 hover:opacity-80 focus-visible:outline-none"
-            style={{
-              borderColor: "var(--border)",
-              background: "var(--pill-bg)",
-              color: "var(--text-secondary)",
-            }}
-            aria-label="Toggle theme"
-          >
-            {dark ? <SunIcon /> : <MoonIcon />}
-          </button>
-        </div>
-
-        {/* Hero name */}
-        <div className="mt-10">
-          <div className="flex items-baseline gap-4">
-            <h1
-              className="text-[72px] font-extralight leading-none tracking-[-0.04em] lowercase sm:text-[96px]"
-              style={{ color: "var(--text-primary)" }}
-            >
-              can
-            </h1>
-            <span
-              className="text-[10px] font-medium uppercase tracking-[0.12em] border rounded-full px-2.5 py-1 mb-1"
-              style={{ color: "var(--text-muted)", borderColor: "var(--border)" }}
-            >
-              macOS
-            </span>
-          </div>
-
-          <p
-            className="mt-5 text-[22px] font-light leading-snug tracking-[-0.01em] sm:text-[26px]"
-            style={{ color: "var(--text-primary)" }}
-          >
-            Instant file conversions<br />without heavy tools.
-          </p>
-
-          <p
-            className="mt-3 text-[15px] leading-relaxed max-w-md"
-            style={{ color: "var(--text-secondary)" }}
-          >
-            A minimal desktop utility to convert files and formats instantly.
-          </p>
-        </div>
-
-        {/* Latest update pill */}
-        <div className="mt-6">
-          <div
-            className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] uppercase tracking-[0.14em]"
-            style={{ boxShadow: dark ? "inset 0 0 0 1px rgba(255,255,255,0.07)" : "inset 0 0 0 1px rgba(0,0,0,0.07)", color: "var(--text-secondary)", background: "transparent" }}
-          >
-            <span className="h-1.5 w-1.5 rounded-full" style={{ background: accent.dot }} />
-            <span>Latest update</span>
-            <span className="text-[12px] normal-case tracking-normal" style={{ color: "var(--text-primary)" }}>
-              <time dateTime="2026-03-14">March 14, 2026</time>
-            </span>
-          </div>
-        </div>
-
-        {/* CTA */}
-        <div className="mt-7 flex flex-col items-start gap-2">
-          <motion.button
-            type="button"
-            disabled
-            className="inline-flex items-center gap-2 rounded-[16px] border px-6 py-3.5 text-[17px] font-semibold tracking-[-0.01em] opacity-80"
-            style={{
-              borderColor: accent.buttonBorder,
-              background: accent.buttonBg,
-              color: accent.buttonText,
-            }}
-          >
-            Brewing now
-          </motion.button>
-          <p className="text-[13px]" style={{ color: "var(--text-secondary)" }}>
-            A small macOS tool, nearly ready to pour.
-          </p>
-        </div>
-
-        {/* Screenshot */}
-        <div className="mt-14">
-          <div
-            className="overflow-hidden rounded-[16px] border w-full"
-            style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
-          >
+          {/* Top bar */}
+          <motion.div variants={fadeUp} className="flex items-center justify-between">
             <div
-              className="flex items-center px-3 border-b"
-              style={{ height: "28px", borderColor: "var(--border)", background: "var(--pill-bg)" }}
+              className="h-20 w-20 overflow-hidden rounded-[20px]"
+              style={{ boxShadow: dark ? "0 0 0 1.5px rgba(255,255,255,0.9)" : "0 0 0 1.5px rgba(0,0,0,0.9)" }}
             >
-              <div className="flex items-center gap-1.5">
-                <span className="h-2.5 w-2.5 rounded-full" style={{ background: "#FF5F57" }} />
-                <span className="h-2.5 w-2.5 rounded-full" style={{ background: "#FEBC2E" }} />
-                <span className="h-2.5 w-2.5 rounded-full" style={{ background: "#28C840" }} />
-              </div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logos/can 2.jpg" alt="can logo" className="h-full w-full object-cover" />
             </div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/dragdrop.png"
-              alt="can screen"
-              className="w-full object-cover"
-              style={{ maxHeight: "520px" }}
-            />
-          </div>
-        </div>
+            <button
+              onClick={() => setDark((d) => !d)}
+              className="inline-flex h-8 w-8 items-center justify-center rounded-full border transition-opacity duration-150 hover:opacity-80 focus-visible:outline-none"
+              style={{ borderColor: "var(--border)", background: "var(--pill-bg)", color: "var(--text-secondary)" }}
+              aria-label="Toggle theme"
+            >
+              {dark ? <SunIcon /> : <MoonIcon />}
+            </button>
+          </motion.div>
 
-        {/* Features */}
-        <div className="mt-14">
-          <ul className="space-y-3">
-            {bullets.map((item) => (
-              <li
-                key={item}
-                className="flex items-start gap-3 text-[15px] leading-relaxed sm:text-[16px]"
+          {/* Hero name */}
+          <motion.div variants={fadeUp} className="mt-10">
+            <div className="flex items-baseline gap-4">
+              <h1
+                className="text-[72px] font-extralight leading-none tracking-[-0.04em] lowercase sm:text-[96px]"
                 style={{ color: "var(--text-primary)" }}
               >
-                <span className="mt-[9px] h-1 w-1 rounded-full flex-shrink-0" style={{ background: accent.dot }} />
-                <span>{renderFeatureText(item, accent)}</span>
-              </li>
-            ))}
-            <li className="flex items-center gap-3">
-              <span className="h-1 w-1 rounded-full flex-shrink-0" style={{ background: accent.dot }} />
-              <SupportedConversions accent={accent} />
-            </li>
-          </ul>
-        </div>
-
-        {/* Built by */}
-        <div className="mt-12">
-          <a
-            href="https://harshachaganti.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-[12px] border px-3.5 py-2 focus-visible:outline-none"
-            style={{ borderColor: "var(--border)", background: "var(--bg-sticky)", color: "var(--text-primary)" }}
-          >
-            <span
-              className="inline-flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-medium"
-              style={{ background: "var(--pill-bg)", color: "var(--text-secondary)" }}
+                can
+              </h1>
+              <span
+                className="text-[10px] font-medium uppercase tracking-[0.12em] border rounded-full px-2.5 py-1 mb-1"
+                style={{ color: "var(--text-muted)", borderColor: "var(--border)" }}
+              >
+                macOS
+              </span>
+            </div>
+            <p
+              className="mt-5 text-[22px] font-light leading-snug tracking-[-0.01em] sm:text-[26px]"
+              style={{ color: "var(--text-primary)" }}
             >
-              HC
-            </span>
-            <span className="text-[14px] font-medium">Harsha Chaganti</span>
-          </a>
-        </div>
+              Instant file conversions<br />without heavy tools.
+            </p>
+            <p
+              className="mt-3 text-[15px] leading-relaxed max-w-md"
+              style={{ color: "var(--text-secondary)" }}
+            >
+              A minimal desktop utility to convert files and formats instantly.
+            </p>
+          </motion.div>
 
+          {/* Latest update pill */}
+          <motion.div variants={fadeUp} className="mt-6">
+            <div
+              className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] uppercase tracking-[0.14em]"
+              style={{ boxShadow: dark ? "inset 0 0 0 1px rgba(255,255,255,0.07)" : "inset 0 0 0 1px rgba(0,0,0,0.07)", color: "var(--text-secondary)", background: "transparent" }}
+            >
+              <span className="h-1.5 w-1.5 rounded-full" style={{ background: accent.dot }} />
+              <span>Latest update</span>
+              <span className="text-[12px] normal-case tracking-normal" style={{ color: "var(--text-primary)" }}>
+                <time dateTime="2026-03-14">March 14, 2026</time>
+              </span>
+            </div>
+          </motion.div>
+
+          {/* CTA */}
+          <motion.div variants={fadeUp} className="mt-7 flex flex-col items-start gap-2">
+            <button
+              type="button"
+              disabled
+              className="inline-flex items-center gap-2 rounded-[16px] border px-6 py-3.5 text-[17px] font-semibold tracking-[-0.01em] opacity-80"
+              style={{ borderColor: accent.buttonBorder, background: accent.buttonBg, color: accent.buttonText }}
+            >
+              Brewing now
+            </button>
+            <p className="text-[13px]" style={{ color: "var(--text-secondary)" }}>
+              A small macOS tool, nearly ready to pour.
+            </p>
+          </motion.div>
+
+          {/* Screenshot */}
+          <motion.div variants={fadeUp} className="mt-14">
+            <div
+              className="overflow-hidden rounded-[16px] border w-full"
+              style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
+            >
+              <div
+                className="flex items-center px-3 border-b"
+                style={{ height: "28px", borderColor: "var(--border)", background: "var(--pill-bg)" }}
+              >
+                <div className="flex items-center gap-1.5">
+                  <span className="h-2.5 w-2.5 rounded-full" style={{ background: "#FF5F57" }} />
+                  <span className="h-2.5 w-2.5 rounded-full" style={{ background: "#FEBC2E" }} />
+                  <span className="h-2.5 w-2.5 rounded-full" style={{ background: "#28C840" }} />
+                </div>
+              </div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/dragdrop.png" alt="can screen" className="w-full object-cover" style={{ maxHeight: "520px" }} />
+            </div>
+          </motion.div>
+
+          {/* Features */}
+          <motion.div variants={fadeUp} className="mt-14">
+            <ul className="space-y-3">
+              {bullets.map((bullet) => (
+                <li
+                  key={bullet}
+                  className="flex items-start gap-3 text-[15px] leading-relaxed sm:text-[16px]"
+                  style={{ color: "var(--text-primary)" }}
+                >
+                  <span className="mt-[9px] h-1 w-1 rounded-full flex-shrink-0" style={{ background: accent.dot }} />
+                  <span>{renderFeatureText(bullet, accent)}</span>
+                </li>
+              ))}
+              <li className="flex items-center gap-3">
+                <span className="h-1 w-1 rounded-full flex-shrink-0" style={{ background: accent.dot }} />
+                <SupportedConversions accent={accent} />
+              </li>
+            </ul>
+          </motion.div>
+
+          {/* Built by */}
+          <motion.div variants={fadeUp} className="mt-12">
+            <a
+              href="https://harshachaganti.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-[12px] border px-3.5 py-2 focus-visible:outline-none"
+              style={{ borderColor: "var(--border)", background: "var(--bg-sticky)", color: "var(--text-primary)" }}
+            >
+              <span
+                className="inline-flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-medium"
+                style={{ background: "var(--pill-bg)", color: "var(--text-secondary)" }}
+              >
+                HC
+              </span>
+              <span className="text-[14px] font-medium">Harsha Chaganti</span>
+            </a>
+          </motion.div>
+
+        </motion.div>
       </section>
     </main>
   );

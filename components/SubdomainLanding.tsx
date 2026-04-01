@@ -2,6 +2,16 @@
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+
+const pageContainer = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.07 } },
+};
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 16 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.25, 0.1, 0.25, 1] } },
+};
 import SupportedConversions from "@/components/SupportedConversions";
 
 type SubdomainLandingProps = {
@@ -212,9 +222,10 @@ export default function SubdomainLanding({
     >
       <section className={`mx-auto w-full px-6 sm:px-10 ${noCard ? "max-w-3xl pt-16 pb-16" : "max-w-2xl py-8"}`}>
         <div className={noCard ? "" : "rounded-[28px] border px-8 py-10"} style={noCard ? {} : { borderColor: "var(--border)" }}>
+        <motion.div variants={noCard ? pageContainer : undefined} initial={noCard ? "hidden" : undefined} animate={noCard ? "show" : undefined}>
 
         {/* Header */}
-        <div className={`flex items-center justify-between ${noCard ? "" : "mb-10 sm:mb-12"}`}>
+        <motion.div variants={noCard ? fadeUp : undefined} className={`flex items-center justify-between ${noCard ? "" : "mb-10 sm:mb-12"}`}>
           {noCard ? (
             <div className="h-20 w-20 overflow-hidden rounded-[20px]" style={{ boxShadow: dark ? "0 0 0 1.5px rgba(255,255,255,0.9)" : "0 0 0 1.5px rgba(0,0,0,0.9)" }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -257,7 +268,7 @@ export default function SubdomainLanding({
 
         {/* Hero name (noCard only) */}
         {noCard && (
-          <div className="mt-10">
+          <motion.div variants={fadeUp} className="mt-10">
             <div className="flex items-baseline gap-4">
               <h1
                 className="text-[72px] font-extralight leading-none tracking-[-0.04em] lowercase sm:text-[96px]"
@@ -286,7 +297,7 @@ export default function SubdomainLanding({
             >
               {description}
             </p>
-          </div>
+          </motion.div>
         )}
 
         {/* Centered tagline/description (card mode only) */}
@@ -305,7 +316,7 @@ export default function SubdomainLanding({
 
         {/* Latest update pill */}
         {latestDate && changelog.length === 0 && (
-          <div className={noCard ? "mt-6" : "mt-3 flex justify-center"}>
+          <motion.div variants={noCard ? fadeUp : undefined} className={noCard ? "mt-6" : "mt-3 flex justify-center"}>
             <div
               className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] uppercase tracking-[0.14em]"
               style={{ boxShadow: dark ? "inset 0 0 0 1px rgba(255,255,255,0.07)" : "inset 0 0 0 1px rgba(0,0,0,0.07)", color: "var(--text-secondary)", background: "transparent" }}
@@ -316,12 +327,12 @@ export default function SubdomainLanding({
                 <time dateTime={latestDateIso ?? latestDate}>{latestDate}</time>
               </span>
             </div>
-          </div>
+          </motion.div>
         )}
 
         {/* Changelog pill */}
         {latestDate && changelog.length > 0 && (
-          <div className={noCard ? "mt-6" : "mt-3 flex justify-center"}>
+          <motion.div variants={noCard ? fadeUp : undefined} className={noCard ? "mt-6" : "mt-3 flex justify-center"}>
             <button
               type="button"
               onClick={() => setChangelogOpen((open) => !open)}
@@ -390,11 +401,11 @@ export default function SubdomainLanding({
                 </motion.div>
               )}
             </AnimatePresence>
-          </div>
+          </motion.div>
         )}
 
         {/* CTA */}
-        <div className={`mt-7 flex flex-col ${noCard ? "items-start" : "items-center mt-6"} gap-2`}>
+        <motion.div variants={noCard ? fadeUp : undefined} className={`mt-7 flex flex-col ${noCard ? "items-start" : "items-center mt-6"} gap-2`}>
           {ctaUrl ? (
             <motion.a
               href={ctaUrl}
@@ -424,10 +435,10 @@ export default function SubdomainLanding({
               {ctaHint}
             </p>
           )}
-        </div>
+        </motion.div>
 
         {/* Screens */}
-        <div className="mt-14">
+        <motion.div variants={noCard ? fadeUp : undefined} className="mt-14">
           {platform === "iOS" ? (
             <>
               <div ref={scrollContainerRef} onScroll={handleScroll} className="overflow-x-auto scrollbar-hide pb-2">
@@ -489,10 +500,10 @@ export default function SubdomainLanding({
               />
             </div>
           )}
-        </div>
+        </motion.div>
 
         {/* Bullets */}
-        <div className="mt-14">
+        <motion.div variants={noCard ? fadeUp : undefined} className="mt-14">
           <ul className="space-y-3">
             {bullets.map((item) => (
               <li
@@ -511,10 +522,10 @@ export default function SubdomainLanding({
               </li>
             )}
           </ul>
-        </div>
+        </motion.div>
 
         {/* Built by */}
-        <div className="mt-12">
+        <motion.div variants={noCard ? fadeUp : undefined} className="mt-12">
           <a
             href={builtByUrl}
             target="_blank"
@@ -530,8 +541,9 @@ export default function SubdomainLanding({
             </span>
             <span className="text-[14px] font-medium">{builtByName}</span>
           </a>
-        </div>
+        </motion.div>
 
+        </motion.div>
         </div>
       </section>
     </main>
