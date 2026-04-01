@@ -143,7 +143,17 @@ export default function SubdomainLanding({
   };
 
   const accent = platform === "iOS"
-    ? {
+    ? dark ? {
+      buttonBg: "#251B22",
+      buttonBorder: "#3D2B36",
+      buttonBorderHover: "#4F3545",
+      buttonText: "#C490A8",
+      buttonHover: "#2E2029",
+      buttonShadow: "0 8px 28px rgba(180, 110, 150, 0.2)",
+      dot: "#D49AB4",
+      highlightBg: "rgba(212, 140, 175, 0.14)",
+      highlightText: "#C8A8BC",
+    } : {
       buttonBg: "#F9DFEA",
       buttonBorder: "#EAC7D9",
       buttonBorderHover: "#D4A0BC",
@@ -154,7 +164,17 @@ export default function SubdomainLanding({
       highlightBg: "#F5D8E6",
       highlightText: "#5D4757",
     }
-    : {
+    : dark ? {
+      buttonBg: "#1C2B3A",
+      buttonBorder: "#284055",
+      buttonBorderHover: "#345270",
+      buttonText: "#88B8D2",
+      buttonHover: "#223244",
+      buttonShadow: "0 8px 28px rgba(100, 165, 205, 0.2)",
+      dot: "#7AAED0",
+      highlightBg: "rgba(110, 170, 210, 0.16)",
+      highlightText: "#9BBFDA",
+    } : {
       buttonBg: "#DDEBFB",
       buttonBorder: "#C1D7F4",
       buttonBorderHover: "#90BAE8",
@@ -185,7 +205,14 @@ export default function SubdomainLanding({
   return (
     <main
       className="min-h-screen transition-colors duration-300"
-      style={{ background: "var(--bg)", color: "var(--text-primary)" }}
+      style={{
+        background: dark
+          ? platform === "iOS"
+            ? "radial-gradient(ellipse at 15% 0%, #1C1318 0%, #111110 60%)"
+            : "radial-gradient(ellipse at 15% 0%, #151C25 0%, #111110 60%)"
+          : "var(--bg)",
+        color: "var(--text-primary)",
+      }}
     >
       <section className={`mx-auto w-full max-w-2xl px-4 sm:px-6 ${noCard ? "pt-16 pb-10" : "py-8"}`}>
         <div className={noCard ? "" : "rounded-[28px] border px-8 py-10"} style={noCard ? {} : { borderColor: "var(--border)" }}>
@@ -239,7 +266,7 @@ export default function SubdomainLanding({
           {latestDate && changelog.length === 0 && (
             <div
               className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] uppercase tracking-[0.14em]"
-              style={{ boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.07)", color: "var(--text-secondary)", background: "var(--bg)" }}
+              style={{ boxShadow: dark ? "inset 0 0 0 1px rgba(255,255,255,0.07)" : "inset 0 0 0 1px rgba(0,0,0,0.07)", color: "var(--text-secondary)", background: "transparent" }}
             >
               <DotIcon />
               <span>{latestLabel}</span>
@@ -255,9 +282,9 @@ export default function SubdomainLanding({
                 onClick={() => setChangelogOpen((open) => !open)}
                 className="mx-auto flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] uppercase tracking-[0.14em] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg)]"
                 style={{
-                  boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.07)",
+                  boxShadow: dark ? "inset 0 0 0 1px rgba(255,255,255,0.07)" : "inset 0 0 0 1px rgba(0,0,0,0.07)",
                   color: "var(--text-secondary)",
-                  background: "var(--bg)",
+                  background: "transparent",
                 }}
                 aria-expanded={changelogOpen}
                 aria-controls="changelog-panel"

@@ -14,12 +14,12 @@ const lightAccent = {
 };
 
 const darkAccent = {
-  buttonBg: "#1A2535",
-  buttonBorder: "#253448",
-  buttonText: "#7BA8CC",
-  dot: "#4A7099",
-  highlightBg: "rgba(100, 150, 200, 0.12)",
-  highlightText: "#8CAEC8",
+  buttonBg: "#1C2B3A",
+  buttonBorder: "#284055",
+  buttonText: "#88B8D2",
+  dot: "#7AAED0",
+  highlightBg: "rgba(110, 170, 210, 0.16)",
+  highlightText: "#9BBFDA",
 };
 
 function renderFeatureText(text: string, accent: typeof lightAccent) {
@@ -96,7 +96,7 @@ export default function CanLanding() {
       className="min-h-screen transition-colors duration-300"
       style={{
         background: dark
-          ? "radial-gradient(ellipse at 20% 0%, #181614 0%, #111110 55%)"
+          ? "radial-gradient(ellipse at 15% 0%, #151C25 0%, #111110 60%)"
           : "var(--bg)",
         color: "var(--text-primary)",
       }}
