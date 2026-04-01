@@ -113,7 +113,7 @@ export default function CanLanding() {
           <motion.div variants={fadeUp} className="flex items-center justify-between">
             <div
               className="h-20 w-20 overflow-hidden rounded-[20px]"
-              style={{ boxShadow: dark ? "0 0 0 1px rgba(255,255,255,0.15)" : "0 0 0 1px rgba(0,0,0,0.1)" }}
+              style={{ boxShadow: dark ? "0 0 0 1px rgba(255,255,255,0.1)" : "0 0 0 1px rgba(0,0,0,0.06)" }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/logos/can 2.jpg" alt="can logo" className="h-full w-full object-cover" />
@@ -129,7 +129,7 @@ export default function CanLanding() {
           </motion.div>
 
           {/* Hero name */}
-          <motion.div variants={fadeUp} className="mt-10">
+          <motion.div variants={fadeUp} className="mt-6">
             <div className="flex items-baseline gap-4">
               <h1
                 className="text-[72px] font-extralight leading-none tracking-[-0.04em] lowercase sm:text-[96px]"
@@ -145,10 +145,10 @@ export default function CanLanding() {
               </span>
             </div>
             <p
-              className="mt-5 text-[22px] font-light leading-snug tracking-[-0.01em] sm:text-[26px]"
+              className="mt-3 text-[22px] font-light leading-snug tracking-[-0.01em] sm:text-[26px] max-w-[300px] sm:max-w-[340px]"
               style={{ color: "var(--text-primary)" }}
             >
-              Instant file conversions<br />without heavy tools.
+              Instant file conversions without heavy tools.
             </p>
             <p
               className="mt-3 text-[15px] leading-relaxed max-w-md"
