@@ -95,9 +95,7 @@ export default function CanLanding() {
     <main
       className="min-h-screen transition-colors duration-300"
       style={{
-        background: dark
-          ? "radial-gradient(ellipse at 15% 0%, #151C25 0%, #111110 60%)"
-          : "var(--bg)",
+        background: "var(--bg)",
         color: "var(--text-primary)",
       }}
     >
