@@ -4,19 +4,25 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import SupportedConversions from "@/components/SupportedConversions";
 
-const accent = {
+const lightAccent = {
   buttonBg: "#DDEBFB",
   buttonBorder: "#C1D7F4",
-  buttonBorderHover: "#90BAE8",
   buttonText: "#3F5574",
-  buttonHover: "#D1E3F8",
-  buttonShadow: "0 8px 28px rgba(143, 177, 224, 0.45)",
   dot: "#8FB1E0",
-  highlightBg: "#D5E6FB",
-  highlightText: "#3F5574",
+  highlightBg: "#E4EEF8",
+  highlightText: "#4A6280",
 };
 
-function renderFeatureText(text: string) {
+const darkAccent = {
+  buttonBg: "#1A2535",
+  buttonBorder: "#253448",
+  buttonText: "#7BA8CC",
+  dot: "#4A7099",
+  highlightBg: "rgba(100, 150, 200, 0.12)",
+  highlightText: "#8CAEC8",
+};
+
+function renderFeatureText(text: string, accent: typeof lightAccent) {
   const parts = text.split(/(\*\*[^*]+\*\*)/g).filter(Boolean);
   return parts.map((part, index) => {
     const isHighlight = part.startsWith("**") && part.endsWith("**");
@@ -69,6 +75,7 @@ const bullets = [
 
 export default function CanLanding() {
   const [dark, setDark] = useState(false);
+  const accent = dark ? darkAccent : lightAccent;
 
   useEffect(() => {
     const stored = window.localStorage.getItem("subdomain-theme");
@@ -87,7 +94,12 @@ export default function CanLanding() {
   return (
     <main
       className="min-h-screen transition-colors duration-300"
-      style={{ background: "var(--bg)", color: "var(--text-primary)" }}
+      style={{
+        background: dark
+          ? "radial-gradient(ellipse at 20% 0%, #181614 0%, #111110 55%)"
+          : "var(--bg)",
+        color: "var(--text-primary)",
+      }}
     >
       <section className="mx-auto w-full max-w-3xl px-6 pt-16 pb-16 sm:px-10">
 
@@ -151,7 +163,7 @@ export default function CanLanding() {
         <div className="mt-6">
           <div
             className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] uppercase tracking-[0.14em]"
-            style={{ boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.07)", color: "var(--text-secondary)", background: "var(--bg)" }}
+            style={{ boxShadow: dark ? "inset 0 0 0 1px rgba(255,255,255,0.07)" : "inset 0 0 0 1px rgba(0,0,0,0.07)", color: "var(--text-secondary)", background: "transparent" }}
           >
             <span className="h-1.5 w-1.5 rounded-full" style={{ background: accent.dot }} />
             <span>Latest update</span>
@@ -216,7 +228,7 @@ export default function CanLanding() {
                 style={{ color: "var(--text-primary)" }}
               >
                 <span className="mt-[9px] h-1 w-1 rounded-full flex-shrink-0" style={{ background: accent.dot }} />
-                <span>{renderFeatureText(item)}</span>
+                <span>{renderFeatureText(item, accent)}</span>
               </li>
             ))}
             <li className="flex items-center gap-3">
