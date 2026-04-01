@@ -152,6 +152,15 @@ export default function SubdomainLanding({
     setActiveScreen(Math.round(progress * (screens.length - 1)));
   };
 
+  const scrollToScreen = (index: number) => {
+    const el = scrollContainerRef.current;
+    if (!el) return;
+    const card = el.querySelector(".snap-center") as HTMLElement;
+    if (!card) return;
+    const gap = 16;
+    el.scrollTo({ left: (card.offsetWidth + gap) * index, behavior: "smooth" });
+  };
+
   const accent = platform === "iOS"
     ? dark ? {
       buttonBg: "#251B22",
@@ -441,27 +450,55 @@ export default function SubdomainLanding({
         <motion.div variants={noCard ? fadeUp : undefined} className="mt-14">
           {platform === "iOS" ? (
             <>
-              <div ref={scrollContainerRef} onScroll={handleScroll} className="overflow-x-auto scrollbar-hide pb-2">
-                <div className="flex w-max snap-x snap-mandatory items-start gap-4 sm:gap-5 md:gap-6">
-                  {screens.length > 0
-                    ? screens.map((src, i) => (
-                      <div
-                        key={src}
-                        className="snap-center flex-shrink-0 overflow-hidden rounded-[26px] border w-[148px] h-[320px] sm:w-[170px] sm:h-[368px] md:w-[192px] md:h-[415px] lg:w-[207px] lg:h-[449px]"
-                        style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
-                      >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={src} alt={`${name} screen ${i + 1}`} className="h-full w-full object-cover" />
-                      </div>
-                    ))
-                    : (
-                      <div
-                        className="flex h-[320px] w-[148px] flex-shrink-0 items-end justify-center rounded-[26px] border pb-6 sm:h-[368px] sm:w-[170px]"
-                        style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
-                      >
-                        <span className="text-[10px] tracking-[0.18em] uppercase" style={{ color: "var(--text-muted)" }}>soon</span>
-                      </div>
-                    )}
+              <div className="relative">
+                {/* Left arrow */}
+                {activeScreen > 0 && (
+                  <button
+                    onClick={() => scrollToScreen(activeScreen - 1)}
+                    className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1 z-10 inline-flex h-7 w-7 items-center justify-center rounded-full border transition-opacity duration-150 hover:opacity-70"
+                    style={{ background: "var(--bg)", borderColor: "var(--border)", color: "var(--text-secondary)" }}
+                    aria-label="Previous screen"
+                  >
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="15 18 9 12 15 6" />
+                    </svg>
+                  </button>
+                )}
+                {/* Right arrow */}
+                {activeScreen < screens.length - 1 && (
+                  <button
+                    onClick={() => scrollToScreen(activeScreen + 1)}
+                    className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1 z-10 inline-flex h-7 w-7 items-center justify-center rounded-full border transition-opacity duration-150 hover:opacity-70"
+                    style={{ background: "var(--bg)", borderColor: "var(--border)", color: "var(--text-secondary)" }}
+                    aria-label="Next screen"
+                  >
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="9 18 15 12 9 6" />
+                    </svg>
+                  </button>
+                )}
+                <div ref={scrollContainerRef} onScroll={handleScroll} className="overflow-x-auto scrollbar-hide pb-2">
+                  <div className="flex w-max snap-x snap-mandatory items-start gap-4 sm:gap-5 md:gap-6">
+                    {screens.length > 0
+                      ? screens.map((src, i) => (
+                        <div
+                          key={src}
+                          className="snap-center flex-shrink-0 overflow-hidden rounded-[26px] border w-[148px] h-[320px] sm:w-[170px] sm:h-[368px] md:w-[192px] md:h-[415px] lg:w-[207px] lg:h-[449px]"
+                          style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={src} alt={`${name} screen ${i + 1}`} className="h-full w-full object-cover" />
+                        </div>
+                      ))
+                      : (
+                        <div
+                          className="flex h-[320px] w-[148px] flex-shrink-0 items-end justify-center rounded-[26px] border pb-6 sm:h-[368px] sm:w-[170px]"
+                          style={{ borderColor: "var(--border-active)", background: "var(--bg-sticky)" }}
+                        >
+                          <span className="text-[10px] tracking-[0.18em] uppercase" style={{ color: "var(--text-muted)" }}>soon</span>
+                        </div>
+                      )}
+                  </div>
                 </div>
               </div>
               {screens.length > 1 && (
