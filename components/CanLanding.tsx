@@ -113,7 +113,7 @@ export default function CanLanding() {
           <motion.div variants={fadeUp} className="flex items-center justify-between">
             <div
               className="h-20 w-20 overflow-hidden rounded-[20px]"
-              style={{ boxShadow: dark ? "0 0 0 1.5px rgba(255,255,255,0.9)" : "0 0 0 1.5px rgba(0,0,0,0.9)" }}
+              style={{ boxShadow: dark ? "0 0 0 1px rgba(255,255,255,0.15)" : "0 0 0 1px rgba(0,0,0,0.1)" }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/logos/can 2.jpg" alt="can logo" className="h-full w-full object-cover" />
