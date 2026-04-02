@@ -294,7 +294,7 @@ export default function SubdomainLanding({
             </div>
             {tagline && (
               <p
-                className="mt-3 text-[22px] font-light leading-snug tracking-[-0.01em] sm:text-[26px] max-w-[300px] sm:max-w-[340px]"
+                className="mt-3 text-[22px] font-light leading-snug tracking-[-0.01em] sm:text-[26px] max-w-[230px] sm:max-w-[270px]"
                 style={{ color: "var(--text-primary)" }}
               >
                 {tagline}
