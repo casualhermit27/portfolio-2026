@@ -277,7 +277,7 @@ export default function Home() {
         style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 0.75rem)" }}
       >
         <nav
-          className="pointer-events-auto mx-auto flex w-fit max-w-[calc(100%-1.25rem)] items-center gap-1.5 overflow-x-auto rounded-[28px] border px-2.5 py-2 shadow-[0_18px_60px_rgba(0,0,0,0.12)] backdrop-blur-2xl sm:max-w-[calc(100%-2rem)] sm:gap-2 sm:px-3 sm:py-3 scrollbar-hide"
+          className="pointer-events-auto mx-auto flex w-fit max-w-[calc(100%-1.25rem)] items-center gap-1 overflow-x-auto rounded-[24px] border px-2 py-2 backdrop-blur-2xl sm:max-w-[calc(100%-2rem)] sm:gap-1.5 sm:px-2.5 scrollbar-hide"
           style={{
             background: "var(--dock-bg)",
             borderColor: "var(--dock-border)",
@@ -292,40 +292,29 @@ export default function Home() {
               <button
                 key={app.id}
                 onClick={() => scrollTo(app.id)}
-                className="group relative flex flex-shrink-0 items-center justify-center rounded-[22px] px-1.5 py-1.5 transition-transform duration-200 hover:-translate-y-0.5"
+                className="group relative flex h-[52px] w-[52px] flex-shrink-0 items-center justify-center rounded-[18px] transition-transform duration-200 hover:-translate-y-0.5 sm:h-14 sm:w-14"
                 aria-label={`Open ${app.name}`}
                 title={app.name}
               >
-                <div
-                  className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border px-2.5 py-1 text-[11px] tracking-wide opacity-0 transition-all duration-200 group-hover:-translate-y-1 group-hover:opacity-100"
-                  style={{
-                    background: "var(--dock-tooltip-bg)",
-                    borderColor: "var(--dock-tooltip-border)",
-                    color: "var(--text-primary)",
-                  }}
-                >
-                  {app.name}
-                </div>
-
                 {isActive && (
                   <motion.div
                     layoutId="dock-pill"
-                    className="absolute inset-0 rounded-[22px] border"
+                    className="absolute inset-0 rounded-[18px] border"
                     style={{
-                      background: "var(--pill-bg)",
-                      borderColor: "var(--border-pill)",
+                      background: "var(--dock-active-bg)",
+                      borderColor: "var(--dock-active-border)",
                     }}
                     transition={{ type: "spring", stiffness: 360, damping: 30 }}
                   />
                 )}
 
                 <motion.div
-                  whileHover={{ y: -3, scale: 1.06 }}
+                  whileHover={{ y: -2, scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
-                  className="relative z-10 flex flex-col items-center gap-1"
+                  className="relative z-10 flex items-center justify-center"
                 >
                   <div
-                    className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-[15px] border sm:h-12 sm:w-12"
+                    className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-[13px] border sm:h-11 sm:w-11"
                     style={{
                       borderColor: isActive ? "var(--border-active)" : "var(--border)",
                     }}
@@ -337,13 +326,6 @@ export default function Home() {
                       className="h-full w-full object-cover"
                     />
                   </div>
-
-                  <span
-                    className="h-1.5 w-1.5 rounded-full transition-colors duration-200"
-                    style={{
-                      background: isActive ? "var(--text-primary)" : "transparent",
-                    }}
-                  />
                 </motion.div>
               </button>
             );
