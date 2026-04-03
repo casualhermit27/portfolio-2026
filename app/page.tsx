@@ -271,31 +271,48 @@ export default function Home() {
         ))}
       </main>
 
-      {/* ── Dot indicators ── */}
+      {/* ── Floating icon nav ── */}
       <div
         className="fixed inset-x-0 bottom-0 z-50 flex justify-center pointer-events-none"
-        style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 20px)" }}
+        style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 28px)" }}
       >
-        <nav className="pointer-events-auto flex items-center gap-[10px]" aria-label="App navigation">
+        <nav
+          className="pointer-events-auto flex items-end gap-3 sm:gap-4"
+          aria-label="App navigation"
+        >
           {apps.map((app) => {
             const isActive = app.id === activeApp;
             return (
-              <button
+              <motion.button
                 key={app.id}
                 onClick={() => scrollTo(app.id)}
+                className="relative flex flex-col items-center gap-[6px]"
                 aria-label={`Go to ${app.name}`}
-                className="flex items-center justify-center w-5 h-5"
+                whileTap={{ scale: 0.9 }}
               >
-                <motion.span
-                  animate={{
-                    scale: isActive ? 1 : 0.55,
-                    opacity: isActive ? 1 : 0.28,
-                  }}
+                <motion.div
+                  animate={{ y: isActive ? -6 : 0 }}
+                  whileHover={{ y: isActive ? -8 : -3 }}
                   transition={{ type: "spring", stiffness: 400, damping: 28 }}
-                  className="block w-[7px] h-[7px] rounded-full"
+                  className="h-[52px] w-[52px] sm:h-[56px] sm:w-[56px] overflow-hidden rounded-[15px] sm:rounded-[16px]"
+                  style={{
+                    boxShadow: isActive
+                      ? "0 8px 24px rgba(40,30,20,0.2), 0 2px 6px rgba(40,30,20,0.1)"
+                      : "0 2px 8px rgba(40,30,20,0.1)",
+                  }}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={app.logo} alt={app.name} className="h-full w-full object-cover" />
+                </motion.div>
+
+                {/* active dot — fixed size so no layout shift */}
+                <motion.span
+                  animate={{ opacity: isActive ? 0.55 : 0, scale: isActive ? 1 : 0.4 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 28 }}
+                  className="block h-[5px] w-[5px] rounded-full flex-shrink-0"
                   style={{ background: "var(--text-primary)" }}
                 />
-              </button>
+              </motion.button>
             );
           })}
         </nav>
