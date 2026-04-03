@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import AppShowcase from "@/components/AppShowcase";
 
@@ -64,9 +64,6 @@ const apps: App[] = [
   },
 ];
 
-// Approx height of sticky header + nav (px)
-const STICKY_HEIGHT = 116;
-
 function AppStoreIcon() {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" xmlSpace="preserve" viewBox="0 0 800 800" width="16" height="16">
@@ -107,12 +104,24 @@ function MoonIcon() {
 export default function Home() {
   const [activeApp, setActiveApp] = useState<string>("mochi");
   const [dark, setDark] = useState(false);
+  const [headerHeight, setHeaderHeight] = useState(88);
   const isScrollingRef = useRef(false);
+  const headerRef = useRef<HTMLDivElement | null>(null);
 
   // Apply / remove dark class on <html>
   useEffect(() => {
     document.documentElement.classList.toggle("dark", dark);
   }, [dark]);
+
+  useEffect(() => {
+    const measureHeader = () => {
+      setHeaderHeight(headerRef.current?.offsetHeight ?? 88);
+    };
+
+    measureHeader();
+    window.addEventListener("resize", measureHeader);
+    return () => window.removeEventListener("resize", measureHeader);
+  }, []);
 
   // Scroll-spy: position-based, works for short sections too
   useEffect(() => {
@@ -140,7 +149,7 @@ export default function Home() {
         }
       }
 
-      const scrollY = window.scrollY + STICKY_HEIGHT + window.innerHeight * 0.25;
+      const scrollY = window.scrollY + headerHeight + window.innerHeight * 0.25;
       let current = apps[0].id;
 
       for (const app of apps) {
@@ -157,9 +166,9 @@ export default function Home() {
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll(); // run once on mount
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [headerHeight]);
 
-  // Smooth scroll to section, offset by sticky bar height
+  // Smooth scroll to section, offset by sticky header height
   const scrollTo = (id: string) => {
     isScrollingRef.current = true;
     setActiveApp(id);
@@ -168,7 +177,7 @@ export default function Home() {
       isScrollingRef.current = false;
       return;
     }
-    const top = el.getBoundingClientRect().top + window.scrollY - STICKY_HEIGHT;
+    const top = el.getBoundingClientRect().top + window.scrollY - headerHeight - 12;
     window.scrollTo({ top, behavior: "smooth" });
 
     // Re-enable scroll-spy once smooth scroll settles
@@ -184,13 +193,14 @@ export default function Home() {
       style={{ background: "var(--bg)", color: "var(--text-primary)" }}
     >
 
-      {/* ── Sticky header + nav ── */}
+      {/* ── Sticky header ── */}
       <div
+        ref={headerRef}
         className="sticky top-0 z-50 transition-colors duration-250"
         style={{ background: "var(--bg-sticky)" }}
       >
         <header
-          className="px-5 sm:px-8 md:px-12 lg:px-16 pt-6 sm:pt-8 pb-4 sm:pb-5 flex items-end justify-between border-b"
+          className="px-5 sm:px-8 md:px-12 lg:px-16 pt-5 sm:pt-7 pb-4 flex items-end justify-between border-b backdrop-blur-xl"
           style={{ borderColor: "var(--border)" }}
         >
           <div>
@@ -242,58 +252,10 @@ export default function Home() {
             </button>
           </div>
         </header>
-
-        {/* Nav with sliding background pill — scrollable on mobile */}
-        <nav
-          className="px-5 sm:px-8 md:px-12 lg:px-16 flex items-center gap-1 border-b py-2 overflow-x-auto scrollbar-hide"
-          style={{ borderColor: "var(--border)" }}
-        >
-          {apps.map((app) => {
-            const isActive = app.id === activeApp;
-            return (
-              <button
-                key={app.id}
-                onClick={() => scrollTo(app.id)}
-                className="group relative flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-lg transition-colors duration-150 flex-shrink-0"
-                style={{ color: isActive ? "var(--text-primary)" : "var(--text-secondary)" }}
-              >
-                {/* Sliding pill behind active tab */}
-                {isActive && (
-                  <motion.div
-                    layoutId="tab-pill"
-                    className="absolute inset-0 rounded-lg border"
-                    style={{ background: "var(--pill-bg)", borderColor: "var(--border-pill)" }}
-                    transition={{ type: "spring", stiffness: 400, damping: 38 }}
-                  />
-                )}
-
-                {/* Icon */}
-                <div
-                  className="relative w-[22px] h-[22px] sm:w-[24px] sm:h-[24px] md:w-[26px] md:h-[26px] rounded-[5px] sm:rounded-[6px] overflow-hidden flex-shrink-0 border transition-colors z-10"
-                  style={{ borderColor: isActive ? "var(--border-active)" : "var(--border)" }}
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={app.logo}
-                    alt={app.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-
-                {/* Label */}
-                <span
-                  className={`relative z-10 text-[12px] sm:text-[13px] ${isActive ? "font-medium" : "font-normal"}`}
-                >
-                  {app.name}
-                </span>
-              </button>
-            );
-          })}
-        </nav>
       </div>
 
       {/* ── All app sections ── */}
-      <main className="px-5 sm:px-8 md:px-12 lg:px-16">
+      <main className="px-5 sm:px-8 md:px-12 lg:px-16 pb-28 sm:pb-32">
         {apps.map((app, i) => (
           <div key={app.id}>
             {i > 0 && (
@@ -308,6 +270,86 @@ export default function Home() {
           </div>
         ))}
       </main>
+
+      {/* ── Floating bottom dock ── */}
+      <div
+        className="fixed inset-x-0 bottom-0 z-50 pointer-events-none"
+        style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 0.75rem)" }}
+      >
+        <nav
+          className="pointer-events-auto mx-auto flex w-fit max-w-[calc(100%-1.25rem)] items-center gap-1.5 overflow-x-auto rounded-[28px] border px-2.5 py-2 shadow-[0_18px_60px_rgba(0,0,0,0.12)] backdrop-blur-2xl sm:max-w-[calc(100%-2rem)] sm:gap-2 sm:px-3 sm:py-3 scrollbar-hide"
+          style={{
+            background: "var(--dock-bg)",
+            borderColor: "var(--dock-border)",
+            boxShadow: "var(--dock-shadow)",
+          }}
+          aria-label="App navigation dock"
+        >
+          {apps.map((app) => {
+            const isActive = app.id === activeApp;
+
+            return (
+              <button
+                key={app.id}
+                onClick={() => scrollTo(app.id)}
+                className="group relative flex flex-shrink-0 items-center justify-center rounded-[22px] px-1.5 py-1.5 transition-transform duration-200 hover:-translate-y-0.5"
+                aria-label={`Open ${app.name}`}
+                title={app.name}
+              >
+                <div
+                  className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border px-2.5 py-1 text-[11px] tracking-wide opacity-0 transition-all duration-200 group-hover:-translate-y-1 group-hover:opacity-100"
+                  style={{
+                    background: "var(--dock-tooltip-bg)",
+                    borderColor: "var(--dock-tooltip-border)",
+                    color: "var(--text-primary)",
+                  }}
+                >
+                  {app.name}
+                </div>
+
+                {isActive && (
+                  <motion.div
+                    layoutId="dock-pill"
+                    className="absolute inset-0 rounded-[22px] border"
+                    style={{
+                      background: "var(--pill-bg)",
+                      borderColor: "var(--border-pill)",
+                    }}
+                    transition={{ type: "spring", stiffness: 360, damping: 30 }}
+                  />
+                )}
+
+                <motion.div
+                  whileHover={{ y: -3, scale: 1.06 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="relative z-10 flex flex-col items-center gap-1"
+                >
+                  <div
+                    className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-[15px] border sm:h-12 sm:w-12"
+                    style={{
+                      borderColor: isActive ? "var(--border-active)" : "var(--border)",
+                    }}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={app.logo}
+                      alt={app.name}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+
+                  <span
+                    className="h-1.5 w-1.5 rounded-full transition-colors duration-200"
+                    style={{
+                      background: isActive ? "var(--text-primary)" : "transparent",
+                    }}
+                  />
+                </motion.div>
+              </button>
+            );
+          })}
+        </nav>
+      </div>
 
     </div>
   );

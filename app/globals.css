@@ -30,6 +30,11 @@ body {
   --logo-bg-empty: #F2EFE9;
   --logo-border-empty: #D8D2CA;
   --section-divider: #E2DDD5;
+  --dock-bg: rgba(244, 240, 232, 0.84);
+  --dock-border: rgba(212, 207, 199, 0.9);
+  --dock-shadow: 0 22px 60px rgba(81, 69, 54, 0.16);
+  --dock-tooltip-bg: rgba(248, 246, 242, 0.98);
+  --dock-tooltip-border: rgba(212, 207, 199, 0.95);
 }
 
 html.dark {
@@ -48,6 +53,11 @@ html.dark {
   --logo-bg-empty: #1A1917;
   --logo-border-empty: #2E2C29;
   --section-divider: #242220;
+  --dock-bg: rgba(24, 23, 21, 0.84);
+  --dock-border: rgba(58, 55, 51, 0.9);
+  --dock-shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
+  --dock-tooltip-bg: rgba(30, 29, 27, 0.98);
+  --dock-tooltip-border: rgba(58, 55, 51, 0.96);
 }
 
 /* Global token application */
