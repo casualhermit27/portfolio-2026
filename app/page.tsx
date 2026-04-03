@@ -272,9 +272,9 @@ export default function Home() {
       </main>
 
       {/* ── Right-side vertical index (sm+) ── */}
-      <div className="fixed right-0 top-1/2 z-50 -translate-y-1/2 pr-5 sm:pr-7 pointer-events-none hidden sm:block">
+      <div className="fixed right-0 top-1/2 z-50 -translate-y-1/2 pr-6 sm:pr-9 pointer-events-none hidden sm:block">
         <nav
-          className="pointer-events-auto flex flex-col items-end gap-[18px]"
+          className="pointer-events-auto flex flex-col items-end gap-6"
           aria-label="App navigation"
         >
           {apps.map((app) => {
@@ -283,31 +283,35 @@ export default function Home() {
               <button
                 key={app.id}
                 onClick={() => scrollTo(app.id)}
-                className="flex items-center gap-2.5 group"
+                className="flex items-center gap-3 group"
                 aria-label={`Go to ${app.name}`}
               >
+                {/* font-medium always — avoids text-width shift on active change */}
                 <motion.span
-                  animate={{ opacity: isActive ? 0.88 : 0.24, x: isActive ? 0 : 3 }}
-                  whileHover={{ opacity: 0.6, x: 0 }}
-                  transition={{ duration: 0.22, ease: "easeOut" }}
-                  className="text-[11px] tracking-wide leading-none select-none"
-                  style={{
-                    color: "var(--text-primary)",
-                    fontWeight: isActive ? 500 : 400,
-                  }}
+                  animate={{ opacity: isActive ? 0.85 : 0.22 }}
+                  whileHover={{ opacity: 0.55 }}
+                  transition={{ duration: 0.2 }}
+                  className="text-[13px] font-medium tracking-wide leading-none select-none"
+                  style={{ color: "var(--text-primary)" }}
                 >
                   {app.name}
                 </motion.span>
 
-                <motion.div
-                  animate={{
-                    height: isActive ? 20 : 8,
-                    opacity: isActive ? 0.65 : 0.16,
-                  }}
-                  className="w-[1.5px] flex-shrink-0 rounded-full"
-                  style={{ background: "var(--text-primary)" }}
-                  transition={{ type: "spring", stiffness: 420, damping: 32 }}
-                />
+                {/* Fixed container — bar uses scaleY so no layout reflow */}
+                <div className="h-7 w-[2px] flex-shrink-0 flex items-center justify-center">
+                  <motion.div
+                    animate={{
+                      scaleY: isActive ? 1 : 0.28,
+                      opacity: isActive ? 0.72 : 0.15,
+                    }}
+                    className="w-full h-full rounded-full"
+                    style={{
+                      background: "var(--text-primary)",
+                      originY: "50%",
+                    }}
+                    transition={{ type: "spring", stiffness: 440, damping: 34 }}
+                  />
+                </div>
               </button>
             );
           })}
@@ -317,9 +321,9 @@ export default function Home() {
       {/* ── Mobile dot strip (xs only) ── */}
       <div
         className="fixed inset-x-0 bottom-0 z-50 flex justify-center sm:hidden pointer-events-none"
-        style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 20px)" }}
+        style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 22px)" }}
       >
-        <div className="pointer-events-auto flex items-center gap-[7px]">
+        <div className="pointer-events-auto flex items-center gap-2">
           {apps.map((app) => {
             const isActive = app.id === activeApp;
             return (
@@ -327,17 +331,23 @@ export default function Home() {
                 key={app.id}
                 onClick={() => scrollTo(app.id)}
                 aria-label={`Go to ${app.name}`}
-                className="flex items-center justify-center p-1"
+                className="flex items-center justify-center p-1.5"
               >
-                <motion.div
-                  animate={{
-                    width: isActive ? 18 : 5,
-                    opacity: isActive ? 0.7 : 0.22,
-                  }}
-                  className="h-[5px] rounded-full"
-                  style={{ background: "var(--text-primary)" }}
-                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                />
+                {/* Fixed container — scaleX avoids width-driven layout shift */}
+                <div className="w-5 h-[5px] flex items-center justify-center">
+                  <motion.div
+                    animate={{
+                      scaleX: isActive ? 1 : 0.28,
+                      opacity: isActive ? 0.72 : 0.2,
+                    }}
+                    className="w-full h-full rounded-full"
+                    style={{
+                      background: "var(--text-primary)",
+                      originX: "50%",
+                    }}
+                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                  />
+                </div>
               </button>
             );
           })}
