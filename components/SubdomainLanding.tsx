@@ -273,7 +273,7 @@ export default function SubdomainLanding({
           >
             {dark ? <SunIcon /> : <MoonIcon />}
           </button>
-        </div>
+        </motion.div>
 
         {/* Hero name (noCard only) */}
         {noCard && (
