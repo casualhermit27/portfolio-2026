@@ -30,14 +30,13 @@ body {
   --logo-bg-empty: #F2EFE9;
   --logo-border-empty: #D8D2CA;
   --section-divider: #E2DDD5;
-  --dock-bg: rgba(242, 238, 231, 0.88);
+  --dock-bg: rgba(242, 238, 231, 0.86);
   --dock-border: rgba(215, 209, 201, 0.92);
-  --dock-shadow: 0 20px 44px rgba(81, 69, 54, 0.14);
-  --dock-active-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(232, 227, 219, 0.98));
-  --dock-active-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65), 0 10px 20px rgba(81, 69, 54, 0.1);
-  --dock-active-text: #1C1C1C;
-  --dock-active-indicator: #7A736B;
-  --dock-icon-bg: rgba(255, 255, 255, 0.45);
+  --dock-shadow: 0 18px 36px rgba(81, 69, 54, 0.12);
+  --dock-active-bg: rgba(232, 227, 219, 0.72);
+  --dock-active-shadow: none;
+  --dock-active-indicator: #6F6961;
+  --dock-icon-bg: rgba(255, 255, 255, 0.38);
   --dock-icon-border: rgba(214, 208, 200, 0.92);
 }
 
@@ -57,13 +56,12 @@ html.dark {
   --logo-bg-empty: #1A1917;
   --logo-border-empty: #2E2C29;
   --section-divider: #242220;
-  --dock-bg: rgba(22, 21, 19, 0.88);
+  --dock-bg: rgba(22, 21, 19, 0.86);
   --dock-border: rgba(56, 53, 49, 0.94);
-  --dock-shadow: 0 22px 48px rgba(0, 0, 0, 0.36);
-  --dock-active-bg: linear-gradient(180deg, rgba(52, 49, 45, 0.92), rgba(32, 30, 28, 0.98));
-  --dock-active-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 12px 24px rgba(0, 0, 0, 0.26);
-  --dock-active-text: #F0EDE8;
-  --dock-active-indicator: #D5CEC5;
+  --dock-shadow: 0 20px 40px rgba(0, 0, 0, 0.32);
+  --dock-active-bg: rgba(41, 39, 36, 0.8);
+  --dock-active-shadow: none;
+  --dock-active-indicator: #D9D1C7;
   --dock-icon-bg: rgba(255, 255, 255, 0.02);
   --dock-icon-border: rgba(63, 59, 55, 0.96);
 }

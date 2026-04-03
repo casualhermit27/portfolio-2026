@@ -277,7 +277,7 @@ export default function Home() {
         style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 1rem)" }}
       >
         <nav
-          className="pointer-events-auto mx-auto flex w-fit max-w-[calc(100%-1.25rem)] items-center gap-2 overflow-x-auto rounded-[30px] border px-3 py-3 shadow-[0_18px_40px_rgba(0,0,0,0.12)] backdrop-blur-2xl sm:max-w-[calc(100%-2rem)] sm:gap-2.5 sm:px-3.5 sm:py-3.5 scrollbar-hide"
+          className="pointer-events-auto mx-auto flex w-fit max-w-[calc(100%-1.25rem)] items-center gap-2 overflow-x-auto rounded-[24px] border px-3 py-2.5 backdrop-blur-2xl sm:max-w-[calc(100%-2rem)] sm:gap-2.5 sm:px-3.5 sm:py-3 scrollbar-hide"
           style={{
             background: "var(--dock-bg)",
             borderColor: "var(--dock-border)",
@@ -292,14 +292,14 @@ export default function Home() {
               <button
                 key={app.id}
                 onClick={() => scrollTo(app.id)}
-                className="group relative flex h-[74px] min-w-[84px] flex-shrink-0 items-center justify-center rounded-[24px] px-3 transition-transform duration-200 hover:-translate-y-0.5 sm:h-[82px] sm:min-w-[94px] sm:px-3.5"
+                className="group relative flex h-[60px] w-[60px] flex-shrink-0 items-center justify-center rounded-[18px] transition-transform duration-200 hover:-translate-y-0.5 sm:h-[64px] sm:w-[64px]"
                 aria-label={`Open ${app.name}`}
                 title={app.name}
               >
                 {isActive && (
                   <motion.div
                     layoutId="dock-pill"
-                    className="absolute inset-0 rounded-[24px]"
+                    className="absolute inset-0 rounded-[18px]"
                     style={{
                       background: "var(--dock-active-bg)",
                       boxShadow: "var(--dock-active-shadow)",
@@ -308,10 +308,19 @@ export default function Home() {
                   />
                 )}
 
+                {isActive && (
+                  <motion.span
+                    layoutId="dock-indicator"
+                    className="absolute left-1/2 top-0 h-[3px] w-7 -translate-x-1/2 rounded-b-full"
+                    style={{ background: "var(--dock-active-indicator)" }}
+                    transition={{ type: "spring", stiffness: 420, damping: 34 }}
+                  />
+                )}
+
                 <motion.div
                   whileHover={{ y: -2, scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
-                  className="relative z-10 flex flex-col items-center justify-center gap-2"
+                  className="relative z-10 flex items-center justify-center"
                 >
                   <div
                     className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-[14px] sm:h-12 sm:w-12"
@@ -327,28 +336,7 @@ export default function Home() {
                       className="h-full w-full object-cover"
                     />
                   </div>
-
-                  <span
-                    className="text-[11px] font-medium tracking-[0.01em] transition-colors duration-200 sm:text-[12px]"
-                    style={{
-                      color: isActive ? "var(--dock-active-text)" : "var(--text-secondary)",
-                    }}
-                  >
-                    {app.name}
-                  </span>
                 </motion.div>
-
-                {isActive && (
-                  <motion.span
-                    layoutId="dock-indicator"
-                    className="absolute bottom-2.5 h-1 rounded-full sm:bottom-3"
-                    style={{
-                      width: 28,
-                      background: "var(--dock-active-indicator)",
-                    }}
-                    transition={{ type: "spring", stiffness: 420, damping: 34 }}
-                  />
-                )}
               </button>
             );
           })}
