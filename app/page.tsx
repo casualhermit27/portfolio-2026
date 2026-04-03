@@ -255,7 +255,7 @@ export default function Home() {
       </div>
 
       {/* ── All app sections ── */}
-      <main className="px-5 sm:px-8 md:px-12 lg:px-16 pb-28 sm:pb-32">
+      <main className="px-5 sm:px-8 md:px-12 lg:px-16 pb-16">
         {apps.map((app, i) => (
           <div key={app.id}>
             {i > 0 && (
@@ -271,76 +271,77 @@ export default function Home() {
         ))}
       </main>
 
-      {/* ── Floating bottom dock ── */}
-      <div
-        className="fixed inset-x-0 bottom-0 z-50 pointer-events-none"
-        style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 1rem)" }}
-      >
+      {/* ── Right-side vertical index (sm+) ── */}
+      <div className="fixed right-0 top-1/2 z-50 -translate-y-1/2 pr-5 sm:pr-7 pointer-events-none hidden sm:block">
         <nav
-          className="pointer-events-auto mx-auto flex w-fit max-w-[calc(100%-1.25rem)] items-center gap-2 overflow-x-auto rounded-[24px] border px-3 py-2.5 backdrop-blur-2xl sm:max-w-[calc(100%-2rem)] sm:gap-2.5 sm:px-3.5 sm:py-3 scrollbar-hide"
-          style={{
-            background: "var(--dock-bg)",
-            borderColor: "var(--dock-border)",
-            boxShadow: "var(--dock-shadow)",
-          }}
-          aria-label="App navigation dock"
+          className="pointer-events-auto flex flex-col items-end gap-[18px]"
+          aria-label="App navigation"
         >
           {apps.map((app) => {
             const isActive = app.id === activeApp;
-
             return (
               <button
                 key={app.id}
                 onClick={() => scrollTo(app.id)}
-                className="group relative flex h-[60px] w-[60px] flex-shrink-0 items-center justify-center rounded-[18px] transition-transform duration-200 hover:-translate-y-0.5 sm:h-[64px] sm:w-[64px]"
-                aria-label={`Open ${app.name}`}
-                title={app.name}
+                className="flex items-center gap-2.5 group"
+                aria-label={`Go to ${app.name}`}
               >
-                {isActive && (
-                  <motion.div
-                    layoutId="dock-pill"
-                    className="absolute inset-0 rounded-[18px]"
-                    style={{
-                      background: "var(--dock-active-bg)",
-                      boxShadow: "var(--dock-active-shadow)",
-                    }}
-                    transition={{ type: "spring", stiffness: 360, damping: 30 }}
-                  />
-                )}
-
-                {isActive && (
-                  <motion.span
-                    layoutId="dock-indicator"
-                    className="absolute left-1/2 top-0 h-[3px] w-7 -translate-x-1/2 rounded-b-full"
-                    style={{ background: "var(--dock-active-indicator)" }}
-                    transition={{ type: "spring", stiffness: 420, damping: 34 }}
-                  />
-                )}
+                <motion.span
+                  animate={{ opacity: isActive ? 0.88 : 0.24, x: isActive ? 0 : 3 }}
+                  whileHover={{ opacity: 0.6, x: 0 }}
+                  transition={{ duration: 0.22, ease: "easeOut" }}
+                  className="text-[11px] tracking-wide leading-none select-none"
+                  style={{
+                    color: "var(--text-primary)",
+                    fontWeight: isActive ? 500 : 400,
+                  }}
+                >
+                  {app.name}
+                </motion.span>
 
                 <motion.div
-                  whileHover={{ y: -2, scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
-                  className="relative z-10 flex items-center justify-center"
-                >
-                  <div
-                    className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-[14px] sm:h-12 sm:w-12"
-                    style={{
-                      border: isActive ? "none" : `1px solid var(--dock-icon-border)`,
-                      background: "var(--dock-icon-bg)",
-                    }}
-                  >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={app.logo}
-                      alt={app.name}
-                      className="h-full w-full object-cover"
-                    />
-                  </div>
-                </motion.div>
+                  animate={{
+                    height: isActive ? 20 : 8,
+                    opacity: isActive ? 0.65 : 0.16,
+                  }}
+                  className="w-[1.5px] flex-shrink-0 rounded-full"
+                  style={{ background: "var(--text-primary)" }}
+                  transition={{ type: "spring", stiffness: 420, damping: 32 }}
+                />
               </button>
             );
           })}
         </nav>
+      </div>
+
+      {/* ── Mobile dot strip (xs only) ── */}
+      <div
+        className="fixed inset-x-0 bottom-0 z-50 flex justify-center sm:hidden pointer-events-none"
+        style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 20px)" }}
+      >
+        <div className="pointer-events-auto flex items-center gap-[7px]">
+          {apps.map((app) => {
+            const isActive = app.id === activeApp;
+            return (
+              <button
+                key={app.id}
+                onClick={() => scrollTo(app.id)}
+                aria-label={`Go to ${app.name}`}
+                className="flex items-center justify-center p-1"
+              >
+                <motion.div
+                  animate={{
+                    width: isActive ? 18 : 5,
+                    opacity: isActive ? 0.7 : 0.22,
+                  }}
+                  className="h-[5px] rounded-full"
+                  style={{ background: "var(--text-primary)" }}
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                />
+              </button>
+            );
+          })}
+        </div>
       </div>
 
     </div>
