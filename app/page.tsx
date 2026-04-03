@@ -255,7 +255,7 @@ export default function Home() {
       </div>
 
       {/* ── All app sections ── */}
-      <main className="px-5 sm:px-8 md:px-12 lg:px-16 pb-24 sm:pb-28">
+      <main className="px-5 sm:px-8 md:px-12 lg:px-16 pb-14">
         {apps.map((app, i) => (
           <div key={app.id}>
             {i > 0 && (
@@ -271,59 +271,31 @@ export default function Home() {
         ))}
       </main>
 
-      {/* ── Floating dock ── */}
+      {/* ── Dot indicators ── */}
       <div
         className="fixed inset-x-0 bottom-0 z-50 flex justify-center pointer-events-none"
-        style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 16px)" }}
+        style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 20px)" }}
       >
-        <nav
-          className="pointer-events-auto flex items-end gap-1 rounded-[26px] border px-2.5 py-2.5"
-          aria-label="App navigation"
-          style={{
-            background: "var(--dock-bg)",
-            borderColor: "var(--dock-border)",
-            boxShadow: "var(--dock-shadow)",
-          }}
-        >
+        <nav className="pointer-events-auto flex items-center gap-[10px]" aria-label="App navigation">
           {apps.map((app) => {
             const isActive = app.id === activeApp;
             return (
-              <motion.button
+              <button
                 key={app.id}
                 onClick={() => scrollTo(app.id)}
-                className="flex flex-col items-center gap-[6px] px-1 pt-1 pb-0.5"
                 aria-label={`Go to ${app.name}`}
-                whileTap={{ scale: 0.9 }}
+                className="flex items-center justify-center w-5 h-5"
               >
-                <motion.div
-                  animate={{ y: isActive ? -5 : 0, scale: isActive ? 1.07 : 1 }}
-                  whileHover={{ y: isActive ? -7 : -3, scale: isActive ? 1.09 : 1.04 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 28 }}
-                  className="h-[52px] w-[52px] sm:h-[56px] sm:w-[56px] overflow-hidden rounded-[15px] sm:rounded-[16px] flex-shrink-0"
-                  style={{
-                    boxShadow: isActive
-                      ? "0 8px 22px rgba(40,30,20,0.18), 0 2px 6px rgba(40,30,20,0.1)"
-                      : "0 1px 4px rgba(40,30,20,0.07)",
-                  }}
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={app.logo}
-                    alt={app.name}
-                    className="h-full w-full object-cover"
-                  />
-                </motion.div>
-
-                {/* label — always rendered (fixed height) to prevent layout shift */}
                 <motion.span
-                  animate={{ opacity: isActive ? 0.68 : 0 }}
-                  transition={{ duration: 0.18 }}
-                  className="text-[10px] sm:text-[11px] font-medium tracking-wide leading-none select-none"
-                  style={{ color: "var(--text-primary)" }}
-                >
-                  {app.name}
-                </motion.span>
-              </motion.button>
+                  animate={{
+                    scale: isActive ? 1 : 0.55,
+                    opacity: isActive ? 1 : 0.28,
+                  }}
+                  transition={{ type: "spring", stiffness: 400, damping: 28 }}
+                  className="block w-[7px] h-[7px] rounded-full"
+                  style={{ background: "var(--text-primary)" }}
+                />
+              </button>
             );
           })}
         </nav>
