@@ -255,7 +255,7 @@ export default function Home() {
       </div>
 
       {/* ── All app sections ── */}
-      <main className="px-5 sm:px-8 md:px-12 lg:px-16 pb-16">
+      <main className="px-5 sm:px-8 md:px-12 lg:px-16 pb-24 sm:pb-28">
         {apps.map((app, i) => (
           <div key={app.id}>
             {i > 0 && (
@@ -271,87 +271,71 @@ export default function Home() {
         ))}
       </main>
 
-      {/* ── Right-side vertical index (sm+) ── */}
-      <div className="fixed right-0 top-1/2 z-50 -translate-y-1/2 pr-6 sm:pr-9 pointer-events-none hidden sm:block">
+      {/* ── Frameless floating icon nav ── */}
+      <div
+        className="fixed inset-x-0 bottom-0 z-50 flex justify-center pointer-events-none"
+        style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 18px)" }}
+      >
         <nav
-          className="pointer-events-auto flex flex-col items-end gap-6"
+          className="pointer-events-auto flex items-end gap-3 sm:gap-4"
           aria-label="App navigation"
         >
           {apps.map((app) => {
             const isActive = app.id === activeApp;
             return (
-              <button
+              <motion.button
                 key={app.id}
                 onClick={() => scrollTo(app.id)}
-                className="flex items-center gap-3 group"
+                className="flex flex-col items-center gap-[7px]"
                 aria-label={`Go to ${app.name}`}
+                whileTap={{ scale: 0.88 }}
               >
-                {/* font-medium always — avoids text-width shift on active change */}
+                <motion.div
+                  animate={{ y: isActive ? -6 : 0, scale: isActive ? 1.08 : 1 }}
+                  whileHover={{ y: isActive ? -9 : -4, scale: isActive ? 1.1 : 1.05 }}
+                  transition={{ type: "spring", stiffness: 380, damping: 26 }}
+                  className="relative"
+                >
+                  {/* soft ground shadow under active icon */}
+                  <motion.div
+                    animate={{ opacity: isActive ? 1 : 0, scaleX: isActive ? 1 : 0.4 }}
+                    className="absolute -bottom-2 inset-x-0 h-[10px] rounded-full blur-[6px]"
+                    style={{ background: "rgba(60,50,40,0.22)" }}
+                    transition={{ duration: 0.25 }}
+                  />
+
+                  <motion.div
+                    animate={{ opacity: isActive ? 1 : 0.45 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-[50px] w-[50px] sm:h-[56px] sm:w-[56px] overflow-hidden rounded-[14px] sm:rounded-[16px]"
+                    style={{
+                      boxShadow: isActive
+                        ? "0 10px 30px rgba(40,30,20,0.22), 0 2px 8px rgba(40,30,20,0.12)"
+                        : "0 2px 10px rgba(40,30,20,0.1)",
+                    }}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={app.logo}
+                      alt={app.name}
+                      className="h-full w-full object-cover"
+                    />
+                  </motion.div>
+                </motion.div>
+
+                {/* label — always rendered to prevent layout shift, opacity only */}
                 <motion.span
-                  animate={{ opacity: isActive ? 0.85 : 0.22 }}
-                  whileHover={{ opacity: 0.55 }}
-                  transition={{ duration: 0.2 }}
-                  className="text-[13px] font-medium tracking-wide leading-none select-none"
+                  animate={{ opacity: isActive ? 0.72 : 0 }}
+                  transition={{ duration: 0.18 }}
+                  className="text-[10px] sm:text-[11px] font-medium tracking-wide leading-none select-none"
                   style={{ color: "var(--text-primary)" }}
                 >
                   {app.name}
                 </motion.span>
-
-                {/* Fixed container — bar uses scaleY so no layout reflow */}
-                <div className="h-7 w-[2px] flex-shrink-0 flex items-center justify-center">
-                  <motion.div
-                    animate={{
-                      scaleY: isActive ? 1 : 0.28,
-                      opacity: isActive ? 0.72 : 0.15,
-                    }}
-                    className="w-full h-full rounded-full"
-                    style={{
-                      background: "var(--text-primary)",
-                      originY: "50%",
-                    }}
-                    transition={{ type: "spring", stiffness: 440, damping: 34 }}
-                  />
-                </div>
-              </button>
+              </motion.button>
             );
           })}
         </nav>
-      </div>
-
-      {/* ── Mobile dot strip (xs only) ── */}
-      <div
-        className="fixed inset-x-0 bottom-0 z-50 flex justify-center sm:hidden pointer-events-none"
-        style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 22px)" }}
-      >
-        <div className="pointer-events-auto flex items-center gap-2">
-          {apps.map((app) => {
-            const isActive = app.id === activeApp;
-            return (
-              <button
-                key={app.id}
-                onClick={() => scrollTo(app.id)}
-                aria-label={`Go to ${app.name}`}
-                className="flex items-center justify-center p-1.5"
-              >
-                {/* Fixed container — scaleX avoids width-driven layout shift */}
-                <div className="w-5 h-[5px] flex items-center justify-center">
-                  <motion.div
-                    animate={{
-                      scaleX: isActive ? 1 : 0.28,
-                      opacity: isActive ? 0.72 : 0.2,
-                    }}
-                    className="w-full h-full rounded-full"
-                    style={{
-                      background: "var(--text-primary)",
-                      originX: "50%",
-                    }}
-                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                  />
-                </div>
-              </button>
-            );
-          })}
-        </div>
       </div>
 
     </div>
