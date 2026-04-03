@@ -274,10 +274,10 @@ export default function Home() {
       {/* ── Floating bottom dock ── */}
       <div
         className="fixed inset-x-0 bottom-0 z-50 pointer-events-none"
-        style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 0.75rem)" }}
+        style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 1rem)" }}
       >
         <nav
-          className="pointer-events-auto mx-auto flex w-fit max-w-[calc(100%-1.25rem)] items-center gap-1 overflow-x-auto rounded-[24px] border px-2 py-2 backdrop-blur-2xl sm:max-w-[calc(100%-2rem)] sm:gap-1.5 sm:px-2.5 scrollbar-hide"
+          className="pointer-events-auto mx-auto flex w-fit max-w-[calc(100%-1.25rem)] items-center gap-2 overflow-x-auto rounded-[30px] border px-3 py-3 shadow-[0_18px_40px_rgba(0,0,0,0.12)] backdrop-blur-2xl sm:max-w-[calc(100%-2rem)] sm:gap-2.5 sm:px-3.5 sm:py-3.5 scrollbar-hide"
           style={{
             background: "var(--dock-bg)",
             borderColor: "var(--dock-border)",
@@ -292,17 +292,17 @@ export default function Home() {
               <button
                 key={app.id}
                 onClick={() => scrollTo(app.id)}
-                className="group relative flex h-[52px] w-[52px] flex-shrink-0 items-center justify-center rounded-[18px] transition-transform duration-200 hover:-translate-y-0.5 sm:h-14 sm:w-14"
+                className="group relative flex h-[74px] min-w-[84px] flex-shrink-0 items-center justify-center rounded-[24px] px-3 transition-transform duration-200 hover:-translate-y-0.5 sm:h-[82px] sm:min-w-[94px] sm:px-3.5"
                 aria-label={`Open ${app.name}`}
                 title={app.name}
               >
                 {isActive && (
                   <motion.div
                     layoutId="dock-pill"
-                    className="absolute inset-0 rounded-[18px] border"
+                    className="absolute inset-0 rounded-[24px]"
                     style={{
                       background: "var(--dock-active-bg)",
-                      borderColor: "var(--dock-active-border)",
+                      boxShadow: "var(--dock-active-shadow)",
                     }}
                     transition={{ type: "spring", stiffness: 360, damping: 30 }}
                   />
@@ -311,12 +311,13 @@ export default function Home() {
                 <motion.div
                   whileHover={{ y: -2, scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
-                  className="relative z-10 flex items-center justify-center"
+                  className="relative z-10 flex flex-col items-center justify-center gap-2"
                 >
                   <div
-                    className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-[13px] border sm:h-11 sm:w-11"
+                    className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-[14px] sm:h-12 sm:w-12"
                     style={{
-                      borderColor: isActive ? "var(--border-active)" : "var(--border)",
+                      border: isActive ? "none" : `1px solid var(--dock-icon-border)`,
+                      background: "var(--dock-icon-bg)",
                     }}
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -326,7 +327,28 @@ export default function Home() {
                       className="h-full w-full object-cover"
                     />
                   </div>
+
+                  <span
+                    className="text-[11px] font-medium tracking-[0.01em] transition-colors duration-200 sm:text-[12px]"
+                    style={{
+                      color: isActive ? "var(--dock-active-text)" : "var(--text-secondary)",
+                    }}
+                  >
+                    {app.name}
+                  </span>
                 </motion.div>
+
+                {isActive && (
+                  <motion.span
+                    layoutId="dock-indicator"
+                    className="absolute bottom-2.5 h-1 rounded-full sm:bottom-3"
+                    style={{
+                      width: 28,
+                      background: "var(--dock-active-indicator)",
+                    }}
+                    transition={{ type: "spring", stiffness: 420, damping: 34 }}
+                  />
+                )}
               </button>
             );
           })}
