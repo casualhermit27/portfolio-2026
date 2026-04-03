@@ -271,14 +271,19 @@ export default function Home() {
         ))}
       </main>
 
-      {/* ── Frameless floating icon nav ── */}
+      {/* ── Floating dock ── */}
       <div
         className="fixed inset-x-0 bottom-0 z-50 flex justify-center pointer-events-none"
-        style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 18px)" }}
+        style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 16px)" }}
       >
         <nav
-          className="pointer-events-auto flex items-end gap-3 sm:gap-4"
+          className="pointer-events-auto flex items-end gap-1 rounded-[26px] border px-2.5 py-2.5"
           aria-label="App navigation"
+          style={{
+            background: "var(--dock-bg)",
+            borderColor: "var(--dock-border)",
+            boxShadow: "var(--dock-shadow)",
+          }}
         >
           {apps.map((app) => {
             const isActive = app.id === activeApp;
@@ -286,46 +291,32 @@ export default function Home() {
               <motion.button
                 key={app.id}
                 onClick={() => scrollTo(app.id)}
-                className="flex flex-col items-center gap-[7px]"
+                className="flex flex-col items-center gap-[6px] px-1 pt-1 pb-0.5"
                 aria-label={`Go to ${app.name}`}
-                whileTap={{ scale: 0.88 }}
+                whileTap={{ scale: 0.9 }}
               >
                 <motion.div
-                  animate={{ y: isActive ? -6 : 0, scale: isActive ? 1.08 : 1 }}
-                  whileHover={{ y: isActive ? -9 : -4, scale: isActive ? 1.1 : 1.05 }}
-                  transition={{ type: "spring", stiffness: 380, damping: 26 }}
-                  className="relative"
+                  animate={{ y: isActive ? -5 : 0, scale: isActive ? 1.07 : 1 }}
+                  whileHover={{ y: isActive ? -7 : -3, scale: isActive ? 1.09 : 1.04 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 28 }}
+                  className="h-[52px] w-[52px] sm:h-[56px] sm:w-[56px] overflow-hidden rounded-[15px] sm:rounded-[16px] flex-shrink-0"
+                  style={{
+                    boxShadow: isActive
+                      ? "0 8px 22px rgba(40,30,20,0.18), 0 2px 6px rgba(40,30,20,0.1)"
+                      : "0 1px 4px rgba(40,30,20,0.07)",
+                  }}
                 >
-                  {/* soft ground shadow under active icon */}
-                  <motion.div
-                    animate={{ opacity: isActive ? 1 : 0, scaleX: isActive ? 1 : 0.4 }}
-                    className="absolute -bottom-2 inset-x-0 h-[10px] rounded-full blur-[6px]"
-                    style={{ background: "rgba(60,50,40,0.22)" }}
-                    transition={{ duration: 0.25 }}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={app.logo}
+                    alt={app.name}
+                    className="h-full w-full object-cover"
                   />
-
-                  <motion.div
-                    animate={{ opacity: isActive ? 1 : 0.45 }}
-                    transition={{ duration: 0.2 }}
-                    className="h-[50px] w-[50px] sm:h-[56px] sm:w-[56px] overflow-hidden rounded-[14px] sm:rounded-[16px]"
-                    style={{
-                      boxShadow: isActive
-                        ? "0 10px 30px rgba(40,30,20,0.22), 0 2px 8px rgba(40,30,20,0.12)"
-                        : "0 2px 10px rgba(40,30,20,0.1)",
-                    }}
-                  >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={app.logo}
-                      alt={app.name}
-                      className="h-full w-full object-cover"
-                    />
-                  </motion.div>
                 </motion.div>
 
-                {/* label — always rendered to prevent layout shift, opacity only */}
+                {/* label — always rendered (fixed height) to prevent layout shift */}
                 <motion.span
-                  animate={{ opacity: isActive ? 0.72 : 0 }}
+                  animate={{ opacity: isActive ? 0.68 : 0 }}
                   transition={{ duration: 0.18 }}
                   className="text-[10px] sm:text-[11px] font-medium tracking-wide leading-none select-none"
                   style={{ color: "var(--text-primary)" }}
