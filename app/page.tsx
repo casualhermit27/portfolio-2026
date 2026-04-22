@@ -271,84 +271,50 @@ export default function Home() {
         ))}
       </main>
 
-      {/* ── Wheel nav (right center) ── */}
+      {/* ── Floating nav ── */}
       <div
-        className="fixed right-5 sm:right-7 top-1/2 z-50 pointer-events-none"
-        style={{ transform: "translateY(-50%)" }}
+        className="fixed inset-x-0 bottom-0 z-50 flex justify-center pointer-events-none"
+        style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 32px)" }}
       >
         <nav
-          className="pointer-events-auto flex flex-col items-center"
+          className="pointer-events-auto flex items-end gap-3 sm:gap-[14px]"
           aria-label="App navigation"
-          style={{ gap: 4 }}
         >
-          {apps.map((app, i) => {
-            const activeIdx = apps.findIndex((a) => a.id === activeApp);
-            const dist = Math.abs(i - activeIdx);
-            const isActive = dist === 0;
-
-            // height, icon size, opacity, border-radius — all spring-animated
-            const segH    = [104, 56, 36][Math.min(dist, 2)];
-            const iconSz  = [42,  22, 13][Math.min(dist, 2)];
-            const op      = [1,  0.55, 0.25][Math.min(dist, 2)];
-            const radius  = [18,  14,  10][Math.min(dist, 2)];
-
-            const lightColors = ["#C3ABFF","#FFB87A","#74D9A2","#70C6FA","#FF97B3"];
-            const darkColors  = ["#3C2A72","#723210","#0E5432","#103262","#72102E"];
-            const segColor = dark ? darkColors[i] : lightColors[i];
-
-            const spring = { type: "spring" as const, stiffness: 420, damping: 34, mass: 0.75 };
-
+          {apps.map((app) => {
+            const isActive = app.id === activeApp;
             return (
               <motion.button
                 key={app.id}
                 onClick={() => scrollTo(app.id)}
+                className="flex flex-col items-center gap-[7px]"
                 aria-label={`Go to ${app.name}`}
-                className="relative flex items-center justify-center overflow-hidden group"
-                animate={{ height: segH, opacity: op, borderRadius: radius }}
-                whileHover={{ opacity: Math.max(op, 0.72), scale: isActive ? 1 : 1.04 }}
-                whileTap={{ scale: 0.92 }}
-                transition={spring}
-                style={{ width: 58, background: segColor, flexShrink: 0 }}
+                whileTap={{ scale: 0.86 }}
+                transition={{ type: "spring", stiffness: 380, damping: 26 }}
               >
-                {/* shimmer on active */}
-                {isActive && (
-                  <motion.div
-                    layoutId="wheel-shimmer"
-                    className="absolute inset-0 pointer-events-none"
-                    style={{
-                      background: "linear-gradient(160deg, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0) 60%)",
-                    }}
-                    transition={spring}
-                  />
-                )}
-
-                {/* icon wrapper — animates size */}
                 <motion.div
-                  className="relative z-10 overflow-hidden flex-shrink-0"
-                  animate={{ width: iconSz, height: iconSz, borderRadius: Math.round(iconSz * 0.24) }}
-                  transition={spring}
+                  animate={{
+                    y: isActive ? -5 : 0,
+                    opacity: isActive ? 1 : 0.28,
+                    scale: isActive ? 1 : 0.92,
+                  }}
+                  transition={{ type: "spring", stiffness: 360, damping: 28 }}
+                  className="h-[46px] w-[46px] sm:h-[50px] sm:w-[50px] overflow-hidden rounded-[13px] sm:rounded-[14px]"
+                  style={{
+                    boxShadow: isActive
+                      ? "0 6px 22px rgba(30,20,10,0.18)"
+                      : "none",
+                  }}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={app.logo} alt={app.name} className="w-full h-full object-cover" />
+                  <img src={app.logo} alt={app.name} className="h-full w-full object-cover" />
                 </motion.div>
 
-                {/* app name label — left side on hover (active only) */}
-                {isActive && (
-                  <span
-                    className="absolute right-[calc(100%+10px)] whitespace-nowrap text-[11px] font-semibold tracking-wide opacity-0 group-hover:opacity-100 transition-opacity duration-120 pointer-events-none select-none"
-                    style={{
-                      color: "var(--text-primary)",
-                      background: "var(--dock-bg)",
-                      backdropFilter: "blur(10px)",
-                      borderRadius: 8,
-                      padding: "4px 10px",
-                      boxShadow: "0 4px 16px rgba(0,0,0,0.10)",
-                      letterSpacing: "0.03em",
-                    }}
-                  >
-                    {app.name}
-                  </span>
-                )}
+                <motion.span
+                  animate={{ opacity: isActive ? 0.4 : 0, scale: isActive ? 1 : 0.3 }}
+                  transition={{ type: "spring", stiffness: 360, damping: 28 }}
+                  className="block h-[4px] w-[4px] rounded-full flex-shrink-0"
+                  style={{ background: "var(--text-primary)" }}
+                />
               </motion.button>
             );
           })}
