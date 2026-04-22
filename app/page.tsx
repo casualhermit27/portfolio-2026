@@ -273,71 +273,82 @@ export default function Home() {
 
       {/* ── Wheel nav (right center) ── */}
       <div
-        className="fixed right-4 sm:right-6 top-1/2 z-50 pointer-events-none"
+        className="fixed right-5 sm:right-7 top-1/2 z-50 pointer-events-none"
         style={{ transform: "translateY(-50%)" }}
       >
         <nav
-          className="pointer-events-auto flex flex-col overflow-hidden"
+          className="pointer-events-auto flex flex-col items-center"
           aria-label="App navigation"
-          style={{
-            borderRadius: 18,
-            boxShadow: dark
-              ? "0 8px 32px rgba(0,0,0,0.36), 0 1px 4px rgba(0,0,0,0.2)"
-              : "0 8px 28px rgba(80,60,40,0.13), 0 1px 4px rgba(80,60,40,0.07)",
-            gap: 2,
-          }}
+          style={{ gap: 4 }}
         >
           {apps.map((app, i) => {
-            const isActive = app.id === activeApp;
-            const lightColors = ["#DDD0F2","#F5D8BA","#C8E8D4","#C0D4F0","#F0CCDA"];
-            const darkColors  = ["#2A2040","#3E2608","#0C2818","#0C1E36","#34101E"];
+            const activeIdx = apps.findIndex((a) => a.id === activeApp);
+            const dist = Math.abs(i - activeIdx);
+            const isActive = dist === 0;
+
+            // height, icon size, opacity, border-radius — all spring-animated
+            const segH    = [104, 56, 36][Math.min(dist, 2)];
+            const iconSz  = [42,  22, 13][Math.min(dist, 2)];
+            const op      = [1,  0.55, 0.25][Math.min(dist, 2)];
+            const radius  = [18,  14,  10][Math.min(dist, 2)];
+
+            const lightColors = ["#C3ABFF","#FFB87A","#74D9A2","#70C6FA","#FF97B3"];
+            const darkColors  = ["#3C2A72","#723210","#0E5432","#103262","#72102E"];
             const segColor = dark ? darkColors[i] : lightColors[i];
+
+            const spring = { type: "spring" as const, stiffness: 420, damping: 34, mass: 0.75 };
+
             return (
               <motion.button
                 key={app.id}
                 onClick={() => scrollTo(app.id)}
-                title={app.name}
                 aria-label={`Go to ${app.name}`}
-                className="relative flex items-center justify-center group"
-                style={{ width: 42, height: 38, background: segColor }}
-                animate={{ opacity: isActive ? 1 : 0.45 }}
-                whileHover={{ opacity: isActive ? 1 : 0.75 }}
-                whileTap={{ scale: 0.93 }}
-                transition={{ duration: 0.18 }}
+                className="relative flex items-center justify-center overflow-hidden group"
+                animate={{ height: segH, opacity: op, borderRadius: radius }}
+                whileHover={{ opacity: Math.max(op, 0.72), scale: isActive ? 1 : 1.04 }}
+                whileTap={{ scale: 0.92 }}
+                transition={spring}
+                style={{ width: 58, background: segColor, flexShrink: 0 }}
               >
-                {/* active glow overlay */}
+                {/* shimmer on active */}
                 {isActive && (
                   <motion.div
-                    layoutId="wheel-glow"
-                    className="absolute inset-0"
-                    style={{ background: "rgba(255,255,255,0.18)", mixBlendMode: "overlay" }}
-                    transition={{ type: "spring", stiffness: 320, damping: 30 }}
+                    layoutId="wheel-shimmer"
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                      background: "linear-gradient(160deg, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0) 60%)",
+                    }}
+                    transition={spring}
                   />
                 )}
 
-                {/* app icon */}
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={app.logo}
-                  alt={app.name}
-                  className="relative z-10 object-cover"
-                  style={{ width: 20, height: 20, borderRadius: 5 }}
-                />
-
-                {/* hover label — appears to the left */}
-                <span
-                  className="absolute right-[calc(100%+8px)] whitespace-nowrap text-[11px] font-medium tracking-wide opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none select-none"
-                  style={{
-                    color: "var(--text-secondary)",
-                    background: "var(--dock-bg)",
-                    backdropFilter: "blur(8px)",
-                    borderRadius: 7,
-                    padding: "3px 8px",
-                    boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-                  }}
+                {/* icon wrapper — animates size */}
+                <motion.div
+                  className="relative z-10 overflow-hidden flex-shrink-0"
+                  animate={{ width: iconSz, height: iconSz, borderRadius: Math.round(iconSz * 0.24) }}
+                  transition={spring}
                 >
-                  {app.name}
-                </span>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={app.logo} alt={app.name} className="w-full h-full object-cover" />
+                </motion.div>
+
+                {/* app name label — left side on hover (active only) */}
+                {isActive && (
+                  <span
+                    className="absolute right-[calc(100%+10px)] whitespace-nowrap text-[11px] font-semibold tracking-wide opacity-0 group-hover:opacity-100 transition-opacity duration-120 pointer-events-none select-none"
+                    style={{
+                      color: "var(--text-primary)",
+                      background: "var(--dock-bg)",
+                      backdropFilter: "blur(10px)",
+                      borderRadius: 8,
+                      padding: "4px 10px",
+                      boxShadow: "0 4px 16px rgba(0,0,0,0.10)",
+                      letterSpacing: "0.03em",
+                    }}
+                  >
+                    {app.name}
+                  </span>
+                )}
               </motion.button>
             );
           })}
