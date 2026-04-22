@@ -271,47 +271,73 @@ export default function Home() {
         ))}
       </main>
 
-      {/* ── Floating icon nav ── */}
+      {/* ── Wheel nav (right center) ── */}
       <div
-        className="fixed inset-x-0 bottom-0 z-50 flex justify-center pointer-events-none"
-        style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 28px)" }}
+        className="fixed right-4 sm:right-6 top-1/2 z-50 pointer-events-none"
+        style={{ transform: "translateY(-50%)" }}
       >
         <nav
-          className="pointer-events-auto flex items-end gap-3 sm:gap-4"
+          className="pointer-events-auto flex flex-col overflow-hidden"
           aria-label="App navigation"
+          style={{
+            borderRadius: 18,
+            boxShadow: dark
+              ? "0 8px 32px rgba(0,0,0,0.36), 0 1px 4px rgba(0,0,0,0.2)"
+              : "0 8px 28px rgba(80,60,40,0.13), 0 1px 4px rgba(80,60,40,0.07)",
+            gap: 2,
+          }}
         >
-          {apps.map((app) => {
+          {apps.map((app, i) => {
             const isActive = app.id === activeApp;
+            const lightColors = ["#DDD0F2","#F5D8BA","#C8E8D4","#C0D4F0","#F0CCDA"];
+            const darkColors  = ["#2A2040","#3E2608","#0C2818","#0C1E36","#34101E"];
+            const segColor = dark ? darkColors[i] : lightColors[i];
             return (
               <motion.button
                 key={app.id}
                 onClick={() => scrollTo(app.id)}
-                className="relative flex flex-col items-center gap-[6px]"
+                title={app.name}
                 aria-label={`Go to ${app.name}`}
-                whileTap={{ scale: 0.9 }}
+                className="relative flex items-center justify-center group"
+                style={{ width: 42, height: 38, background: segColor }}
+                animate={{ opacity: isActive ? 1 : 0.45 }}
+                whileHover={{ opacity: isActive ? 1 : 0.75 }}
+                whileTap={{ scale: 0.93 }}
+                transition={{ duration: 0.18 }}
               >
-                <motion.div
-                  animate={{ y: isActive ? -6 : 0 }}
-                  whileHover={{ y: isActive ? -8 : -3 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 28 }}
-                  className="h-[52px] w-[52px] sm:h-[56px] sm:w-[56px] overflow-hidden rounded-[15px] sm:rounded-[16px]"
+                {/* active glow overlay */}
+                {isActive && (
+                  <motion.div
+                    layoutId="wheel-glow"
+                    className="absolute inset-0"
+                    style={{ background: "rgba(255,255,255,0.18)", mixBlendMode: "overlay" }}
+                    transition={{ type: "spring", stiffness: 320, damping: 30 }}
+                  />
+                )}
+
+                {/* app icon */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={app.logo}
+                  alt={app.name}
+                  className="relative z-10 object-cover"
+                  style={{ width: 20, height: 20, borderRadius: 5 }}
+                />
+
+                {/* hover label — appears to the left */}
+                <span
+                  className="absolute right-[calc(100%+8px)] whitespace-nowrap text-[11px] font-medium tracking-wide opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none select-none"
                   style={{
-                    boxShadow: isActive
-                      ? "0 8px 24px rgba(40,30,20,0.2), 0 2px 6px rgba(40,30,20,0.1)"
-                      : "0 2px 8px rgba(40,30,20,0.1)",
+                    color: "var(--text-secondary)",
+                    background: "var(--dock-bg)",
+                    backdropFilter: "blur(8px)",
+                    borderRadius: 7,
+                    padding: "3px 8px",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
                   }}
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={app.logo} alt={app.name} className="h-full w-full object-cover" />
-                </motion.div>
-
-                {/* active dot — fixed size so no layout shift */}
-                <motion.span
-                  animate={{ opacity: isActive ? 0.55 : 0, scale: isActive ? 1 : 0.4 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 28 }}
-                  className="block h-[5px] w-[5px] rounded-full flex-shrink-0"
-                  style={{ background: "var(--text-primary)" }}
-                />
+                  {app.name}
+                </span>
               </motion.button>
             );
           })}
