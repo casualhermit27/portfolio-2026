@@ -8,6 +8,47 @@ import SupportedConversions from "@/components/SupportedConversions";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
+function BrewingAnimation() {
+  return (
+    <div className="flex flex-col items-center gap-3">
+      {/* steam wisps */}
+      <div className="relative h-7 w-10 flex justify-center">
+        {[0, 0.45, 0.9].map((delay, i) => (
+          <motion.div
+            key={i}
+            className="absolute bottom-0 rounded-full"
+            style={{
+              width: 2,
+              height: 15,
+              background: "#B8A0C4",
+              left: `calc(50% + ${(i - 1) * 9}px)`,
+              transformOrigin: "bottom center",
+            }}
+            animate={{ opacity: [0, 0.55, 0], y: [0, -13, -22], scaleX: [1, 1.6, 0.5] }}
+            transition={{ duration: 2.6, repeat: Infinity, delay, ease: [0.4, 0, 0.2, 1] }}
+          />
+        ))}
+      </div>
+
+      {/* cup */}
+      <svg width="24" height="21" viewBox="0 0 24 21" fill="none" style={{ color: "#B8A0C4" }}>
+        <path d="M4.5 6h15L17.8 15.5H6.2L4.5 6Z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
+        <path d="M19.5 8.5c2.2 0 3.2 1.1 3.2 2.8s-1 2.7-3.2 2.7" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+        <line x1="3.5" y1="6" x2="20.5" y2="6" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+        <path d="M2.5 16.5h19" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+      </svg>
+
+      {/* label */}
+      <p
+        className="text-[10px] tracking-[0.22em] uppercase"
+        style={{ color: "#B8A0C4", fontWeight: 500, letterSpacing: "0.22em" }}
+      >
+        coming soon
+      </p>
+    </div>
+  );
+}
+
 const phoneContainer = {
   hidden: {},
   show: {
@@ -142,23 +183,40 @@ export default function AppShowcase({ app, comingSoon }: AppShowcaseProps) {
       />
 
       {comingSoon ? (
-        /* ── Coming-soon blur treatment ── */
-        <div className="relative select-none">
-          {/* ghost mockups, blurred */}
-          <div className="flex gap-3 sm:gap-4 md:gap-5 flex-wrap pt-2 pointer-events-none"
-            style={{ filter: "blur(6px)", opacity: 0.22 }}>
-            {Array.from({ length: emptyCount }).map((_, i) => (
-              isMac ? <MacMockup key={i} empty /> : <PhoneMockup key={i} empty />
-            ))}
+        /* ── Coming-soon: silhouettes + brewing overlay ── */
+        <div className="relative pt-2 select-none">
+          {/* silhouette shapes — same dimensions as real mockups, solid fill, blurred */}
+          <div
+            className="flex gap-3 sm:gap-4 md:gap-5 flex-wrap pointer-events-none"
+            style={{ filter: "blur(9px)", opacity: 0.32 }}
+          >
+            {Array.from({ length: emptyCount }).map((_, i) =>
+              isMac ? (
+                <div
+                  key={i}
+                  className="relative flex-shrink-0 rounded-[10px]"
+                  style={{
+                    width: "clamp(300px, 48vw, 680px)",
+                    height: "clamp(190px, 30vw, 430px)",
+                    background: "var(--border-active)",
+                  }}
+                />
+              ) : (
+                <div
+                  key={i}
+                  className={`relative flex-shrink-0
+                    w-[150px] h-[325px] rounded-[24px]
+                    sm:w-[170px] sm:h-[368px] sm:rounded-[28px]
+                    md:w-[200px] md:h-[433px] md:rounded-[32px]`}
+                  style={{ background: "var(--border-active)" }}
+                />
+              )
+            )}
           </div>
-          {/* overlay label */}
-          <div className="absolute inset-0 flex items-center">
-            <p
-              className="text-[10px] tracking-[0.18em] uppercase"
-              style={{ color: "var(--text-muted)", fontWeight: 500 }}
-            >
-              coming soon
-            </p>
+
+          {/* brewing animation centered */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <BrewingAnimation />
           </div>
         </div>
       ) : (
