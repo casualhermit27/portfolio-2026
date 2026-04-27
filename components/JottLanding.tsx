@@ -66,6 +66,22 @@ function AppleIcon() {
   );
 }
 
+function PauseIcon() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+      <path d="M7 5.5A1.5 1.5 0 0 1 8.5 4h1A1.5 1.5 0 0 1 11 5.5v13A1.5 1.5 0 0 1 9.5 20h-1A1.5 1.5 0 0 1 7 18.5zm6 0A1.5 1.5 0 0 1 14.5 4h1A1.5 1.5 0 0 1 17 5.5v13a1.5 1.5 0 0 1-1.5 1.5h-1A1.5 1.5 0 0 1 13 18.5z" />
+    </svg>
+  );
+}
+
+function PlayIcon() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+      <path d="M8.3 5.24a1 1 0 0 1 1.53-.85l8.5 6.76a1 1 0 0 1 0 1.56l-8.5 6.76A1 1 0 0 1 8.3 18.6z" />
+    </svg>
+  );
+}
+
 function highlightParts(title: string, query: string) {
   if (!query) return [{ text: title, highlighted: false }];
   const index = title.toLowerCase().indexOf(query.toLowerCase());
@@ -85,6 +101,7 @@ export default function JottLanding() {
   const [barText, setBarText] = useState("What's on your mind?");
   const [showCaret, setShowCaret] = useState(false);
   const [resultsOpen, setResultsOpen] = useState(false);
+  const [paused, setPaused] = useState(false);
   const [keyStates, setKeyStates] = useState<KeyStates>({ first: false, second: false });
 
   const results = useMemo(() => {
@@ -94,6 +111,12 @@ export default function JottLanding() {
 
   useEffect(() => {
     let cancelled = false;
+
+    if (paused) {
+      return () => {
+        cancelled = true;
+      };
+    }
 
     const sleep = async (ms: number) => {
       await new Promise<void>((resolve) => {
@@ -217,7 +240,7 @@ export default function JottLanding() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [paused]);
 
   return (
     <div className="jott-root">
@@ -298,6 +321,15 @@ export default function JottLanding() {
               <a href="#" className="jott-btn jott-btn-secondary">
                 Mac App Store
               </a>
+              <button
+                type="button"
+                className="jott-btn jott-btn-tertiary"
+                onClick={() => setPaused((prev) => !prev)}
+                aria-pressed={paused}
+              >
+                {paused ? <PlayIcon /> : <PauseIcon />}
+                {paused ? "Play Preview" : "Pause Preview"}
+              </button>
             </div>
             <div className="jott-meta jott-r jott-r6">macOS 13+ · Apple silicon &amp; Intel</div>
           </div>
@@ -326,6 +358,8 @@ export default function JottLanding() {
           font-family: var(--sans);
           min-height: 100vh;
           -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+          text-rendering: optimizeLegibility;
         }
 
         .jott-bezel {
@@ -340,7 +374,8 @@ export default function JottLanding() {
           overflow: hidden;
           border-radius: 22px;
           background: var(--canvas);
-          box-shadow: inset 0 0 0 1px rgba(17, 17, 17, 0.04), 0 0 0 1px #111;
+          border: 2px solid #111;
+          box-shadow: none;
         }
 
         .jott-notch {
@@ -391,7 +426,7 @@ export default function JottLanding() {
           border-radius: 0 0 24px 24px;
           background: #080808;
           padding: 30px 12px 12px;
-          box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 6px 18px rgba(0, 0, 0, 0.35);
+          box-shadow: none;
         }
 
         .jott-bar-input {
@@ -409,7 +444,7 @@ export default function JottLanding() {
         }
 
         .jott-bar-input.typing {
-          color: var(--ink);
+          color: #f4f1ec;
         }
 
         .jott-bar-input.search-mode {
@@ -512,7 +547,7 @@ export default function JottLanding() {
           font-size: 13.5px;
           font-weight: 500;
           line-height: 1.35;
-          color: var(--ink);
+          color: #f4f1ec;
         }
 
         .jott-result-title mark {
@@ -689,6 +724,8 @@ export default function JottLanding() {
           font-weight: 500;
           text-decoration: none;
           transition: transform 140ms ease, border-color 140ms ease;
+          appearance: none;
+          cursor: pointer;
         }
 
         .jott-btn-primary {
@@ -712,6 +749,18 @@ export default function JottLanding() {
         .jott-btn-secondary:hover {
           border-color: #dacdbf;
           background: #fdf3e7;
+        }
+
+        .jott-btn-tertiary {
+          border: 1px solid #ddd6ce;
+          background: #f7f3ee;
+          color: #4e4740;
+        }
+
+        .jott-btn-tertiary:hover {
+          border-color: #ccc3ba;
+          background: #f2ede7;
+          transform: translateY(-1px);
         }
 
         .jott-meta {
