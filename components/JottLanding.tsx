@@ -1,15 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-
-const corpus = [
-  { title: "MiniLM (sentence embeddings) + cosine similarity", meta: "note · 4d ago" },
-  { title: "Ship the landing page", meta: "note · 2d ago" },
-  { title: "Reread the MiniLM paper this weekend", meta: "note · 1d ago" },
-  { title: "Logging schema for capture events", meta: "note · 6d ago" },
-  { title: "Call Sam at 4pm — staffing", meta: "note · today" },
-  { title: "Ready to cook — risotto recipe", meta: "note · 1w ago" },
-];
+import { useEffect, useState } from "react";
 
 const captures = [
   "Ship the landing page",
@@ -22,38 +13,53 @@ type KeyStates = {
   second: boolean;
 };
 
-function SearchIcon({ className = "" }: { className?: string }) {
+function HelpIcon() {
   return (
     <svg
-      width="11"
-      height="11"
-      viewBox="0 0 16 16"
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
       strokeWidth="1.8"
       strokeLinecap="round"
-      className={className}
+      strokeLinejoin="round"
       aria-hidden
     >
-      <circle cx="7" cy="7" r="4.5" />
-      <path d="M10.5 10.5l3 3" />
+      <path d="M9.1 9a3 3 0 1 1 5.4 1.8c-.62.83-1.5 1.3-2 1.84-.34.37-.5.72-.5 1.36" />
+      <circle cx="12" cy="17.25" r=".8" fill="currentColor" stroke="none" />
     </svg>
   );
 }
 
-function FileIcon() {
+function TextIcon() {
   return (
     <svg
-      className="jott-result-icon"
-      viewBox="0 0 16 16"
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="1.5"
+      strokeWidth="2"
+      strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden
     >
-      <path d="M4 2h5l3 3v9H4z" />
-      <path d="M9 2v3h3" />
+      <path d="M6 18 9.2 8.5a1 1 0 0 1 1.9 0L14 18" />
+      <path d="M7.2 14h5.6" />
+      <path d="M17 8.5h1.5a2 2 0 1 1 0 4H17z" />
+      <path d="M17 12.5h2a2 2 0 1 1 0 4H17z" />
+    </svg>
+  );
+}
+
+function MicIcon() {
+  return (
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <rect x="9" y="4" width="6" height="10" rx="3" />
+      <path d="M6.5 11.5a5.5 5.5 0 0 0 11 0" />
+      <path d="M12 17v3" />
+      <path d="M9 20h6" />
     </svg>
   );
 }
@@ -82,32 +88,13 @@ function PlayIcon() {
   );
 }
 
-function highlightParts(title: string, query: string) {
-  if (!query) return [{ text: title, highlighted: false }];
-  const index = title.toLowerCase().indexOf(query.toLowerCase());
-  if (index < 0) return [{ text: title, highlighted: false }];
-
-  return [
-    { text: title.slice(0, index), highlighted: false },
-    { text: title.slice(index, index + query.length), highlighted: true },
-    { text: title.slice(index + query.length), highlighted: false },
-  ].filter((part) => part.text);
-}
-
 export default function JottLanding() {
   const [dropOpen, setDropOpen] = useState(false);
   const [typing, setTyping] = useState(false);
-  const [searchMode, setSearchMode] = useState(false);
-  const [barText, setBarText] = useState("What's on your mind?");
+  const [barText, setBarText] = useState("Capture a thought...");
   const [showCaret, setShowCaret] = useState(false);
-  const [resultsOpen, setResultsOpen] = useState(false);
   const [paused, setPaused] = useState(false);
   const [keyStates, setKeyStates] = useState<KeyStates>({ first: false, second: false });
-
-  const results = useMemo(() => {
-    if (!searchMode) return [];
-    return corpus.filter((note) => note.title.toLowerCase().includes(barText.toLowerCase())).slice(0, 4);
-  }, [barText, searchMode]);
 
   useEffect(() => {
     let cancelled = false;
@@ -179,9 +166,7 @@ export default function JottLanding() {
 
     const resetBar = () => {
       setTyping(false);
-      setSearchMode(false);
-      setResultsOpen(false);
-      setText("What's on your mind?");
+      setText("Capture a thought...");
       setShowCaret(false);
     };
 
@@ -201,33 +186,10 @@ export default function JottLanding() {
         }
 
         setTyping(false);
-        setText("What's on your mind?");
+        setText("Capture a thought...");
         setShowCaret(false);
-        if (!(await sleep(500))) return;
+        if (!(await sleep(900))) return;
 
-        if (!(await typeText("/search", 70))) return;
-        if (!(await sleep(380))) return;
-        setSearchMode(true);
-        setText("");
-        if (!(await sleep(220))) return;
-        if (!(await typeSearchQuery("minilm"))) return;
-        setResultsOpen(true);
-        if (!(await sleep(1700))) return;
-
-        let current = "minilm";
-        while (current.length) {
-          if (!(await sleep(28))) return;
-          current = current.slice(0, -1);
-          setText(current);
-        }
-
-        if (!(await sleep(200))) return;
-        if (!(await typeSearchQuery("sam"))) return;
-        if (!(await sleep(1500))) return;
-
-        setShowCaret(false);
-        setResultsOpen(false);
-        if (!(await sleep(400))) return;
         setDropOpen(false);
         if (!(await sleep(500))) return;
         resetBar();
@@ -251,42 +213,28 @@ export default function JottLanding() {
           <div className="jott-drop-stage">
             <div className={`jott-drop${dropOpen ? " open" : ""}`}>
               <div className="jott-bar-shell">
-                <div className={`jott-bar-input${typing ? " typing" : ""}${searchMode ? " search-mode" : ""}`}>
-                  <span className="jott-mode-badge">
-                    <SearchIcon />
-                    Search
+                <div className="jott-bar-top">
+                  <button type="button" className="jott-help-btn" aria-label="Help">
+                    <HelpIcon />
+                  </button>
+                  <span className="jott-top-mark" aria-hidden>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="/logos/jott.png" alt="" className="jott-top-mark-image" />
                   </span>
+                </div>
+                <div className={`jott-bar-input${typing ? " typing" : ""}`}>
                   <span className="jott-bar-text-wrap">
                     <span>{barText}</span>
                     <span className="jott-caret" style={{ display: showCaret ? "inline-block" : "none" }} />
                   </span>
                 </div>
-
-                <div className="jott-hint">
-                  <span className="jott-slash">
-                    type <code>/search</code> to find a note
-                  </span>
-                  <span>↵ save</span>
-                </div>
-
-                <div className={`jott-results${resultsOpen ? " open" : ""}`}>
-                  {results.length ? (
-                    results.map((result, index) => (
-                      <div className={`jott-result${index === 0 ? " active" : ""}`} key={result.title}>
-                        <FileIcon />
-                        <div className="jott-result-body">
-                          <div className="jott-result-title">
-                            {highlightParts(result.title, barText).map((part, indexPart) =>
-                              part.highlighted ? <mark key={`${result.title}-${indexPart}`}>{part.text}</mark> : <span key={`${result.title}-${indexPart}`}>{part.text}</span>
-                            )}
-                          </div>
-                          <div className="jott-result-meta">{result.meta}</div>
-                        </div>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="jott-result-empty">No notes match &quot;{barText}&quot;</div>
-                  )}
+                <div className="jott-tools-row">
+                  <button type="button" className="jott-tool-pill" aria-label="Text tools">
+                    <TextIcon />
+                  </button>
+                  <button type="button" className="jott-tool-pill" aria-label="Voice tools">
+                    <MicIcon />
+                  </button>
                 </div>
               </div>
             </div>
@@ -403,17 +351,15 @@ export default function JottLanding() {
         }
 
         .jott-drop-stage {
-          pointer-events: none;
           position: absolute;
           top: 0;
           left: 50%;
           z-index: 35;
-          width: 520px;
+          width: min(920px, calc(100vw - 88px));
           transform: translateX(-50%);
         }
 
         .jott-drop {
-          pointer-events: auto;
           transform: translateY(-100%);
           transition: transform 650ms cubic-bezier(0.22, 1, 0.36, 1);
         }
@@ -423,22 +369,61 @@ export default function JottLanding() {
         }
 
         .jott-bar-shell {
-          border-radius: 0 0 24px 24px;
+          border-radius: 0 0 36px 36px;
           background: #080808;
-          padding: 30px 12px 12px;
+          padding: 0;
           box-shadow: none;
+        }
+
+        .jott-bar-top {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          min-height: 86px;
+          padding: 0 28px;
+          background: #000;
+          border-radius: 0;
+        }
+
+        .jott-help-btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 42px;
+          height: 42px;
+          border: none;
+          border-radius: 999px;
+          background: rgba(255, 255, 255, 0.06);
+          color: rgba(255, 255, 255, 0.42);
+          appearance: none;
+          cursor: pointer;
+        }
+
+        .jott-top-mark {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 34px;
+          height: 34px;
+        }
+
+        .jott-top-mark-image {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          filter: brightness(1.12);
         }
 
         .jott-bar-input {
           position: relative;
           display: flex;
-          min-height: 54px;
+          min-height: 112px;
           align-items: center;
-          border-radius: 14px;
-          background: rgba(255, 255, 255, 0.05);
-          padding: 16px 20px;
+          border-radius: 0 0 36px 36px;
+          background: #151515;
+          padding: 0 28px;
           text-align: left;
-          font-size: 17px;
+          font-size: 38px;
           color: var(--ink-faint);
           transition: background 300ms ease, box-shadow 300ms ease;
         }
@@ -447,42 +432,11 @@ export default function JottLanding() {
           color: #f4f1ec;
         }
 
-        .jott-bar-input.search-mode {
-          background: rgba(180, 150, 255, 0.08);
-          box-shadow: inset 0 0 0 1px var(--accent-ring);
-        }
-
-        .jott-mode-badge {
-          position: absolute;
-          left: 14px;
-          top: 50%;
-          display: none;
-          height: 24px;
-          transform: translateY(-50%);
-          align-items: center;
-          gap: 6px;
-          border-radius: 6px;
-          background: var(--accent-soft);
-          padding: 0 10px;
-          color: var(--accent);
-          font-family: var(--mono);
-          font-size: 11px;
-          letter-spacing: 0.4px;
-        }
-
-        .jott-bar-input.search-mode .jott-mode-badge {
-          display: inline-flex;
-        }
-
-        .jott-bar-input.search-mode .jott-bar-text-wrap {
-          padding-left: 70px;
-        }
-
         .jott-bar-text-wrap {
           display: flex;
           flex: 1;
           align-items: center;
-          transition: padding-left 200ms ease;
+          line-height: 1.05;
         }
 
         .jott-caret {
@@ -495,113 +449,26 @@ export default function JottLanding() {
           vertical-align: middle;
         }
 
-        .jott-results {
-          margin-top: 8px;
-          max-height: 0;
-          overflow: hidden;
-          opacity: 0;
-          transition: max-height 500ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 300ms ease, margin-top 300ms ease;
-        }
-
-        .jott-results.open {
-          max-height: 320px;
-          opacity: 1;
-        }
-
-        .jott-result {
-          display: flex;
-          align-items: flex-start;
-          gap: 12px;
-          border-radius: 10px;
-          padding: 10px 16px;
-          text-align: left;
-          transition: background 200ms ease;
-        }
-
-        .jott-result + .jott-result {
-          margin-top: 2px;
-        }
-
-        .jott-result.active {
-          background: rgba(255, 255, 255, 0.04);
-        }
-
-        .jott-result-icon {
-          margin-top: 2px;
-          height: 18px;
-          width: 18px;
-          flex-shrink: 0;
-          color: oklch(0.78 0.12 145);
-        }
-
-        .jott-result-body {
-          min-width: 0;
-          flex: 1;
-        }
-
-        .jott-result-title {
-          margin-bottom: 2px;
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          font-size: 13.5px;
-          font-weight: 500;
-          line-height: 1.35;
-          color: #f4f1ec;
-        }
-
-        .jott-result-title mark {
-          border-radius: 3px;
-          background: var(--accent-soft);
-          padding: 0 2px;
-          color: var(--accent);
-        }
-
-        .jott-result-meta,
-        .jott-hint {
-          font-family: var(--mono);
-          letter-spacing: 0.4px;
-        }
-
-        .jott-result-meta {
-          font-size: 10.5px;
-          color: var(--ink-fainter);
-        }
-
-        .jott-result-empty {
-          padding: 14px 16px;
-          font-size: 13px;
-          color: var(--ink-faint);
-        }
-
-        .jott-hint {
+        .jott-tools-row {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 10px 16px 4px;
-          font-size: 10.5px;
-          color: var(--ink-fainter);
-          transition: opacity 300ms ease;
+          width: 164px;
+          margin: 22px auto 0;
         }
 
-        .jott-bar-input.search-mode ~ .jott-hint {
-          opacity: 0.4;
-        }
-
-        .jott-slash {
+        .jott-tool-pill {
           display: inline-flex;
           align-items: center;
-          gap: 6px;
-        }
-
-        .jott-slash code {
-          border: 1px solid var(--hairline);
-          border-radius: 4px;
-          background: rgba(255, 255, 255, 0.06);
-          padding: 2px 6px;
-          color: var(--ink-mute);
-          font-family: var(--mono);
-          font-size: 10.5px;
+          justify-content: center;
+          width: 92px;
+          height: 70px;
+          border: none;
+          border-radius: 999px;
+          background: #111;
+          color: rgba(255, 255, 255, 0.54);
+          appearance: none;
+          cursor: pointer;
         }
 
         .jott-main {
@@ -835,7 +702,33 @@ export default function JottLanding() {
           }
 
           .jott-drop-stage {
-            width: 92%;
+            width: calc(100vw - 36px);
+          }
+
+          .jott-bar-top {
+            min-height: 72px;
+            padding: 0 16px;
+          }
+
+          .jott-bar-input {
+            min-height: 92px;
+            padding: 0 20px;
+            font-size: 26px;
+            border-radius: 0 0 28px 28px;
+          }
+
+          .jott-bar-shell {
+            border-radius: 0 0 28px 28px;
+          }
+
+          .jott-tools-row {
+            width: 144px;
+            margin-top: 18px;
+          }
+
+          .jott-tool-pill {
+            width: 66px;
+            height: 54px;
           }
 
           .jott-screen {
