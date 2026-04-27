@@ -53,6 +53,7 @@ function AppleIcon() {
 export default function JottLanding() {
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [keysPressed, setKeysPressed] = useState(false);
+  const [cueVisible, setCueVisible] = useState(true);
 
   const pressKeys = () => {
     setKeysPressed(true);
@@ -61,9 +62,13 @@ export default function JottLanding() {
 
   const playDemo = () => {
     setPopoverOpen(false);
+    setCueVisible(true);
     window.setTimeout(pressKeys, 420);
     window.setTimeout(pressKeys, 820);
-    window.setTimeout(() => setPopoverOpen(true), 1120);
+    window.setTimeout(() => {
+      setPopoverOpen(true);
+      setCueVisible(false);
+    }, 1120);
   };
 
   useEffect(() => {
@@ -119,12 +124,14 @@ export default function JottLanding() {
             </h1>
             <p className="jott-lede">One keystroke. Nothing in your way.</p>
 
-            <button type="button" className="jott-trigger" onClick={playDemo}>
-              <span>Tap</span>
-              <span className={`jott-keycap${keysPressed ? " press" : ""}`}>⌥</span>
-              <span className="jott-plus">+</span>
-              <span className={`jott-keycap${keysPressed ? " press" : ""}`}>⌥</span>
-              <span>twice — anywhere.</span>
+            <button
+              type="button"
+              className={`jott-trigger${cueVisible ? " visible" : ""}`}
+              onClick={playDemo}
+              aria-label="Replay double Option reveal"
+            >
+              <span className={`jott-keycap${keysPressed ? " press" : ""}`}>⌥ option</span>
+              <span className={`jott-keycap${keysPressed ? " press" : ""}`}>⌥ option</span>
             </button>
 
             <div className="jott-ctas">

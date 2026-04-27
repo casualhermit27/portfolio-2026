@@ -199,8 +199,8 @@
   max-width: 12ch;
   font-family: var(--sans);
   font-size: 52px;
-  font-weight: 700;
-  line-height: 0.98;
+  font-weight: 600;
+  line-height: 1.02;
   letter-spacing: 0;
   color: #181715;
 }
@@ -208,46 +208,59 @@
 .jott-main h1 em {
   color: #7b6bc8;
   font-style: normal;
+  font-weight: 600;
 }
 
 .jott-lede {
   margin: 12px 0 0;
   font-family: var(--sans);
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1.55;
   color: rgba(24, 23, 21, 0.56);
 }
 
 .jott-trigger {
-  margin-top: 20px;
+  margin-top: 22px;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  color: rgba(24, 23, 21, 0.46);
-  font-family: "SF Mono", "SFMono-Regular", ui-monospace, monospace;
-  font-size: 11px;
-  letter-spacing: 0.03em;
+  justify-content: center;
+  gap: 8px;
   border: none;
   background: transparent;
   padding: 0;
   appearance: none;
   cursor: pointer;
+  opacity: 0;
+  transform: translateY(4px);
+  pointer-events: none;
+  transition: opacity 240ms ease, transform 240ms ease;
+}
+
+.jott-trigger.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
 }
 
 .jott-keycap {
   display: inline-flex;
-  min-width: 24px;
-  height: 24px;
+  min-width: 74px;
+  height: 34px;
   align-items: center;
   justify-content: center;
   border: 1px solid rgba(24, 23, 21, 0.1);
   border-bottom-width: 2px;
-  border-radius: 7px;
-  background: rgba(255, 255, 255, 0.78);
-  padding: 0 6px;
-  color: rgba(24, 23, 21, 0.76);
-  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 1px 0 rgba(24, 23, 21, 0.05);
+  padding: 0 10px;
+  color: rgba(24, 23, 21, 0.58);
+  font-family: "SF Mono", "SFMono-Regular", ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0;
+  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease, color 120ms ease;
 }
 
 .jott-keycap.press {
@@ -255,10 +268,6 @@
   border-color: rgba(123, 107, 200, 0.35);
   background: #eee9ff;
   color: #6d5cbc;
-}
-
-.jott-plus {
-  color: rgba(24, 23, 21, 0.28);
 }
 
 .jott-ctas {
@@ -350,7 +359,13 @@
   }
 
   .jott-main h1 {
-    font-size: 40px;
+    font-size: 38px;
+  }
+
+  .jott-keycap {
+    min-width: 68px;
+    height: 32px;
+    font-size: 9.5px;
   }
 
   .jott-trigger {
