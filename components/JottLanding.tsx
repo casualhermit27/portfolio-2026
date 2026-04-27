@@ -1,177 +1,305 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-const demoLines = [
-  "Plan Q3 sync with design on Tuesday.",
-  "Review action items before 4 PM.",
-  "Capture next steps while everyone is talking.",
+const corpus = [
+  { title: "MiniLM (sentence embeddings) + cosine similarity", meta: "note · 4d ago" },
+  { title: "Ship the landing page", meta: "note · 2d ago" },
+  { title: "Reread the MiniLM paper this weekend", meta: "note · 1d ago" },
+  { title: "Logging schema for capture events", meta: "note · 6d ago" },
+  { title: "Call Sam at 4pm — staffing", meta: "note · today" },
+  { title: "Ready to cook — risotto recipe", meta: "note · 1w ago" },
 ];
 
-function PauseIcon() {
+const captures = [
+  "Ship the landing page",
+  "Call Sam at 4pm",
+  "Reread the MiniLM paper",
+];
+
+type KeyStates = {
+  first: boolean;
+  second: boolean;
+};
+
+function SearchIcon({ className = "" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-      <path d="M7 5.5A1.5 1.5 0 0 1 8.5 4h1A1.5 1.5 0 0 1 11 5.5v13A1.5 1.5 0 0 1 9.5 20h-1A1.5 1.5 0 0 1 7 18.5zm6 0A1.5 1.5 0 0 1 14.5 4h1A1.5 1.5 0 0 1 17 5.5v13a1.5 1.5 0 0 1-1.5 1.5h-1A1.5 1.5 0 0 1 13 18.5z" />
+    <svg
+      width="11"
+      height="11"
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      className={className}
+      aria-hidden
+    >
+      <circle cx="7" cy="7" r="4.5" />
+      <path d="M10.5 10.5l3 3" />
     </svg>
   );
 }
 
-function PlayIcon() {
+function FileIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-      <path d="M8.3 5.24a1 1 0 0 1 1.53-.85l8.5 6.76a1 1 0 0 1 0 1.56l-8.5 6.76A1 1 0 0 1 8.3 18.6z" />
+    <svg
+      className="jott-result-icon"
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="M4 2h5l3 3v9H4z" />
+      <path d="M9 2v3h3" />
     </svg>
   );
 }
 
-function HelpIcon() {
+function AppleIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d="M9.1 9a3 3 0 1 1 5.4 1.8c-.62.83-1.5 1.3-2 1.84-.34.37-.5.72-.5 1.36" />
-      <circle cx="12" cy="17.25" r=".8" fill="currentColor" stroke="none" />
+    <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
+      <path d="M11.182 8.394c-.016-1.616 1.32-2.39 1.38-2.428-.752-1.1-1.924-1.25-2.34-1.268-.996-.1-1.944.586-2.45.586-.51 0-1.29-.572-2.12-.556-1.09.016-2.096.634-2.656 1.612-1.132 1.96-.29 4.866.816 6.46.538.78 1.18 1.656 2.02 1.624.81-.032 1.116-.524 2.096-.524.98 0 1.256.524 2.116.508.874-.014 1.428-.794 1.962-1.58.619-.908.874-1.79.89-1.836-.02-.01-1.708-.654-1.714-2.598zM9.704 3.582c.448-.544.75-1.298.668-2.046-.644.026-1.424.428-1.888.972-.416.482-.78 1.252-.682 1.986.72.056 1.454-.366 1.902-.912z" />
     </svg>
   );
 }
 
-function ImageIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <rect x="3.5" y="5" width="17" height="14" rx="2.5" />
-      <circle cx="9" cy="10" r="1.5" />
-      <path d="m20.5 15-4.7-4.7a1 1 0 0 0-1.42 0L7 17.5" />
-    </svg>
-  );
-}
+function highlightParts(title: string, query: string) {
+  if (!query) return [{ text: title, highlighted: false }];
+  const index = title.toLowerCase().indexOf(query.toLowerCase());
+  if (index < 0) return [{ text: title, highlighted: false }];
 
-function TextIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d="M6 18 9.2 8.5a1 1 0 0 1 1.9 0L14 18" />
-      <path d="M7.2 14h5.6" />
-      <path d="M17 8.5h1.5a2 2 0 1 1 0 4H17z" />
-      <path d="M17 12.5h2a2 2 0 1 1 0 4H17z" />
-    </svg>
-  );
-}
-
-function MicIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <rect x="9" y="4" width="6" height="10" rx="3" />
-      <path d="M6.5 11.5a5.5 5.5 0 0 0 11 0" />
-      <path d="M12 17v3" />
-      <path d="M9 20h6" />
-    </svg>
-  );
+  return [
+    { text: title.slice(0, index), highlighted: false },
+    { text: title.slice(index, index + query.length), highlighted: true },
+    { text: title.slice(index + query.length), highlighted: false },
+  ].filter((part) => part.text);
 }
 
 export default function JottLanding() {
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [lineIndex, setLineIndex] = useState(0);
-  const [displayText, setDisplayText] = useState("");
-  const [phase, setPhase] = useState<"typing" | "holding" | "deleting">("typing");
+  const [dropOpen, setDropOpen] = useState(false);
+  const [typing, setTyping] = useState(false);
+  const [searchMode, setSearchMode] = useState(false);
+  const [barText, setBarText] = useState("What's on your mind?");
+  const [showCaret, setShowCaret] = useState(false);
+  const [resultsOpen, setResultsOpen] = useState(false);
+  const [keyStates, setKeyStates] = useState<KeyStates>({ first: false, second: false });
+
+  const results = useMemo(() => {
+    if (!searchMode) return [];
+    return corpus.filter((note) => note.title.toLowerCase().includes(barText.toLowerCase())).slice(0, 4);
+  }, [barText, searchMode]);
 
   useEffect(() => {
-    if (!isPlaying) return;
+    let cancelled = false;
 
-    const currentLine = demoLines[lineIndex];
-    const nextText = phase === "deleting"
-      ? currentLine.slice(0, Math.max(displayText.length - 1, 0))
-      : currentLine.slice(0, displayText.length + 1);
+    const sleep = async (ms: number) => {
+      await new Promise<void>((resolve) => {
+        window.setTimeout(resolve, ms);
+      });
+      return !cancelled;
+    };
 
-    const timeout = window.setTimeout(() => {
-      if (phase === "holding") {
-        setPhase("deleting");
-        return;
+    const setText = (value: string) => {
+      if (!cancelled) setBarText(value);
+    };
+
+    const typeText = async (value: string, speed = 55) => {
+      if (cancelled) return false;
+      setTyping(true);
+      setText("");
+      setShowCaret(true);
+      let current = "";
+      for (const char of value) {
+        if (!(await sleep(speed + Math.random() * 25))) return false;
+        current += char;
+        setText(current);
       }
+      return true;
+    };
 
-      setDisplayText(nextText);
-
-      if (phase === "typing" && nextText === currentLine) {
-        setPhase("holding");
-        return;
+    const eraseText = async (initial: string) => {
+      let current = initial;
+      while (current.length) {
+        if (!(await sleep(16))) return false;
+        current = current.slice(0, -1);
+        setText(current);
       }
+      return true;
+    };
 
-      if (phase === "deleting" && nextText.length === 0) {
-        setPhase("typing");
-        setLineIndex((prev) => (prev + 1) % demoLines.length);
+    const pressKey = async (key: keyof KeyStates) => {
+      setKeyStates((prev) => ({ ...prev, [key]: true }));
+      if (!(await sleep(110))) return false;
+      setKeyStates((prev) => ({ ...prev, [key]: false }));
+      return true;
+    };
+
+    const doubleTap = async () => {
+      if (!(await pressKey("first"))) return false;
+      if (!(await sleep(120))) return false;
+      return pressKey("second");
+    };
+
+    const typeSearchQuery = async (query: string) => {
+      setText("");
+      let current = "";
+      for (const char of query) {
+        if (!(await sleep(70 + Math.random() * 25))) return false;
+        current += char;
+        setText(current);
       }
-    }, phase === "holding" ? 1100 : phase === "deleting" ? 22 : 44);
+      return true;
+    };
 
-    return () => window.clearTimeout(timeout);
-  }, [displayText, isPlaying, lineIndex, phase]);
+    const resetBar = () => {
+      setTyping(false);
+      setSearchMode(false);
+      setResultsOpen(false);
+      setText("What's on your mind?");
+      setShowCaret(false);
+    };
+
+    const run = async () => {
+      if (!(await sleep(900))) return;
+      while (!cancelled) {
+        if (!(await doubleTap())) return;
+        if (!(await sleep(150))) return;
+        setDropOpen(true);
+        if (!(await sleep(700))) return;
+
+        for (const capture of captures) {
+          if (!(await typeText(capture))) return;
+          if (!(await sleep(900))) return;
+          if (!(await eraseText(capture))) return;
+          if (!(await sleep(280))) return;
+        }
+
+        setTyping(false);
+        setText("What's on your mind?");
+        setShowCaret(false);
+        if (!(await sleep(500))) return;
+
+        if (!(await typeText("/search", 70))) return;
+        if (!(await sleep(380))) return;
+        setSearchMode(true);
+        setText("");
+        if (!(await sleep(220))) return;
+        if (!(await typeSearchQuery("minilm"))) return;
+        setResultsOpen(true);
+        if (!(await sleep(1700))) return;
+
+        let current = "minilm";
+        while (current.length) {
+          if (!(await sleep(28))) return;
+          current = current.slice(0, -1);
+          setText(current);
+        }
+
+        if (!(await sleep(200))) return;
+        if (!(await typeSearchQuery("sam"))) return;
+        if (!(await sleep(1500))) return;
+
+        setShowCaret(false);
+        setResultsOpen(false);
+        if (!(await sleep(400))) return;
+        setDropOpen(false);
+        if (!(await sleep(500))) return;
+        resetBar();
+        if (!(await sleep(1600))) return;
+      }
+    };
+
+    void run();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <div className="jott-root">
-      <main className="jott-shell">
-        <section className="jott-stage">
-          <div className="jott-notch">
-            <div className="jott-notch-camera" />
+      <main className="jott-bezel">
+        <section className="jott-screen">
+          <div className="jott-notch" />
+
+          <div className="jott-drop-stage">
+            <div className={`jott-drop${dropOpen ? " open" : ""}`}>
+              <div className="jott-bar-shell">
+                <div className={`jott-bar-input${typing ? " typing" : ""}${searchMode ? " search-mode" : ""}`}>
+                  <span className="jott-mode-badge">
+                    <SearchIcon />
+                    Search
+                  </span>
+                  <span className="jott-bar-text-wrap">
+                    <span>{barText}</span>
+                    <span className="jott-caret" style={{ display: showCaret ? "inline-block" : "none" }} />
+                  </span>
+                </div>
+
+                <div className="jott-hint">
+                  <span className="jott-slash">
+                    type <code>/search</code> to find a note
+                  </span>
+                  <span>↵ save</span>
+                </div>
+
+                <div className={`jott-results${resultsOpen ? " open" : ""}`}>
+                  {results.length ? (
+                    results.map((result, index) => (
+                      <div className={`jott-result${index === 0 ? " active" : ""}`} key={result.title}>
+                        <FileIcon />
+                        <div className="jott-result-body">
+                          <div className="jott-result-title">
+                            {highlightParts(result.title, barText).map((part, indexPart) =>
+                              part.highlighted ? <mark key={`${result.title}-${indexPart}`}>{part.text}</mark> : <span key={`${result.title}-${indexPart}`}>{part.text}</span>
+                            )}
+                          </div>
+                          <div className="jott-result-meta">{result.meta}</div>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="jott-result-empty">No notes match &quot;{barText}&quot;</div>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className="jott-hero">
-            <div className="jott-demo-wrap">
-              <div className="jott-demo">
-                <div className="jott-demo-top">
-                  <button type="button" className="jott-circle-btn" aria-label="Help">
-                    <HelpIcon />
-                  </button>
+          <div className="jott-main">
+            <div className="jott-logo jott-r jott-r1">
+              <span className="jott-mark">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/logos/jott.png" alt="Jott icon" className="jott-mark-image" />
+              </span>
+              <span>Jott</span>
+            </div>
+            <h1 className="jott-r jott-r2">
+              Capture a <em>thought.</em>
+            </h1>
+            <p className="jott-lede jott-r jott-r3">One keystroke. Nothing in your way.</p>
 
-                  <div className="jott-demo-actions">
-                    <button type="button" className="jott-pill-btn">
-                      <ImageIcon />
-                      <span>Use image</span>
-                    </button>
-                  </div>
-                </div>
-
-                <div className="jott-input-panel">
-                  <div className="jott-input-text">
-                    {displayText || "Add a meeting note..."}
-                    <span className={`jott-caret${isPlaying ? " visible" : ""}`} />
-                  </div>
-                </div>
-
-                <div className="jott-tool-row">
-                  <button type="button" className="jott-tool-btn jott-tool-wide" aria-label="Text formatting">
-                    <TextIcon />
-                  </button>
-                  <button type="button" className="jott-tool-btn" aria-label="Voice note">
-                    <MicIcon />
-                  </button>
-                </div>
-              </div>
+            <div className="jott-trigger jott-r jott-r4">
+              <span>Tap</span>
+              <span className={`jott-keycap${keyStates.first ? " press" : ""}`}>⌥</span>
+              <span className="jott-plus">+</span>
+              <span className={`jott-keycap${keyStates.second ? " press" : ""}`}>⌥</span>
+              <span>twice — anywhere.</span>
             </div>
 
-            <div className="jott-copy">
-              <div className="jott-brand">
-                <span className="jott-brand-mark">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/logos/jott.png" alt="Jott icon" className="jott-brand-image" />
-                </span>
-                <span>Jott</span>
-              </div>
-
-              <h1>Capture notes without breaking the conversation.</h1>
-              <p className="jott-lede">
-                A fast, focused note surface for meetings, ideas, and follow-ups. Open it, write immediately, and get out of the way.
-              </p>
-
-              <div className="jott-copy-actions">
-                <a href="#" className="jott-primary-btn">Download for Mac</a>
-                <button
-                  type="button"
-                  className="jott-secondary-btn"
-                  onClick={() => setIsPlaying((prev) => !prev)}
-                  aria-pressed={!isPlaying}
-                >
-                  <span className="jott-control-icon">{isPlaying ? <PauseIcon /> : <PlayIcon />}</span>
-                  <span>{isPlaying ? "Pause preview" : "Play preview"}</span>
-                </button>
-              </div>
-
-              <p className="jott-meta">macOS 13+ · Apple silicon &amp; Intel · built for fast capture</p>
+            <div className="jott-ctas jott-r jott-r5">
+              <a href="#" className="jott-btn jott-btn-primary">
+                <AppleIcon />
+                Download for Mac
+              </a>
+              <a href="#" className="jott-btn jott-btn-secondary">
+                Mac App Store
+              </a>
             </div>
+            <div className="jott-meta jott-r jott-r6">macOS 13+ · Apple silicon &amp; Intel</div>
           </div>
         </section>
       </main>
@@ -180,312 +308,445 @@ export default function JottLanding() {
         @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Serif:wght@400;500&display=swap");
 
         .jott-root {
-          --jott-bg: #aab7c5;
-          --jott-bg-soft: #b9c5d1;
-          --jott-stage: #9eacba;
-          --jott-panel: #0d0d0f;
-          --jott-panel-soft: #141417;
-          --jott-line: rgba(255, 255, 255, 0.08);
-          --jott-line-strong: rgba(255, 255, 255, 0.14);
-          --jott-text: #f4f6f8;
-          --jott-text-muted: rgba(244, 246, 248, 0.55);
-          --jott-text-faint: rgba(244, 246, 248, 0.38);
-          --jott-copy: #1e2a36;
-          --jott-copy-soft: rgba(30, 42, 54, 0.74);
-          --jott-notch: #050506;
-          --jott-accent: #1a2330;
-          --jott-radius: 34px;
+          --canvas: oklch(0.175 0.005 270);
+          --ink: oklch(0.97 0.003 270);
+          --ink-mute: oklch(0.72 0.006 270);
+          --ink-faint: oklch(0.52 0.006 270);
+          --ink-fainter: oklch(0.38 0.006 270);
+          --hairline: rgba(255, 255, 255, 0.07);
+          --accent: oklch(0.72 0.13 290);
+          --accent-ink: #0e0a1c;
+          --accent-soft: oklch(0.72 0.13 290 / 0.14);
+          --accent-ring: oklch(0.72 0.13 290 / 0.5);
+          --sans: "IBM Plex Sans", -apple-system, sans-serif;
+          --serif: "IBM Plex Serif", Georgia, serif;
+          --mono: "IBM Plex Mono", ui-monospace, monospace;
+          background: #f5f2ec;
+          color: var(--ink);
+          font-family: var(--sans);
           min-height: 100vh;
-          background: linear-gradient(180deg, var(--jott-bg-soft) 0%, var(--jott-bg) 100%);
-          color: var(--jott-copy);
-          font-family: "IBM Plex Sans", -apple-system, sans-serif;
           -webkit-font-smoothing: antialiased;
         }
 
-        .jott-shell {
+        .jott-bezel {
           min-height: 100vh;
-          padding: 18px;
-          background: transparent;
+          background: #f5f2ec;
+          padding: 14px 14px 18px;
         }
 
-        .jott-stage {
+        .jott-screen {
           position: relative;
-          min-height: calc(100vh - 36px);
+          min-height: calc(100vh - 32px);
           overflow: hidden;
-          border-radius: 36px;
-          background: linear-gradient(180deg, #b6c2ce 0%, #a2afbc 100%);
-          border: 1px solid rgba(255, 255, 255, 0.3);
+          border-radius: 22px;
+          background: var(--canvas);
+          box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.6);
         }
 
         .jott-notch {
           position: absolute;
           top: 0;
           left: 50%;
-          z-index: 4;
-          display: flex;
-          height: 34px;
-          width: 228px;
+          z-index: 40;
+          height: 30px;
+          width: 220px;
           transform: translateX(-50%);
-          align-items: center;
-          justify-content: center;
-          border-radius: 0 0 22px 22px;
-          background: var(--jott-notch);
-          border-left: 1px solid rgba(255, 255, 255, 0.05);
-          border-right: 1px solid rgba(255, 255, 255, 0.05);
-          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+          border-radius: 0 0 18px 18px;
+          background: #000;
         }
 
-        .jott-notch-camera {
-          height: 9px;
-          width: 68px;
+        .jott-notch::after {
+          content: "";
+          position: absolute;
+          top: 11px;
+          right: 30px;
+          height: 7px;
+          width: 7px;
           border-radius: 999px;
-          background: linear-gradient(180deg, #0e1115 0%, #0a0b0d 100%);
-          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+          background: #0a0a0c;
+          box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
         }
 
-        .jott-hero {
+        .jott-drop-stage {
+          pointer-events: none;
+          position: absolute;
+          top: 0;
+          left: 50%;
+          z-index: 35;
+          width: 520px;
+          transform: translateX(-50%);
+        }
+
+        .jott-drop {
+          pointer-events: auto;
+          transform: translateY(-100%);
+          transition: transform 650ms cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .jott-drop.open {
+          transform: translateY(0);
+        }
+
+        .jott-bar-shell {
+          border-radius: 0 0 24px 24px;
+          background: #000;
+          padding: 30px 12px 12px;
+          box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 6px 18px rgba(0, 0, 0, 0.35);
+        }
+
+        .jott-bar-input {
+          position: relative;
           display: flex;
-          min-height: calc(100vh - 36px);
-          flex-direction: column;
+          min-height: 54px;
           align-items: center;
-          justify-content: center;
-          gap: 44px;
-          padding: 112px 24px 72px;
+          border-radius: 14px;
+          background: rgba(255, 255, 255, 0.05);
+          padding: 16px 20px;
+          text-align: left;
+          font-size: 17px;
+          color: var(--ink-faint);
+          transition: background 300ms ease, box-shadow 300ms ease;
         }
 
-        .jott-demo-wrap {
-          width: min(920px, 100%);
-          display: flex;
-          justify-content: center;
+        .jott-bar-input.typing {
+          color: var(--ink);
         }
 
-        .jott-demo {
-          width: min(920px, 100%);
+        .jott-bar-input.search-mode {
+          background: rgba(180, 150, 255, 0.08);
+          box-shadow: inset 0 0 0 1px var(--accent-ring);
         }
 
-        .jott-demo-top {
-          display: flex;
+        .jott-mode-badge {
+          position: absolute;
+          left: 14px;
+          top: 50%;
+          display: none;
+          height: 24px;
+          transform: translateY(-50%);
           align-items: center;
-          justify-content: space-between;
-          margin-bottom: 14px;
-          padding: 0 4px;
+          gap: 6px;
+          border-radius: 6px;
+          background: var(--accent-soft);
+          padding: 0 10px;
+          color: var(--accent);
+          font-family: var(--mono);
+          font-size: 11px;
+          letter-spacing: 0.4px;
         }
 
-        .jott-circle-btn,
-        .jott-pill-btn,
-        .jott-tool-btn,
-        .jott-secondary-btn {
-          appearance: none;
-          border: 1px solid var(--jott-line);
-          background: rgba(12, 12, 14, 0.92);
-          color: var(--jott-text-muted);
-        }
-
-        .jott-circle-btn,
-        .jott-pill-btn,
-        .jott-tool-btn,
-        .jott-primary-btn,
-        .jott-secondary-btn {
-          transition: background 180ms ease, border-color 180ms ease, color 180ms ease, transform 180ms ease;
-        }
-
-        .jott-circle-btn:hover,
-        .jott-pill-btn:hover,
-        .jott-tool-btn:hover,
-        .jott-secondary-btn:hover,
-        .jott-primary-btn:hover {
-          transform: translateY(-1px);
-        }
-
-        .jott-circle-btn {
+        .jott-bar-input.search-mode .jott-mode-badge {
           display: inline-flex;
-          height: 42px;
-          width: 42px;
-          align-items: center;
-          justify-content: center;
-          border-radius: 999px;
         }
 
-        .jott-circle-btn svg,
-        .jott-pill-btn svg {
-          height: 18px;
-          width: 18px;
+        .jott-bar-input.search-mode .jott-bar-text-wrap {
+          padding-left: 70px;
         }
 
-        .jott-pill-btn {
-          display: inline-flex;
-          height: 42px;
-          align-items: center;
-          gap: 10px;
-          border-radius: 999px;
-          padding: 0 18px;
-          font-size: 14px;
-          font-weight: 500;
-        }
-
-        .jott-input-panel {
-          min-height: 176px;
-          border-radius: 0 0 34px 34px;
-          background: rgba(14, 14, 16, 0.94);
-          border: 1px solid rgba(255, 255, 255, 0.05);
-          padding: 36px 24px 28px;
-        }
-
-        .jott-input-text {
+        .jott-bar-text-wrap {
           display: flex;
-          min-height: 92px;
-          align-items: flex-start;
-          font-size: clamp(24px, 4.1vw, 40px);
-          line-height: 1.12;
-          letter-spacing: -0.03em;
-          color: ${"`"}var(--jott-text-muted)${"`"};
+          flex: 1;
+          align-items: center;
+          transition: padding-left 200ms ease;
         }
 
         .jott-caret {
+          margin-left: 2px;
           display: inline-block;
-          width: 2px;
-          height: 1em;
-          margin-left: 4px;
-          opacity: 0;
-          background: rgba(244, 246, 248, 0.7);
-        }
-
-        .jott-caret.visible {
-          opacity: 1;
+          height: 18px;
+          width: 1.5px;
           animation: jott-blink 1s steps(1) infinite;
+          background: var(--accent);
+          vertical-align: middle;
         }
 
-        .jott-tool-row {
+        .jott-results {
+          margin-top: 8px;
+          max-height: 0;
+          overflow: hidden;
+          opacity: 0;
+          transition: max-height 500ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 300ms ease, margin-top 300ms ease;
+        }
+
+        .jott-results.open {
+          max-height: 320px;
+          opacity: 1;
+        }
+
+        .jott-result {
           display: flex;
-          justify-content: center;
-          gap: 14px;
-          margin-top: 18px;
+          align-items: flex-start;
+          gap: 12px;
+          border-radius: 10px;
+          padding: 10px 16px;
+          text-align: left;
+          transition: background 200ms ease;
         }
 
-        .jott-tool-btn {
-          display: inline-flex;
-          height: 72px;
-          width: 72px;
+        .jott-result + .jott-result {
+          margin-top: 2px;
+        }
+
+        .jott-result.active {
+          background: rgba(255, 255, 255, 0.04);
+        }
+
+        .jott-result-icon {
+          margin-top: 2px;
+          height: 18px;
+          width: 18px;
+          flex-shrink: 0;
+          color: oklch(0.78 0.12 145);
+        }
+
+        .jott-result-body {
+          min-width: 0;
+          flex: 1;
+        }
+
+        .jott-result-title {
+          margin-bottom: 2px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          font-size: 13.5px;
+          font-weight: 500;
+          line-height: 1.35;
+          color: var(--ink);
+        }
+
+        .jott-result-title mark {
+          border-radius: 3px;
+          background: var(--accent-soft);
+          padding: 0 2px;
+          color: var(--accent);
+        }
+
+        .jott-result-meta,
+        .jott-hint {
+          font-family: var(--mono);
+          letter-spacing: 0.4px;
+        }
+
+        .jott-result-meta {
+          font-size: 10.5px;
+          color: var(--ink-fainter);
+        }
+
+        .jott-result-empty {
+          padding: 14px 16px;
+          font-size: 13px;
+          color: var(--ink-faint);
+        }
+
+        .jott-hint {
+          display: flex;
           align-items: center;
-          justify-content: center;
-          border-radius: 999px;
+          justify-content: space-between;
+          padding: 10px 16px 4px;
+          font-size: 10.5px;
+          color: var(--ink-fainter);
+          transition: opacity 300ms ease;
         }
 
-        .jott-tool-btn svg {
-          width: 28px;
-          height: 28px;
+        .jott-bar-input.search-mode ~ .jott-hint {
+          opacity: 0.4;
         }
 
-        .jott-tool-wide {
-          width: 94px;
-          border-radius: 999px;
+        .jott-slash {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
         }
 
-        .jott-copy {
+        .jott-slash code {
+          border: 1px solid var(--hairline);
+          border-radius: 4px;
+          background: rgba(255, 255, 255, 0.06);
+          padding: 2px 6px;
+          color: var(--ink-mute);
+          font-family: var(--mono);
+          font-size: 10.5px;
+        }
+
+        .jott-main {
+          position: relative;
+          z-index: 1;
           display: flex;
-          width: min(740px, 100%);
           flex-direction: column;
           align-items: center;
+          padding: 140px 32px 80px;
           text-align: center;
         }
 
-        .jott-brand {
-          display: inline-flex;
+        .jott-logo {
+          margin-bottom: 56px;
+          display: flex;
           align-items: center;
-          gap: 12px;
-          margin-bottom: 22px;
-          color: var(--jott-copy);
-          font-family: "IBM Plex Serif", Georgia, serif;
-          font-size: 22px;
+          gap: 10px;
+          font-family: var(--serif);
+          font-size: 17px;
           font-weight: 500;
         }
 
-        .jott-brand-mark {
-          width: 32px;
-          height: 32px;
-          border-radius: 9px;
+        .jott-mark {
+          display: flex;
+          height: 22px;
+          width: 22px;
+          align-items: center;
+          justify-content: center;
           overflow: hidden;
+          border-radius: 6px;
+          background: var(--accent);
+          color: var(--accent-ink);
         }
 
-        .jott-brand-image {
-          width: 100%;
+        .jott-mark-image {
           height: 100%;
+          width: 100%;
           object-fit: cover;
         }
 
-        .jott-copy h1 {
-          margin: 0;
-          max-width: 12ch;
-          color: var(--jott-copy);
-          font-family: "IBM Plex Serif", Georgia, serif;
-          font-size: clamp(42px, 8vw, 72px);
+        .jott-main h1 {
+          margin: 0 0 20px;
+          max-width: 780px;
+          font-family: var(--serif);
+          font-size: 64px;
           font-weight: 500;
-          line-height: 0.98;
-          letter-spacing: -0.055em;
+          line-height: 1.04;
+          letter-spacing: -1.2px;
+        }
+
+        .jott-main h1 em {
+          color: var(--accent);
+          font-style: italic;
         }
 
         .jott-lede {
-          max-width: 620px;
-          margin: 18px 0 0;
-          color: var(--jott-copy-soft);
-          font-size: clamp(16px, 2.1vw, 21px);
-          line-height: 1.58;
+          margin: 0 0 28px;
+          max-width: 420px;
+          font-size: 16px;
+          line-height: 1.6;
+          color: var(--ink-mute);
         }
 
-        .jott-copy-actions {
-          display: flex;
-          flex-wrap: wrap;
-          justify-content: center;
-          gap: 12px;
-          margin-top: 28px;
-        }
-
-        .jott-primary-btn,
-        .jott-secondary-btn {
+        .jott-trigger {
+          margin-bottom: 32px;
           display: inline-flex;
           align-items: center;
+          gap: 8px;
+          color: var(--ink-mute);
+          font-family: var(--mono);
+          font-size: 12px;
+          letter-spacing: 0.3px;
+        }
+
+        .jott-keycap {
+          display: inline-flex;
+          min-width: 28px;
+          height: 28px;
+          align-items: center;
+          justify-content: center;
+          border: 1px solid var(--hairline);
+          border-bottom-width: 2px;
+          border-radius: 6px;
+          background: rgba(255, 255, 255, 0.05);
+          padding: 0 8px;
+          color: var(--ink);
+          font-family: var(--sans);
+          font-size: 12px;
+          font-weight: 500;
+          transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+        }
+
+        .jott-keycap.press {
+          transform: translateY(2px);
+          border-color: var(--accent-ring);
+          border-bottom-width: 1px;
+          background: var(--accent-soft);
+          color: var(--accent);
+        }
+
+        .jott-plus {
+          color: var(--ink-fainter);
+        }
+
+        .jott-ctas {
+          margin-bottom: 14px;
+          display: flex;
           justify-content: center;
           gap: 10px;
-          min-height: 48px;
-          border-radius: 999px;
-          padding: 0 20px;
-          font-size: 14px;
+        }
+
+        .jott-btn {
+          display: inline-flex;
+          height: 44px;
+          align-items: center;
+          gap: 10px;
+          border-radius: 10px;
+          padding: 0 18px;
+          font-size: 13.5px;
           font-weight: 500;
           text-decoration: none;
+          transition: transform 140ms ease, border-color 140ms ease;
         }
 
-        .jott-primary-btn {
-          border: 1px solid rgba(22, 34, 48, 0.15);
-          background: rgba(25, 36, 49, 0.96);
-          color: #edf2f5;
+        .jott-btn-primary {
+          border: 1px solid var(--ink);
+          background: var(--ink);
+          color: var(--canvas);
         }
 
-        .jott-secondary-btn {
-          background: rgba(255, 255, 255, 0.38);
-          border-color: rgba(22, 34, 48, 0.08);
-          color: var(--jott-copy);
+        .jott-btn-primary:hover {
+          transform: translateY(-1px);
         }
 
-        .jott-control-icon {
-          width: 16px;
-          height: 16px;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
+        .jott-btn-secondary {
+          border: 1px solid var(--hairline);
+          background: transparent;
+          color: var(--ink);
         }
 
-        .jott-control-icon svg {
-          width: 16px;
-          height: 16px;
+        .jott-btn-secondary:hover {
+          border-color: var(--ink-faint);
         }
 
         .jott-meta {
-          margin: 16px 0 0;
-          color: rgba(30, 42, 54, 0.58);
-          font-family: "IBM Plex Mono", ui-monospace, monospace;
+          margin-top: 14px;
+          color: var(--ink-fainter);
+          font-family: var(--mono);
           font-size: 11px;
-          letter-spacing: 0.06em;
-          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        .jott-r {
+          opacity: 0;
+          transform: translateY(8px);
+          animation: jott-reveal 900ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        .jott-r1 {
+          animation-delay: 0ms;
+        }
+
+        .jott-r2 {
+          animation-delay: 80ms;
+        }
+
+        .jott-r3 {
+          animation-delay: 160ms;
+        }
+
+        .jott-r4 {
+          animation-delay: 240ms;
+        }
+
+        .jott-r5 {
+          animation-delay: 320ms;
+        }
+
+        .jott-r6 {
+          animation-delay: 400ms;
         }
 
         @keyframes jott-blink {
@@ -494,110 +755,21 @@ export default function JottLanding() {
           }
         }
 
-        @media (max-width: 900px) {
-          .jott-stage {
-            border-radius: 28px;
-          }
-
-          .jott-hero {
-            gap: 34px;
-            padding: 100px 18px 56px;
-          }
-
-          .jott-input-panel {
-            min-height: 154px;
-            padding: 28px 18px 22px;
-            border-radius: 0 0 28px 28px;
-          }
-
-          .jott-tool-btn {
-            width: 66px;
-            height: 66px;
-          }
-
-          .jott-tool-wide {
-            width: 86px;
+        @keyframes jott-reveal {
+          to {
+            opacity: 1;
+            transform: none;
           }
         }
 
-        @media (max-width: 640px) {
-          .jott-shell {
-            padding: 10px;
+        @media (max-width: 680px) {
+          .jott-drop-stage {
+            width: 92%;
           }
 
-          .jott-stage {
-            min-height: calc(100vh - 20px);
-            border-radius: 24px;
-          }
-
-          .jott-notch {
-            width: 186px;
-            height: 30px;
-            border-radius: 0 0 18px 18px;
-          }
-
-          .jott-notch-camera {
-            width: 54px;
-            height: 8px;
-          }
-
-          .jott-hero {
-            min-height: calc(100vh - 20px);
-            justify-content: flex-start;
-            gap: 28px;
-            padding: 86px 14px 38px;
-          }
-
-          .jott-demo-top {
-            margin-bottom: 10px;
-          }
-
-          .jott-circle-btn,
-          .jott-pill-btn {
-            height: 38px;
-          }
-
-          .jott-pill-btn {
-            padding: 0 14px;
-            font-size: 13px;
-          }
-
-          .jott-input-panel {
-            min-height: 126px;
-            padding: 22px 16px 18px;
-            border-radius: 0 0 24px 24px;
-          }
-
-          .jott-input-text {
-            min-height: 72px;
-          }
-
-          .jott-tool-row {
-            margin-top: 14px;
-            gap: 12px;
-          }
-
-          .jott-tool-btn {
-            width: 58px;
-            height: 58px;
-          }
-
-          .jott-tool-wide {
-            width: 78px;
-          }
-
-          .jott-copy-actions {
-            width: 100%;
-            flex-direction: column;
-          }
-
-          .jott-primary-btn,
-          .jott-secondary-btn {
-            width: 100%;
-          }
-
-          .jott-meta {
-            line-height: 1.5;
+          .jott-main h1 {
+            font-size: 44px;
+            letter-spacing: -0.8px;
           }
         }
       `}</style>
