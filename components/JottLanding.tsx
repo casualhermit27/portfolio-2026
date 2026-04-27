@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 function HelpIcon() {
   return (
@@ -53,27 +53,23 @@ function AppleIcon() {
 export default function JottLanding() {
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [keysPressed, setKeysPressed] = useState(false);
-  const lastOptionPress = useRef(0);
 
-  const triggerPopover = () => {
+  const pressKeys = () => {
     setKeysPressed(true);
-    setPopoverOpen(true);
     window.setTimeout(() => setKeysPressed(false), 220);
   };
 
+  const playDemo = () => {
+    setPopoverOpen(false);
+    window.setTimeout(pressKeys, 420);
+    window.setTimeout(pressKeys, 820);
+    window.setTimeout(() => setPopoverOpen(true), 1120);
+  };
+
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== "Alt") return;
-
-      const now = Date.now();
-      if (now - lastOptionPress.current < 420) {
-        triggerPopover();
-      }
-      lastOptionPress.current = now;
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    playDemo();
+    const interval = window.setInterval(playDemo, 6200);
+    return () => window.clearInterval(interval);
   }, []);
 
   return (
@@ -123,7 +119,7 @@ export default function JottLanding() {
             </h1>
             <p className="jott-lede">One keystroke. Nothing in your way.</p>
 
-            <button type="button" className="jott-trigger" onDoubleClick={triggerPopover}>
+            <button type="button" className="jott-trigger" onClick={playDemo}>
               <span>Tap</span>
               <span className={`jott-keycap${keysPressed ? " press" : ""}`}>⌥</span>
               <span className="jott-plus">+</span>
