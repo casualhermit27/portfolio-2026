@@ -199,58 +199,88 @@ export default function Home() {
         className="sticky top-0 z-50 transition-colors duration-250"
         style={{ background: "var(--bg-sticky)" }}
       >
-        <header
-          className="px-5 sm:px-8 md:px-12 lg:px-16 pt-5 sm:pt-7 pb-4 flex items-end justify-between border-b backdrop-blur-xl"
-          style={{ borderColor: "var(--border)" }}
-        >
-          <div>
-            <p
-              className="text-[13px] font-medium tracking-tight"
-              style={{ color: "var(--text-primary)" }}
-            >
-              Harsha Chaganti
-            </p>
-            <div className="flex items-center gap-2 mt-0.5">
+        <header className="backdrop-blur-xl">
+          {/* top row */}
+          <div
+            className="px-5 sm:px-8 md:px-12 lg:px-16 pt-5 sm:pt-6 pb-3 flex items-end justify-between"
+          >
+            <div>
               <p
-                className="text-[11px] tracking-wide"
-                style={{ color: "var(--text-secondary)" }}
+                className="text-[13px] font-medium tracking-tight"
+                style={{ color: "var(--text-primary)" }}
               >
-                iOS Developer
+                Harsha Chaganti
               </p>
-              <a
-                href="https://apps.apple.com/developer/harsha-chaganti"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="opacity-50 hover:opacity-100 transition-opacity duration-200"
-                title="App Store"
+              <div className="flex items-center gap-2 mt-0.5">
+                <p
+                  className="text-[11px] tracking-wide"
+                  style={{ color: "var(--text-secondary)" }}
+                >
+                  iOS Developer
+                </p>
+                <a
+                  href="https://apps.apple.com/developer/harsha-chaganti"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="opacity-50 hover:opacity-100 transition-opacity duration-200"
+                  title="App Store"
+                >
+                  <AppStoreIcon />
+                </a>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 pb-0.5">
+              <p className="text-[11px] tracking-wide" style={{ color: "var(--text-faint)" }}>
+                © 2026
+              </p>
+              <button
+                onClick={() => setDark((d) => !d)}
+                className="flex items-center justify-center w-7 h-7 rounded-full border transition-all duration-200 hover:opacity-80"
+                style={{
+                  borderColor: "var(--border)",
+                  background: "var(--pill-bg)",
+                  color: "var(--text-secondary)",
+                }}
+                title={dark ? "Switch to light mode" : "Switch to dark mode"}
+                aria-label="Toggle dark mode"
               >
-                <AppStoreIcon />
-              </a>
+                {dark ? <SunIcon /> : <MoonIcon />}
+              </button>
             </div>
           </div>
 
-          {/* Right side: copyright + dark mode toggle */}
-          <div className="flex items-center gap-3 pb-0.5">
-            <p
-              className="text-[11px] tracking-wide"
-              style={{ color: "var(--text-faint)" }}
-            >
-              © 2026
-            </p>
-            <button
-              onClick={() => setDark((d) => !d)}
-              className="flex items-center justify-center w-7 h-7 rounded-full border transition-all duration-200 hover:opacity-80"
-              style={{
-                borderColor: "var(--border)",
-                background: "var(--pill-bg)",
-                color: "var(--text-secondary)",
-              }}
-              title={dark ? "Switch to light mode" : "Switch to dark mode"}
-              aria-label="Toggle dark mode"
-            >
-              {dark ? <SunIcon /> : <MoonIcon />}
-            </button>
-          </div>
+          {/* app tab strip */}
+          <nav
+            className="px-5 sm:px-8 md:px-12 lg:px-16 flex items-center gap-5 sm:gap-6 border-b"
+            aria-label="App navigation"
+            style={{ borderColor: "var(--border)" }}
+          >
+            {apps.map((app) => {
+              const isActive = app.id === activeApp;
+              return (
+                <button
+                  key={app.id}
+                  onClick={() => scrollTo(app.id)}
+                  className="relative py-2 text-[11px] tracking-wide transition-colors duration-200 whitespace-nowrap"
+                  style={{
+                    color: isActive ? "var(--text-primary)" : "var(--text-faint)",
+                    fontWeight: isActive ? 500 : 400,
+                  }}
+                >
+                  {app.name}
+                  {isActive && (
+                    <motion.span
+                      layoutId="tab-underline"
+                      className="absolute bottom-0 left-0 right-0 h-[1.5px]"
+                      style={{ background: "var(--text-primary)", opacity: 0.5 }}
+                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                </button>
+              );
+            })}
+          </nav>
         </header>
       </div>
 
@@ -271,55 +301,6 @@ export default function Home() {
         ))}
       </main>
 
-      {/* ── Floating nav ── */}
-      <div
-        className="fixed inset-x-0 bottom-0 z-50 flex justify-center pointer-events-none"
-        style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 32px)" }}
-      >
-        <nav
-          className="pointer-events-auto flex items-end gap-3 sm:gap-[14px]"
-          aria-label="App navigation"
-        >
-          {apps.map((app) => {
-            const isActive = app.id === activeApp;
-            return (
-              <motion.button
-                key={app.id}
-                onClick={() => scrollTo(app.id)}
-                className="flex flex-col items-center gap-[7px]"
-                aria-label={`Go to ${app.name}`}
-                whileTap={{ scale: 0.86 }}
-                transition={{ type: "spring", stiffness: 380, damping: 26 }}
-              >
-                <motion.div
-                  animate={{
-                    y: isActive ? -5 : 0,
-                    opacity: isActive ? 1 : 0.28,
-                    scale: isActive ? 1 : 0.92,
-                  }}
-                  transition={{ type: "spring", stiffness: 360, damping: 28 }}
-                  className="h-[46px] w-[46px] sm:h-[50px] sm:w-[50px] overflow-hidden rounded-[13px] sm:rounded-[14px]"
-                  style={{
-                    boxShadow: isActive
-                      ? "0 6px 22px rgba(30,20,10,0.18)"
-                      : "none",
-                  }}
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={app.logo} alt={app.name} className="h-full w-full object-cover" />
-                </motion.div>
-
-                <motion.span
-                  animate={{ opacity: isActive ? 0.4 : 0, scale: isActive ? 1 : 0.3 }}
-                  transition={{ type: "spring", stiffness: 360, damping: 28 }}
-                  className="block h-[4px] w-[4px] rounded-full flex-shrink-0"
-                  style={{ background: "var(--text-primary)" }}
-                />
-              </motion.button>
-            );
-          })}
-        </nav>
-      </div>
 
     </div>
   );
