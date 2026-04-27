@@ -1,19 +1,8 @@
 .jott-root {
-  --canvas: #fffdf9;
-  --ink: #121212;
-  --ink-mute: #65615c;
-  --ink-faint: #8e877f;
-  --ink-fainter: #b1aaa3;
-  --hairline: rgba(17, 17, 17, 0.09);
-  --accent: #8e79d8;
-  --accent-ink: #231f32;
-  --accent-soft: rgba(142, 121, 216, 0.14);
-  --accent-ring: rgba(142, 121, 216, 0.34);
   --sans: "SF Pro Rounded", "SF Pro Text", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --editor: "SF Pro Text", "SF Pro Display", "SF Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --mono: "SF Mono", "SFMono-Regular", ui-monospace, monospace;
-  background: #fffdf9;
-  color: var(--ink);
+  background: #0a0a0a;
+  color: #fff;
   font-family: var(--sans);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
@@ -24,16 +13,15 @@
 .jott-bezel {
   min-height: 100vh;
   background: #0a0a0a;
-  padding: 20px;
+  padding: 0;
 }
 
 .jott-screen {
   position: relative;
-  min-height: calc(100vh - 40px);
+  min-height: 100vh;
   overflow: hidden;
-  border-radius: 22px;
-  background: var(--canvas);
-  border: none;
+  background: #0a0a0a;
+  border-radius: 0;
   box-shadow: none;
 }
 
@@ -61,41 +49,28 @@
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
 }
 
-.jott-drop-stage {
+.jott-popover {
   position: absolute;
   top: 0;
   left: 50%;
-  z-index: 35;
-  width: min(920px, calc(100vw - 88px));
+  width: min(920px, calc(100vw - 150px));
   transform: translateX(-50%);
 }
 
-.jott-drop {
-  transform: translateY(-100%);
-  transition: transform 650ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.jott-drop.open {
-  transform: translateY(0);
-}
-
-.jott-bar-shell {
-  border-radius: 0 0 30px 30px;
+.jott-popover-shell {
+  border-radius: 0 0 34px 34px;
   background: #080808;
   padding: 0;
   box-shadow: none;
-  overflow: visible;
 }
 
-.jott-bar-top {
+.jott-popover-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
   min-height: 62px;
   padding: 0 20px;
   background: #000;
-  border-radius: 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .jott-help-btn {
@@ -112,162 +87,49 @@
   cursor: pointer;
 }
 
-.jott-top-chips {
+.jott-top-mark {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
 }
 
-.jott-status-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  height: 24px;
-  padding: 0 10px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.07);
-  color: rgba(255, 255, 255, 0.5);
-  font-family: var(--mono);
-  font-size: 9.5px;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  text-transform: lowercase;
+.jott-top-mark-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: brightness(1.15);
 }
 
-.jott-bar-input {
-  position: relative;
+.jott-popover-input {
   display: flex;
-  min-height: 110px;
+  min-height: 112px;
   align-items: center;
-  border-radius: 0 0 30px 30px;
+  border-radius: 0 0 34px 34px;
   background: #151515;
   padding: 0 24px;
   text-align: left;
   font-family: var(--editor);
   font-size: 28px;
   font-weight: 400;
-  color: var(--ink-faint);
-  transition: background 300ms ease, box-shadow 300ms ease;
-  padding-right: 86px;
+  color: rgba(255, 255, 255, 0.28);
 }
 
-.jott-bar-input.typing {
-  color: #f4f1ec;
-}
-
-.jott-mode-badge {
-  position: absolute;
-  left: 20px;
-  top: 20px;
-  display: inline-flex;
-  align-items: center;
-  height: 24px;
-  padding: 0 10px;
-  border-radius: 999px;
-  background: rgba(142, 121, 216, 0.15);
-  color: #bca9f5;
-  font-family: var(--mono);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-}
-
-.jott-bar-text-wrap {
-  display: flex;
-  flex: 1;
-  align-items: center;
-  line-height: 1.05;
-  padding-left: 62px;
-}
-
-.jott-caret {
-  margin-left: 2px;
-  display: inline-block;
-  height: 18px;
-  width: 1.5px;
-  animation: jott-blink 1s steps(1) infinite;
-  background: var(--accent);
-  vertical-align: middle;
-}
-
-.jott-inline-mic {
-  position: absolute;
-  right: 18px;
-  top: 50%;
-  transform: translateY(-50%);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 42px;
-  height: 42px;
-  border: none;
-  border-radius: 12px;
-  background: #6f6bff;
-  color: #fff;
-  appearance: none;
-  cursor: pointer;
-}
-
-.jott-inline-mic svg {
-  width: 18px;
-  height: 18px;
-}
-
-.jott-dropdown {
-  border-top: 0.5px solid rgba(255, 255, 255, 0.06);
-  background: #080808;
-  border-radius: 0 0 30px 30px;
-  padding: 14px 14px 16px;
-}
-
-.jott-dropdown-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-}
-
-.jott-search-tile {
-  min-height: 96px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.045);
-  padding: 12px;
-}
-
-.jott-search-tile-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-  color: rgba(255, 255, 255, 0.36);
-  font-family: var(--mono);
-  font-size: 9.5px;
-  letter-spacing: 0.04em;
-}
-
-.jott-search-tile h3 {
-  margin: 0;
-  color: rgba(255, 255, 255, 0.86);
-  font-family: var(--sans);
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 1.35;
-}
-
-.jott-tools-row {
+.jott-floating-actions {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  width: auto;
-  margin: 14px auto 0;
+  margin-top: 22px;
 }
 
 .jott-tool-pill {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 58px;
-  height: 58px;
+  width: 72px;
+  height: 72px;
   border: none;
   border-radius: 999px;
   background: #111;
@@ -277,331 +139,50 @@
 }
 
 .jott-tool-pill-text {
-  width: 62px;
-  height: 34px;
-  background: #111;
+  width: 92px;
   font-family: var(--sans);
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 700;
   letter-spacing: -0.04em;
 }
 
 .jott-tool-pill svg {
-  width: 24px;
-  height: 24px;
-}
-
-.jott-main {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 140px 32px 80px;
-  text-align: center;
-}
-
-.jott-logo {
-  margin-bottom: 56px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-family: var(--sans);
-  font-size: 18px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-}
-
-.jott-mark {
-  display: flex;
-  height: 22px;
-  width: 22px;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  border-radius: 6px;
-  background: var(--accent);
-  color: var(--accent-ink);
-}
-
-.jott-mark-image {
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-}
-
-.jott-main h1 {
-  margin: 0 0 20px;
-  max-width: 780px;
-  font-family: var(--sans);
-  font-size: 64px;
-  font-weight: 700;
-  line-height: 1.02;
-  letter-spacing: -0.055em;
-}
-
-.jott-main h1 em {
-  color: var(--accent);
-  font-style: normal;
-}
-
-.jott-lede {
-  margin: 0 0 28px;
-  max-width: 420px;
-  font-family: var(--sans);
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 1.6;
-  color: var(--ink-mute);
-}
-
-.jott-trigger {
-  margin-bottom: 32px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--ink-mute);
-  font-family: var(--mono);
-  font-size: 12px;
-  letter-spacing: 0.3px;
-}
-
-.jott-keycap {
-  display: inline-flex;
-  min-width: 28px;
-  height: 28px;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid rgba(18, 18, 18, 0.09);
-  border-bottom-width: 2px;
-  border-radius: 6px;
-  background: #fbf7f1;
-  padding: 0 8px;
-  color: var(--ink);
-  font-family: var(--sans);
-  font-size: 12px;
-  font-weight: 600;
-  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
-}
-
-.jott-keycap.press {
-  transform: translateY(2px);
-  border-color: var(--accent-ring);
-  border-bottom-width: 1px;
-  background: #f1ebff;
-  color: var(--accent);
-}
-
-.jott-plus {
-  color: var(--ink-fainter);
-}
-
-.jott-ctas {
-  margin-bottom: 14px;
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-
-.jott-btn {
-  display: inline-flex;
-  height: 44px;
-  align-items: center;
-  gap: 10px;
-  border-radius: 10px;
-  padding: 0 18px;
-  font-family: var(--sans);
-  font-size: 13.5px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: transform 140ms ease, border-color 140ms ease;
-  appearance: none;
-  cursor: pointer;
-}
-
-.jott-btn-primary {
-  border: 1px solid #dccff5;
-  background: #efe7ff;
-  color: #352d48;
-}
-
-.jott-btn-primary:hover {
-  transform: translateY(-1px);
-  border-color: #cbb8f2;
-  background: #e8defd;
-}
-
-.jott-btn-secondary {
-  border: 1px solid #e7ddd3;
-  background: #fff8f1;
-  color: #514a43;
-}
-
-.jott-btn-secondary:hover {
-  border-color: #dacdbf;
-  background: #fdf3e7;
-}
-
-.jott-preview-control {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  height: 32px;
-  margin-bottom: 0;
-  border: 1px solid #ddd6ce;
-  border-radius: 999px;
-  background: #f7f3ee;
-  padding: 0 12px;
-  color: #4e4740;
-  font-family: var(--mono);
-  font-size: 10.5px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  appearance: none;
-  cursor: pointer;
-  transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
-}
-
-.jott-preview-control:hover {
-  border-color: #ccc3ba;
-  background: #f2ede7;
-  transform: translateY(-1px);
-}
-
-.jott-meta {
-  margin-top: 0;
-  color: var(--ink-fainter);
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.5px;
-}
-
-.jott-r {
-  opacity: 0;
-  transform: translateY(8px);
-  animation: jott-reveal 900ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-}
-
-.jott-r1 {
-  animation-delay: 0ms;
-}
-
-.jott-r2 {
-  animation-delay: 80ms;
-}
-
-.jott-r3 {
-  animation-delay: 160ms;
-}
-
-.jott-r4 {
-  animation-delay: 240ms;
-}
-
-.jott-r5 {
-  animation-delay: 320ms;
-}
-
-.jott-r6 {
-  animation-delay: 400ms;
-}
-
-@keyframes jott-blink {
-  50% {
-    opacity: 0;
-  }
-}
-
-@keyframes jott-reveal {
-  to {
-    opacity: 1;
-    transform: none;
-  }
+  width: 26px;
+  height: 26px;
 }
 
 @media (max-width: 680px) {
-  .jott-bezel {
-    padding: 12px;
+  .jott-popover {
+    width: calc(100vw - 48px);
   }
 
-  .jott-drop-stage {
-    width: calc(100vw - 36px);
-  }
-
-  .jott-bar-top {
+  .jott-popover-top {
     min-height: 56px;
-    padding: 0 16px;
+    padding: 0 14px;
   }
 
-  .jott-top-chips {
-    gap: 6px;
-  }
-
-  .jott-status-chip {
-    padding: 0 8px;
-    font-size: 9px;
-  }
-
-  .jott-bar-input {
-    min-height: 86px;
+  .jott-popover-input {
+    min-height: 88px;
     padding: 0 18px;
-    padding-right: 70px;
-    font-size: 21px;
-    border-radius: 0 0 24px 24px;
+    font-size: 22px;
+    border-radius: 0 0 26px 26px;
   }
 
-  .jott-mode-badge {
-    left: 16px;
-    top: 15px;
-    height: 21px;
-    padding: 0 8px;
-    font-size: 9px;
+  .jott-popover-shell {
+    border-radius: 0 0 26px 26px;
   }
 
-  .jott-bar-text-wrap {
-    padding-left: 52px;
-  }
-
-  .jott-inline-mic {
-    right: 14px;
-    width: 34px;
-    height: 34px;
-  }
-
-  .jott-bar-shell {
-    border-radius: 0 0 24px 24px;
-  }
-
-  .jott-dropdown {
-    border-radius: 0 0 24px 24px;
-    padding: 10px 10px 12px;
-  }
-
-  .jott-dropdown-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .jott-tools-row {
-    margin-top: 12px;
+  .jott-floating-actions {
+    margin-top: 18px;
   }
 
   .jott-tool-pill {
-    width: 50px;
-    height: 32px;
+    width: 60px;
+    height: 60px;
   }
 
   .jott-tool-pill-text {
-    width: 58px;
-    font-size: 16px;
-  }
-
-  .jott-screen {
-    min-height: calc(100vh - 24px);
-  }
-
-  .jott-main h1 {
-    font-size: 44px;
-    letter-spacing: -0.8px;
+    width: 82px;
+    font-size: 20px;
   }
 }
