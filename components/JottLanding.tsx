@@ -321,17 +321,17 @@ export default function JottLanding() {
               <a href="#" className="jott-btn jott-btn-secondary">
                 Mac App Store
               </a>
-              <button
-                type="button"
-                className="jott-btn jott-btn-tertiary"
-                onClick={() => setPaused((prev) => !prev)}
-                aria-pressed={paused}
-              >
-                {paused ? <PlayIcon /> : <PauseIcon />}
-                {paused ? "Play Preview" : "Pause Preview"}
-              </button>
             </div>
-            <div className="jott-meta jott-r jott-r6">macOS 13+ · Apple silicon &amp; Intel</div>
+            <button
+              type="button"
+              className="jott-preview-control jott-r jott-r6"
+              onClick={() => setPaused((prev) => !prev)}
+              aria-pressed={paused}
+            >
+              {paused ? <PlayIcon /> : <PauseIcon />}
+              {paused ? "Play preview" : "Stop preview"}
+            </button>
+            <div className="jott-meta">macOS 13+ · Apple silicon &amp; Intel</div>
           </div>
         </section>
       </main>
@@ -364,17 +364,17 @@ export default function JottLanding() {
 
         .jott-bezel {
           min-height: 100vh;
-          background: #fffdf9;
-          padding: 14px 14px 18px;
+          background: #0a0a0a;
+          padding: 20px;
         }
 
         .jott-screen {
           position: relative;
-          min-height: calc(100vh - 32px);
+          min-height: calc(100vh - 40px);
           overflow: hidden;
           border-radius: 22px;
           background: var(--canvas);
-          border: 2px solid #111;
+          border: none;
           box-shadow: none;
         }
 
@@ -751,20 +751,35 @@ export default function JottLanding() {
           background: #fdf3e7;
         }
 
-        .jott-btn-tertiary {
+        .jott-preview-control {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 7px;
+          height: 32px;
+          margin-bottom: 12px;
           border: 1px solid #ddd6ce;
+          border-radius: 999px;
           background: #f7f3ee;
+          padding: 0 12px;
           color: #4e4740;
+          font-family: var(--mono);
+          font-size: 10.5px;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+          appearance: none;
+          cursor: pointer;
+          transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
         }
 
-        .jott-btn-tertiary:hover {
+        .jott-preview-control:hover {
           border-color: #ccc3ba;
           background: #f2ede7;
           transform: translateY(-1px);
         }
 
         .jott-meta {
-          margin-top: 14px;
+          margin-top: 0;
           color: var(--ink-fainter);
           font-family: var(--mono);
           font-size: 11px;
@@ -815,8 +830,16 @@ export default function JottLanding() {
         }
 
         @media (max-width: 680px) {
+          .jott-bezel {
+            padding: 12px;
+          }
+
           .jott-drop-stage {
             width: 92%;
+          }
+
+          .jott-screen {
+            min-height: calc(100vh - 24px);
           }
 
           .jott-main h1 {
