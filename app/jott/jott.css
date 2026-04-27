@@ -112,19 +112,26 @@
   cursor: pointer;
 }
 
-.jott-top-mark {
+.jott-top-chips {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
+  gap: 8px;
 }
 
-.jott-top-mark-image {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  filter: brightness(1.12);
+.jott-status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 24px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.5);
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
 }
 
 .jott-bar-input {
@@ -141,10 +148,28 @@
   font-weight: 400;
   color: var(--ink-faint);
   transition: background 300ms ease, box-shadow 300ms ease;
+  padding-right: 86px;
 }
 
 .jott-bar-input.typing {
   color: #f4f1ec;
+}
+
+.jott-mode-badge {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: rgba(142, 121, 216, 0.15);
+  color: #bca9f5;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
 }
 
 .jott-bar-text-wrap {
@@ -152,6 +177,7 @@
   flex: 1;
   align-items: center;
   line-height: 1.05;
+  padding-left: 62px;
 }
 
 .jott-caret {
@@ -164,12 +190,76 @@
   vertical-align: middle;
 }
 
-.jott-tools-row {
+.jott-inline-mic {
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 12px;
+  background: #6f6bff;
+  color: #fff;
+  appearance: none;
+  cursor: pointer;
+}
+
+.jott-inline-mic svg {
+  width: 18px;
+  height: 18px;
+}
+
+.jott-dropdown {
+  border-top: 0.5px solid rgba(255, 255, 255, 0.06);
+  background: #080808;
+  border-radius: 0 0 30px 30px;
+  padding: 14px 14px 16px;
+}
+
+.jott-dropdown-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.jott-search-tile {
+  min-height: 96px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.045);
+  padding: 12px;
+}
+
+.jott-search-tile-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 128px;
-  margin: 20px auto 0;
+  margin-bottom: 12px;
+  color: rgba(255, 255, 255, 0.36);
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.04em;
+}
+
+.jott-search-tile h3 {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.86);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.jott-tools-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: auto;
+  margin: 14px auto 0;
 }
 
 .jott-tool-pill {
@@ -187,9 +277,11 @@
 }
 
 .jott-tool-pill-text {
-  width: 72px;
+  width: 62px;
+  height: 34px;
+  background: #111;
   font-family: var(--sans);
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
   letter-spacing: -0.04em;
 }
@@ -356,7 +448,7 @@
   justify-content: center;
   gap: 7px;
   height: 32px;
-  margin-bottom: 12px;
+  margin-bottom: 0;
   border: 1px solid #ddd6ce;
   border-radius: 999px;
   background: #f7f3ee;
@@ -442,30 +534,66 @@
     padding: 0 16px;
   }
 
+  .jott-top-chips {
+    gap: 6px;
+  }
+
+  .jott-status-chip {
+    padding: 0 8px;
+    font-size: 9px;
+  }
+
   .jott-bar-input {
     min-height: 86px;
     padding: 0 18px;
+    padding-right: 70px;
     font-size: 21px;
     border-radius: 0 0 24px 24px;
+  }
+
+  .jott-mode-badge {
+    left: 16px;
+    top: 15px;
+    height: 21px;
+    padding: 0 8px;
+    font-size: 9px;
+  }
+
+  .jott-bar-text-wrap {
+    padding-left: 52px;
+  }
+
+  .jott-inline-mic {
+    right: 14px;
+    width: 34px;
+    height: 34px;
   }
 
   .jott-bar-shell {
     border-radius: 0 0 24px 24px;
   }
 
+  .jott-dropdown {
+    border-radius: 0 0 24px 24px;
+    padding: 10px 10px 12px;
+  }
+
+  .jott-dropdown-grid {
+    grid-template-columns: 1fr;
+  }
+
   .jott-tools-row {
-    width: 118px;
-    margin-top: 16px;
+    margin-top: 12px;
   }
 
   .jott-tool-pill {
-    width: 52px;
-    height: 52px;
+    width: 50px;
+    height: 32px;
   }
 
   .jott-tool-pill-text {
-    width: 62px;
-    font-size: 18px;
+    width: 58px;
+    font-size: 16px;
   }
 
   .jott-screen {

@@ -32,6 +32,15 @@ function HelpIcon() {
   );
 }
 
+function ClipboardIcon() {
+  return (
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <rect x="9" y="3.5" width="6" height="4" rx="1.4" />
+      <path d="M9 5.5H7a2 2 0 0 0-2 2V18a2.5 2.5 0 0 0 2.5 2.5h9A2.5 2.5 0 0 0 19 18V7.5a2 2 0 0 0-2-2h-2" />
+    </svg>
+  );
+}
+
 function MicIcon() {
   return (
     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -185,25 +194,58 @@ export default function JottLanding() {
                   <button type="button" className="jott-help-btn" aria-label="Help">
                     <HelpIcon />
                   </button>
-                  <span className="jott-top-mark" aria-hidden>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src="/logos/jott.png" alt="" className="jott-top-mark-image" />
-                  </span>
+                  <div className="jott-top-chips">
+                    <span className="jott-status-chip">
+                      saved
+                    </span>
+                    <span className="jott-status-chip">
+                      <ClipboardIcon />
+                      use clipboard
+                    </span>
+                  </div>
                 </div>
                 <div className={`jott-bar-input${typing ? " typing" : ""}`}>
+                  <span className="jott-mode-badge">Notes</span>
                   <span className="jott-bar-text-wrap">
                     <span>{barText}</span>
                     <span className="jott-caret" style={{ display: showCaret ? "inline-block" : "none" }} />
                   </span>
-                </div>
-                <div className="jott-tools-row">
-                  <button type="button" className="jott-tool-pill jott-tool-pill-text" aria-label="Text tools">
-                    <span>Aa</span>
-                  </button>
-                  <button type="button" className="jott-tool-pill" aria-label="Voice tools">
+                  <button type="button" className="jott-inline-mic" aria-label="Voice tools">
                     <MicIcon />
                   </button>
                 </div>
+                <div className="jott-dropdown">
+                  <div className="jott-dropdown-grid">
+                    <article className="jott-search-tile">
+                      <div className="jott-search-tile-top">
+                        <span className="jott-search-tile-icon">◫</span>
+                        <span className="jott-search-tile-time">today</span>
+                      </div>
+                      <h3>Ship the landing page</h3>
+                    </article>
+                    <article className="jott-search-tile">
+                      <div className="jott-search-tile-top">
+                        <span className="jott-search-tile-icon">◫</span>
+                        <span className="jott-search-tile-time">4d ago</span>
+                      </div>
+                      <h3>MiniLM embeddings + cosine similarity</h3>
+                    </article>
+                  </div>
+                </div>
+              </div>
+              <div className="jott-tools-row">
+                <button type="button" className="jott-tool-pill jott-tool-pill-text" aria-label="Text tools">
+                  <span>Aa</span>
+                </button>
+                <button
+                  type="button"
+                  className="jott-preview-control"
+                  onClick={() => setPaused((prev) => !prev)}
+                  aria-pressed={paused}
+                >
+                  {paused ? <PlayIcon /> : <PauseIcon />}
+                  {paused ? "Play preview" : "Stop preview"}
+                </button>
               </div>
             </div>
           </div>
@@ -238,16 +280,7 @@ export default function JottLanding() {
                 Mac App Store
               </a>
             </div>
-            <button
-              type="button"
-              className="jott-preview-control jott-r jott-r6"
-              onClick={() => setPaused((prev) => !prev)}
-              aria-pressed={paused}
-            >
-              {paused ? <PlayIcon /> : <PauseIcon />}
-              {paused ? "Play preview" : "Stop preview"}
-            </button>
-            <div className="jott-meta">macOS 13+ · Apple silicon &amp; Intel</div>
+            <div className="jott-meta jott-r jott-r6">macOS 13+ · Apple silicon &amp; Intel</div>
           </div>
         </section>
       </main>
