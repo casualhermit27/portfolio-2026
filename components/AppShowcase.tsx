@@ -36,9 +36,10 @@ const EMPTY_COUNTS: Record<string, number> = {
 
 type AppShowcaseProps = {
   app: App;
+  comingSoon?: boolean;
 };
 
-export default function AppShowcase({ app }: AppShowcaseProps) {
+export default function AppShowcase({ app, comingSoon }: AppShowcaseProps) {
   const hasScreens = app.screens.length > 0;
   const platform = app.platform ?? "ios";
   const isMac = platform === "mac";
@@ -140,65 +141,87 @@ export default function AppShowcase({ app }: AppShowcaseProps) {
         style={{ borderColor: "var(--border)" }}
       />
 
-      {/* Screens label + action */}
-      <div className="flex items-center justify-between gap-3 mb-5 sm:mb-6 md:mb-8">
-        <p
-          className="text-[10px] font-semibold tracking-[0.14em] uppercase"
-          style={{ color: "var(--text-muted)" }}
-        >
-          {hasScreens ? "Screens" : "Preview"}
-        </p>
-        {app.liveUrl && (
-          <motion.a
-            href={app.liveUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group inline-flex items-center justify-center gap-1.5 border rounded-[8px] px-3.5 sm:px-4 py-1.5 sm:py-2 text-[11px] font-medium leading-none"
-            style={{
-              color: goToButtonPalette.text,
-            }}
-            variants={ctaVariants}
-            initial="rest"
-            animate="rest"
-            whileHover="hover"
-            whileTap="tap"
-            transition={{ type: "spring", stiffness: 520, damping: 26, mass: 0.5 }}
-          >
-            Go to
-            <motion.span
-              aria-hidden
-              className="inline-block text-[11px]"
-              variants={arrowVariants}
-              transition={{ type: "spring", stiffness: 560, damping: 30, mass: 0.45 }}
+      {comingSoon ? (
+        /* ── Coming-soon blur treatment ── */
+        <div className="relative select-none">
+          {/* ghost mockups, blurred */}
+          <div className="flex gap-3 sm:gap-4 md:gap-5 flex-wrap pt-2 pointer-events-none"
+            style={{ filter: "blur(6px)", opacity: 0.22 }}>
+            {Array.from({ length: emptyCount }).map((_, i) => (
+              isMac ? <MacMockup key={i} empty /> : <PhoneMockup key={i} empty />
+            ))}
+          </div>
+          {/* overlay label */}
+          <div className="absolute inset-0 flex items-center">
+            <p
+              className="text-[10px] tracking-[0.18em] uppercase"
+              style={{ color: "var(--text-muted)", fontWeight: 500 }}
             >
-              →
-            </motion.span>
-          </motion.a>
-        )}
-      </div>
+              coming soon
+            </p>
+          </div>
+        </div>
+      ) : (
+        <>
+          {/* Screens label + action */}
+          <div className="flex items-center justify-between gap-3 mb-5 sm:mb-6 md:mb-8">
+            <p
+              className="text-[10px] font-semibold tracking-[0.14em] uppercase"
+              style={{ color: "var(--text-muted)" }}
+            >
+              {hasScreens ? "Screens" : "Preview"}
+            </p>
+            {app.liveUrl && (
+              <motion.a
+                href={app.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center justify-center gap-1.5 border rounded-[8px] px-3.5 sm:px-4 py-1.5 sm:py-2 text-[11px] font-medium leading-none"
+                style={{ color: goToButtonPalette.text }}
+                variants={ctaVariants}
+                initial="rest"
+                animate="rest"
+                whileHover="hover"
+                whileTap="tap"
+                transition={{ type: "spring", stiffness: 520, damping: 26, mass: 0.5 }}
+              >
+                Go to
+                <motion.span
+                  aria-hidden
+                  className="inline-block text-[11px]"
+                  variants={arrowVariants}
+                  transition={{ type: "spring", stiffness: 560, damping: 30, mass: 0.45 }}
+                >
+                  →
+                </motion.span>
+              </motion.a>
+            )}
+          </div>
 
-      {/* Mockups — stagger on mount */}
-      <motion.div
-        className="flex gap-3 sm:gap-4 md:gap-5 flex-wrap pt-2"
-        variants={phoneContainer}
-        initial="hidden"
-        animate="show"
-      >
-        {hasScreens
-          ? app.screens.map((src, i) => (
-            <motion.div key={src} variants={phoneItem}>
-              {isMac
-                ? <MacMockup src={src} alt={`${app.name} screen ${i + 1}`} />
-                : <PhoneMockup src={src} alt={`${app.name} screen ${i + 1}`} />
-              }
-            </motion.div>
-          ))
-          : Array.from({ length: emptyCount }).map((_, i) => (
-            <motion.div key={i} variants={phoneItem}>
-              {isMac ? <MacMockup empty /> : <PhoneMockup empty />}
-            </motion.div>
-          ))}
-      </motion.div>
+          {/* Mockups — stagger on mount */}
+          <motion.div
+            className="flex gap-3 sm:gap-4 md:gap-5 flex-wrap pt-2"
+            variants={phoneContainer}
+            initial="hidden"
+            animate="show"
+          >
+            {hasScreens
+              ? app.screens.map((src, i) => (
+                <motion.div key={src} variants={phoneItem}>
+                  {isMac
+                    ? <MacMockup src={src} alt={`${app.name} screen ${i + 1}`} />
+                    : <PhoneMockup src={src} alt={`${app.name} screen ${i + 1}`} />
+                  }
+                </motion.div>
+              ))
+              : Array.from({ length: emptyCount }).map((_, i) => (
+                <motion.div key={i} variants={phoneItem}>
+                  {isMac ? <MacMockup empty /> : <PhoneMockup empty />}
+                </motion.div>
+              ))}
+          </motion.div>
+        </>
+      )}
     </div>
   );
 }

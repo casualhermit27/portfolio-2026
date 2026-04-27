@@ -252,7 +252,7 @@ export default function Home() {
 
           {/* app tab strip */}
           <nav
-            className="px-5 sm:px-8 md:px-12 lg:px-16 flex items-center gap-5 sm:gap-6 border-b"
+            className="px-5 sm:px-8 md:px-12 lg:px-16 flex items-center gap-6 sm:gap-8 border-b"
             aria-label="App navigation"
             style={{ borderColor: "var(--border)" }}
           >
@@ -262,18 +262,29 @@ export default function Home() {
                 <button
                   key={app.id}
                   onClick={() => scrollTo(app.id)}
-                  className="relative py-2 text-[11px] tracking-wide transition-colors duration-200 whitespace-nowrap"
+                  className="relative flex items-center gap-2 py-3 transition-colors duration-200 whitespace-nowrap"
                   style={{
                     color: isActive ? "var(--text-primary)" : "var(--text-faint)",
                     fontWeight: isActive ? 500 : 400,
                   }}
                 >
-                  {app.name}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={app.logo}
+                    alt=""
+                    aria-hidden
+                    className="object-cover flex-shrink-0 transition-opacity duration-200"
+                    style={{
+                      width: 20, height: 20, borderRadius: 5,
+                      opacity: isActive ? 1 : 0.35,
+                    }}
+                  />
+                  <span className="text-[12px] tracking-wide">{app.name}</span>
                   {isActive && (
                     <motion.span
                       layoutId="tab-underline"
                       className="absolute bottom-0 left-0 right-0 h-[1.5px]"
-                      style={{ background: "var(--text-primary)", opacity: 0.5 }}
+                      style={{ background: "var(--text-primary)", opacity: 0.45 }}
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
                   )}
@@ -286,19 +297,22 @@ export default function Home() {
 
       {/* ── All app sections ── */}
       <main className="px-5 sm:px-8 md:px-12 lg:px-16 pb-14">
-        {apps.map((app, i) => (
-          <div key={app.id}>
-            {i > 0 && (
-              <div
-                className="border-t"
-                style={{ borderColor: "var(--section-divider)" }}
-              />
-            )}
-            <section id={`section-${app.id}`} className="py-10 sm:py-12 md:py-16">
-              <AppShowcase app={app} />
-            </section>
-          </div>
-        ))}
+        {apps.map((app, i) => {
+          const comingSoon = i > 1; // everything after "can"
+          return (
+            <div key={app.id}>
+              {i > 0 && (
+                <div
+                  className="border-t"
+                  style={{ borderColor: "var(--section-divider)" }}
+                />
+              )}
+              <section id={`section-${app.id}`} className="py-10 sm:py-12 md:py-16">
+                <AppShowcase app={app} comingSoon={comingSoon} />
+              </section>
+            </div>
+          );
+        })}
       </main>
 
 
