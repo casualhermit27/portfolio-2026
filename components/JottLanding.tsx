@@ -308,20 +308,20 @@ export default function JottLanding() {
         @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Serif:wght@400;500&display=swap");
 
         .jott-root {
-          --canvas: oklch(0.175 0.005 270);
-          --ink: oklch(0.97 0.003 270);
-          --ink-mute: oklch(0.72 0.006 270);
-          --ink-faint: oklch(0.52 0.006 270);
-          --ink-fainter: oklch(0.38 0.006 270);
-          --hairline: rgba(255, 255, 255, 0.07);
-          --accent: oklch(0.72 0.13 290);
-          --accent-ink: #0e0a1c;
-          --accent-soft: oklch(0.72 0.13 290 / 0.14);
-          --accent-ring: oklch(0.72 0.13 290 / 0.5);
+          --canvas: #fffdf9;
+          --ink: #121212;
+          --ink-mute: #65615c;
+          --ink-faint: #8e877f;
+          --ink-fainter: #b1aaa3;
+          --hairline: rgba(17, 17, 17, 0.09);
+          --accent: #8e79d8;
+          --accent-ink: #231f32;
+          --accent-soft: rgba(142, 121, 216, 0.14);
+          --accent-ring: rgba(142, 121, 216, 0.34);
           --sans: "IBM Plex Sans", -apple-system, sans-serif;
           --serif: "IBM Plex Serif", Georgia, serif;
           --mono: "IBM Plex Mono", ui-monospace, monospace;
-          background: #f5f2ec;
+          background: #fffdf9;
           color: var(--ink);
           font-family: var(--sans);
           min-height: 100vh;
@@ -330,7 +330,7 @@ export default function JottLanding() {
 
         .jott-bezel {
           min-height: 100vh;
-          background: #f5f2ec;
+          background: #fffdf9;
           padding: 14px 14px 18px;
         }
 
@@ -340,7 +340,7 @@ export default function JottLanding() {
           overflow: hidden;
           border-radius: 22px;
           background: var(--canvas);
-          box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.6);
+          box-shadow: inset 0 0 0 1px rgba(17, 17, 17, 0.04), 0 0 0 1px #111;
         }
 
         .jott-notch {
@@ -352,7 +352,7 @@ export default function JottLanding() {
           width: 220px;
           transform: translateX(-50%);
           border-radius: 0 0 18px 18px;
-          background: #000;
+          background: #080808;
         }
 
         .jott-notch::after {
@@ -363,8 +363,8 @@ export default function JottLanding() {
           height: 7px;
           width: 7px;
           border-radius: 999px;
-          background: #0a0a0c;
-          box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+          background: #141418;
+          box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
         }
 
         .jott-drop-stage {
@@ -389,7 +389,7 @@ export default function JottLanding() {
 
         .jott-bar-shell {
           border-radius: 0 0 24px 24px;
-          background: #000;
+          background: #080808;
           padding: 30px 12px 12px;
           box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 6px 18px rgba(0, 0, 0, 0.35);
         }
@@ -647,10 +647,10 @@ export default function JottLanding() {
           height: 28px;
           align-items: center;
           justify-content: center;
-          border: 1px solid var(--hairline);
+          border: 1px solid rgba(18, 18, 18, 0.09);
           border-bottom-width: 2px;
           border-radius: 6px;
-          background: rgba(255, 255, 255, 0.05);
+          background: #fbf7f1;
           padding: 0 8px;
           color: var(--ink);
           font-family: var(--sans);
@@ -663,7 +663,7 @@ export default function JottLanding() {
           transform: translateY(2px);
           border-color: var(--accent-ring);
           border-bottom-width: 1px;
-          background: var(--accent-soft);
+          background: #f1ebff;
           color: var(--accent);
         }
 
@@ -692,23 +692,26 @@ export default function JottLanding() {
         }
 
         .jott-btn-primary {
-          border: 1px solid var(--ink);
-          background: var(--ink);
-          color: var(--canvas);
+          border: 1px solid #dccff5;
+          background: #efe7ff;
+          color: #352d48;
         }
 
         .jott-btn-primary:hover {
           transform: translateY(-1px);
+          border-color: #cbb8f2;
+          background: #e8defd;
         }
 
         .jott-btn-secondary {
-          border: 1px solid var(--hairline);
-          background: transparent;
-          color: var(--ink);
+          border: 1px solid #e7ddd3;
+          background: #fff8f1;
+          color: #514a43;
         }
 
         .jott-btn-secondary:hover {
-          border-color: var(--ink-faint);
+          border-color: #dacdbf;
+          background: #fdf3e7;
         }
 
         .jott-meta {
