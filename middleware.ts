@@ -4,11 +4,13 @@ import { NextResponse } from "next/server";
 const SUBDOMAIN_TO_PATH: Record<string, string> = {
   "mochi.harshachaganti.com": "/mochi",
   "can.harshachaganti.com": "/can",
+  "jott.harshachaganti.com": "/jott",
 };
 
 const SUBDOMAIN_TO_FAVICON: Record<string, string> = {
   "mochi.harshachaganti.com": "/favicons/mochi-rounded.png",
   "can.harshachaganti.com": "/favicons/can-rounded.png",
+  "jott.harshachaganti.com": "/favicons/jott-rounded.png",
 };
 
 export function middleware(request: NextRequest) {

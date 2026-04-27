@@ -39,6 +39,15 @@ const apps: App[] = [
     screens: [],
   },
   {
+    id: "jott",
+    name: "jott",
+    tagline: "capture a thought, anywhere",
+    logo: "/logos/jott.png",
+    platform: "mac",
+    liveUrl: "https://jott.harshachaganti.com",
+    screens: [],
+  },
+  {
     id: "boba",
     name: "boba",
     tagline: "something is brewing",
