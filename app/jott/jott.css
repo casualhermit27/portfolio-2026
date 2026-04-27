@@ -1,7 +1,7 @@
 .jott-root {
   --sans: "SF Pro Rounded", "SF Pro Text", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --editor: "SF Pro Text", "SF Pro Display", "SF Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #0a0a0a;
+  background: #f3f3f1;
   color: #fff;
   font-family: var(--sans);
   min-height: 100vh;
@@ -12,7 +12,7 @@
 
 .jott-bezel {
   min-height: 100vh;
-  background: #0a0a0a;
+  background: #f3f3f1;
   padding: 0;
 }
 
@@ -20,7 +20,7 @@
   position: relative;
   min-height: 100vh;
   overflow: hidden;
-  background: #0a0a0a;
+  background: #f3f3f1;
   border-radius: 0;
   box-shadow: none;
 }
