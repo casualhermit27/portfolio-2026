@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
+
 function HelpIcon() {
   return (
     <svg
@@ -49,13 +51,38 @@ function AppleIcon() {
 }
 
 export default function JottLanding() {
+  const [popoverOpen, setPopoverOpen] = useState(false);
+  const [keysPressed, setKeysPressed] = useState(false);
+  const lastOptionPress = useRef(0);
+
+  const triggerPopover = () => {
+    setKeysPressed(true);
+    setPopoverOpen(true);
+    window.setTimeout(() => setKeysPressed(false), 220);
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Alt") return;
+
+      const now = Date.now();
+      if (now - lastOptionPress.current < 420) {
+        triggerPopover();
+      }
+      lastOptionPress.current = now;
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   return (
     <div className="jott-root">
       <main className="jott-bezel">
         <section className="jott-screen">
           <div className="jott-notch" />
 
-          <div className="jott-popover">
+          <div className={`jott-popover${popoverOpen ? " open" : ""}`}>
             <div className="jott-popover-shell">
               <div className="jott-popover-top">
                 <button type="button" className="jott-help-btn" aria-label="Help">
@@ -96,13 +123,13 @@ export default function JottLanding() {
             </h1>
             <p className="jott-lede">One keystroke. Nothing in your way.</p>
 
-            <div className="jott-trigger">
+            <button type="button" className="jott-trigger" onDoubleClick={triggerPopover}>
               <span>Tap</span>
-              <span className="jott-keycap">⌥</span>
+              <span className={`jott-keycap${keysPressed ? " press" : ""}`}>⌥</span>
               <span className="jott-plus">+</span>
-              <span className="jott-keycap">⌥</span>
+              <span className={`jott-keycap${keysPressed ? " press" : ""}`}>⌥</span>
               <span>twice — anywhere.</span>
-            </div>
+            </button>
 
             <div className="jott-ctas">
               <a href="#" className="jott-btn jott-btn-primary">
