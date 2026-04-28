@@ -1,8 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const DEMO_TEXT = "What's on your mind?";
+
+const spring = { type: "spring" as const, stiffness: 340, damping: 28, mass: 0.8 };
+const springFast = { type: "spring" as const, stiffness: 480, damping: 30, mass: 0.6 };
 
 function HelpIcon() {
   return (
@@ -24,22 +28,22 @@ function MicIcon() {
   );
 }
 
-function BellIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-      <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-    </svg>
-  );
-}
+const heroContainer = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.09, delayChildren: 0.1 } },
+};
+
+const heroItem = {
+  hidden: { opacity: 0, y: 22, filter: "blur(4px)" },
+  show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { ...spring } },
+};
 
 export default function JottLanding() {
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [keysPressed, setKeysPressed] = useState(false);
   const [typedText, setTypedText] = useState("");
-
-  // Keycap visibility — independent cycling timer
   const [cueVisible, setCueVisible] = useState(false);
+
   const cueTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const typeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -61,13 +65,10 @@ export default function JottLanding() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Typing animation — runs when popover opens
+  // Typing animation
   useEffect(() => {
     if (typeTimer.current) clearTimeout(typeTimer.current);
-    if (!popoverOpen) {
-      setTypedText("");
-      return;
-    }
+    if (!popoverOpen) { setTypedText(""); return; }
     setTypedText("");
     let i = 0;
     const type = () => {
@@ -107,69 +108,144 @@ export default function JottLanding() {
         <section className="jott-screen">
           <div className="jott-notch" />
 
-          {/* popover panel */}
-          <div className={`jott-popover${popoverOpen ? " open" : ""}`}>
-            <div className="jott-popover-shell">
-              <div className="jott-popover-top">
-                <button type="button" className="jott-help-btn" aria-label="Help">
-                  <HelpIcon />
-                </button>
-                <span className="jott-top-mark" aria-hidden>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/logos/jott.png" alt="" className="jott-top-mark-image" />
-                </span>
-              </div>
-              <div className="jott-popover-input">
-                <span>
-                  {typedText || <span className="jott-placeholder">What&apos;s on your mind?</span>}
-                </span>
-                {popoverOpen && <span className="jott-cursor" aria-hidden />}
-              </div>
-            </div>
-            <div className="jott-floating-actions">
-              <button type="button" className="jott-tool-pill jott-tool-pill-text" aria-label="Text tools">
-                <span>Aa</span>
-              </button>
-              <button type="button" className="jott-tool-pill" aria-label="Voice note">
-                <MicIcon />
-              </button>
-            </div>
-          </div>
+          {/* grain overlay */}
+          <div className="jott-grain" aria-hidden />
+
+          {/* popover — Framer Motion */}
+          <AnimatePresence>
+            {popoverOpen && (
+              <motion.div
+                className="jott-popover-wrap"
+                initial={{ y: "-100%", opacity: 0 }}
+                animate={{ y: "0%", opacity: 1 }}
+                exit={{ y: "-100%", opacity: 0 }}
+                transition={{ type: "spring", stiffness: 320, damping: 32, mass: 0.9 }}
+              >
+                <div className="jott-popover-shell">
+                  <div className="jott-popover-top">
+                    <button type="button" className="jott-help-btn" aria-label="Help">
+                      <HelpIcon />
+                    </button>
+                    <span className="jott-top-mark" aria-hidden>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src="/logos/jott.png" alt="" className="jott-top-mark-image" />
+                    </span>
+                  </div>
+                  <div className="jott-popover-input">
+                    <span>
+                      {typedText || <span className="jott-placeholder">What&apos;s on your mind?</span>}
+                    </span>
+                    <span className="jott-cursor" aria-hidden />
+                  </div>
+                </div>
+                <div className="jott-floating-actions">
+                  <motion.button
+                    type="button"
+                    className="jott-tool-pill jott-tool-pill-text"
+                    aria-label="Text tools"
+                    whileHover={{ scale: 1.08, backgroundColor: "#1e1e22" }}
+                    whileTap={{ scale: 0.93 }}
+                    transition={springFast}
+                  >
+                    <span>Aa</span>
+                  </motion.button>
+                  <motion.button
+                    type="button"
+                    className="jott-tool-pill"
+                    aria-label="Voice note"
+                    whileHover={{ scale: 1.08, backgroundColor: "#1e1e22" }}
+                    whileTap={{ scale: 0.93 }}
+                    transition={springFast}
+                  >
+                    <MicIcon />
+                  </motion.button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* hero */}
-          <div className="jott-main">
-            <div className="jott-icon">
+          <motion.div
+            className="jott-main"
+            variants={heroContainer}
+            initial="hidden"
+            animate="show"
+          >
+            {/* floating logo */}
+            <motion.div
+              className="jott-icon"
+              variants={heroItem}
+              animate={{
+                y: [0, -7, 0],
+                transition: { duration: 4, repeat: Infinity, ease: "easeInOut", repeatType: "loop" },
+              }}
+            >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/logos/jott.png" alt="Jott icon" />
-            </div>
-            <p className="jott-label">jott</p>
+            </motion.div>
 
-            <h1>Capture a <em>thought.</em></h1>
-            <p className="jott-lede">One keystroke. Nothing in your way.</p>
+            <motion.p className="jott-label" variants={heroItem}>jott</motion.p>
 
-            <div className="jott-ctas">
-              <button type="button" className="jott-btn jott-btn-primary" disabled>
+            <motion.h1 variants={heroItem}>
+              Capture a <em>thought.</em>
+            </motion.h1>
+
+            <motion.p className="jott-lede" variants={heroItem}>
+              One keystroke. Nothing in your way.
+            </motion.p>
+
+            <motion.div className="jott-ctas" variants={heroItem}>
+              <motion.button
+                type="button"
+                className="jott-btn jott-btn-primary"
+                disabled
+                whileHover={{
+                  scale: 1.04,
+                  y: -3,
+                  boxShadow: "0 10px 32px rgba(100, 80, 200, 0.38)",
+                }}
+                whileTap={{ scale: 0.96 }}
+                transition={spring}
+              >
                 <span className="jott-brew-dot" aria-hidden />
                 Brewing
-              </button>
-              <button type="button" className="jott-btn jott-btn-secondary" disabled>
+              </motion.button>
+
+              <motion.button
+                type="button"
+                className="jott-btn jott-btn-secondary"
+                disabled
+                whileHover={{ scale: 1.03, y: -2, backgroundColor: "#f7f7f7" }}
+                whileTap={{ scale: 0.97 }}
+                transition={spring}
+              >
                 Mac App Store · soon
-              </button>
-            </div>
+              </motion.button>
+            </motion.div>
 
-            <div className="jott-meta">macOS 13+ · Apple silicon &amp; Intel</div>
-          </div>
+            <motion.div className="jott-meta" variants={heroItem}>
+              macOS 13+ · Apple silicon &amp; Intel
+            </motion.div>
+          </motion.div>
 
-          {/* keycap hint — fixed bottom center, auto cycles in/out */}
-          <button
-            type="button"
-            className={`jott-trigger${cueVisible ? " visible" : ""}`}
-            onClick={playDemo}
-            aria-label="See double-Option shortcut demo"
-          >
-            <span className={`jott-keycap${keysPressed ? " press" : ""}`}>⌥ option</span>
-            <span className={`jott-keycap${keysPressed ? " press" : ""}`}>⌥ option</span>
-          </button>
+          {/* keycap hint */}
+          <AnimatePresence>
+            {cueVisible && (
+              <motion.button
+                type="button"
+                className="jott-trigger"
+                onClick={playDemo}
+                aria-label="See double-Option shortcut demo"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 6 }}
+                transition={{ duration: 0.44, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <span className={`jott-keycap${keysPressed ? " press" : ""}`}>⌥ option</span>
+                <span className={`jott-keycap${keysPressed ? " press" : ""}`}>⌥ option</span>
+              </motion.button>
+            )}
+          </AnimatePresence>
         </section>
       </main>
     </div>

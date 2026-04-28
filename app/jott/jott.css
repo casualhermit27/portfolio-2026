@@ -32,11 +32,25 @@
   position: relative;
   min-height: calc(100vh - 20px);
   overflow: hidden;
-  background: var(--bg);
+  background:
+    radial-gradient(ellipse 72% 55% at 50% 38%, rgba(168, 148, 232, 0.09) 0%, transparent 70%),
+    var(--bg);
   border-radius: 12px;
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.06),
     0 0 0 1px rgba(0, 0, 0, 0.5);
+}
+
+/* film grain */
+.jott-grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
 }
 
 /* notch */
@@ -65,20 +79,13 @@
 }
 
 /* popover */
-.jott-popover {
+.jott-popover-wrap {
   position: absolute;
   top: 0;
   left: 50%;
+  transform: translateX(-50%);
   width: min(520px, calc(100vw - 220px));
-  opacity: 0;
-  transform: translate(-50%, -100%);
-  transition: transform 480ms cubic-bezier(0.22, 1, 0.36, 1), opacity 200ms ease;
-  will-change: transform, opacity;
-}
-
-.jott-popover.open {
-  opacity: 1;
-  transform: translate(-50%, 0);
+  z-index: 30;
 }
 
 .jott-popover-shell {
@@ -323,12 +330,12 @@
   letter-spacing: 0.08em;
 }
 
-/* keycap trigger — fixed bottom center */
+/* keycap trigger — fixed bottom center (opacity/y handled by Framer) */
 .jott-trigger {
   position: fixed;
   bottom: 44px;
   left: 50%;
-  transform: translateX(-50%) translateY(8px);
+  transform: translateX(-50%);
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -337,16 +344,7 @@
   padding: 0;
   appearance: none;
   cursor: pointer;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 500ms ease, transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
   z-index: 30;
-}
-
-.jott-trigger.visible {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-  pointer-events: auto;
 }
 
 .jott-keycap {
@@ -410,7 +408,7 @@
     bottom: 56px;
   }
 
-  .jott-popover {
+  .jott-popover-wrap {
     width: min(640px, calc(100vw - 260px));
   }
 
@@ -428,7 +426,7 @@
 
 /* mobile */
 @media (max-width: 680px) {
-  .jott-popover {
+  .jott-popover-wrap {
     width: calc(100vw - 40px);
   }
 
