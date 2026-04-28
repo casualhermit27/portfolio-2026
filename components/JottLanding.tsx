@@ -116,9 +116,9 @@ export default function JottLanding() {
             {popoverOpen && (
               <motion.div
                 className="jott-popover-wrap"
-                initial={{ y: "-100%", opacity: 0 }}
-                animate={{ y: "0%", opacity: 1 }}
-                exit={{ y: "-100%", opacity: 0 }}
+                initial={{ x: "-50%", y: "-100%", opacity: 0 }}
+                animate={{ x: "-50%", y: "0%", opacity: 1 }}
+                exit={{ x: "-50%", y: "-100%", opacity: 0 }}
                 transition={{ type: "spring", stiffness: 320, damping: 32, mass: 0.9 }}
               >
                 <div className="jott-popover-shell">
