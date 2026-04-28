@@ -332,12 +332,13 @@
 /* keycap trigger — fixed bottom center (opacity/y handled by Framer) */
 .jott-trigger {
   position: fixed;
-  bottom: 44px;
+  bottom: 40px;
   left: 50%;
   transform: translateX(-50%);
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
+  gap: 6px;
   border: none;
   background: transparent;
   padding: 0;
@@ -348,21 +349,20 @@
 
 .jott-keycap {
   display: inline-flex;
-  min-width: 86px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   align-items: center;
   justify-content: center;
   border: 1px solid rgba(28, 24, 40, 0.1);
-  border-bottom-width: 2.5px;
-  border-radius: 10px;
+  border-bottom-width: 2px;
+  border-radius: 8px;
   background: #ffffff;
   box-shadow: 0 1px 0 rgba(28, 24, 40, 0.04);
-  padding: 0 12px;
+  padding: 0;
   color: var(--text-soft);
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 400;
-  letter-spacing: 0.01em;
   transition: transform 100ms ease, background 100ms ease, border-color 100ms ease, color 100ms ease;
 }
 
@@ -397,14 +397,14 @@
   }
 
   .jott-keycap {
-    min-width: 96px;
-    height: 42px;
-    font-size: 12px;
+    width: 40px;
+    height: 40px;
+    font-size: 14px;
   }
 
   .jott-trigger {
-    gap: 12px;
-    bottom: 56px;
+    gap: 7px;
+    bottom: 52px;
   }
 
   .jott-popover-wrap {
@@ -465,9 +465,9 @@
   }
 
   .jott-keycap {
-    min-width: 76px;
-    height: 34px;
-    font-size: 10.5px;
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
   }
 
   .jott-ctas {

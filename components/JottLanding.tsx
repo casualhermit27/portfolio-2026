@@ -241,8 +241,8 @@ export default function JottLanding() {
                 exit={{ opacity: 0, y: 6 }}
                 transition={{ duration: 0.44, ease: [0.22, 1, 0.36, 1] }}
               >
-                <span className={`jott-keycap${keysPressed ? " press" : ""}`}>⌥ option</span>
-                <span className={`jott-keycap${keysPressed ? " press" : ""}`}>⌥ option</span>
+                <span className={`jott-keycap${keysPressed ? " press" : ""}`}>⌥</span>
+                <span className={`jott-keycap${keysPressed ? " press" : ""}`}>⌥</span>
               </motion.button>
             )}
           </AnimatePresence>
