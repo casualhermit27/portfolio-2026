@@ -129,8 +129,29 @@
   font-family: var(--sans);
   font-size: 17px;
   font-weight: 300;
-  color: rgba(255, 255, 255, 0.26);
+  color: rgba(255, 255, 255, 0.72);
   letter-spacing: 0.01em;
+}
+
+.jott-placeholder {
+  color: rgba(255, 255, 255, 0.22);
+}
+
+/* blinking cursor */
+.jott-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.05em;
+  background: var(--accent-mid);
+  border-radius: 1px;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: jott-blink 1s step-end infinite;
+}
+
+@keyframes jott-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
 
 .jott-floating-actions {
@@ -260,15 +281,33 @@
 }
 
 .jott-btn-primary {
-  border: 1px solid #b5a9e8;
-  background: var(--accent-solid);
-  color: #2a1f5c;
+  border: 1px solid #6a57c0;
+  background: var(--accent);
+  color: rgba(255, 255, 255, 0.92);
+  cursor: default;
 }
 
 .jott-btn-secondary {
   border: 1px solid rgba(28, 24, 40, 0.1);
   background: #ffffff;
-  color: rgba(28, 24, 40, 0.58);
+  color: rgba(28, 24, 40, 0.38);
+  cursor: default;
+}
+
+/* pulsing dot inside Brewing button */
+.jott-brew-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.6);
+  animation: jott-pulse 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes jott-pulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.25); }
 }
 
 .jott-meta {

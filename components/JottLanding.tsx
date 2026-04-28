@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 
+const DEMO_TEXT = "What's on your mind?";
+
 function HelpIcon() {
   return (
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -22,10 +24,11 @@ function MicIcon() {
   );
 }
 
-function AppleIcon() {
+function BellIcon() {
   return (
-    <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
-      <path d="M11.182 8.394c-.016-1.616 1.32-2.39 1.38-2.428-.752-1.1-1.924-1.25-2.34-1.268-.996-.1-1.944.586-2.45.586-.51 0-1.29-.572-2.12-.556-1.09.016-2.096.634-2.656 1.612-1.132 1.96-.29 4.866.816 6.46.538.78 1.18 1.656 2.02 1.624.81-.032 1.116-.524 2.096-.524.98 0 1.256.524 2.116.508.874-.014 1.428-.794 1.962-1.58.619-.908.874-1.79.89-1.836-.02-.01-1.708-.654-1.714-2.598zM9.704 3.582c.448-.544.75-1.298.668-2.046-.644.026-1.424.428-1.888.972-.416.482-.78 1.252-.682 1.986.72.056 1.454-.366 1.902-.912z" />
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+      <path d="M13.73 21a2 2 0 0 1-3.46 0" />
     </svg>
   );
 }
@@ -33,12 +36,13 @@ function AppleIcon() {
 export default function JottLanding() {
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [keysPressed, setKeysPressed] = useState(false);
+  const [typedText, setTypedText] = useState("");
 
   // Keycap visibility — independent cycling timer
   const [cueVisible, setCueVisible] = useState(false);
   const cueTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const typeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Show 2.8s, hide 5.2s — cycle forever
   const scheduleCue = (showFirst: boolean, delay: number) => {
     cueTimer.current = setTimeout(() => {
       if (showFirst) {
@@ -52,11 +56,30 @@ export default function JottLanding() {
   };
 
   useEffect(() => {
-    // slight initial delay so page settles first
     scheduleCue(true, 900);
     return () => { if (cueTimer.current) clearTimeout(cueTimer.current); };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Typing animation — runs when popover opens
+  useEffect(() => {
+    if (typeTimer.current) clearTimeout(typeTimer.current);
+    if (!popoverOpen) {
+      setTypedText("");
+      return;
+    }
+    setTypedText("");
+    let i = 0;
+    const type = () => {
+      i++;
+      setTypedText(DEMO_TEXT.slice(0, i));
+      if (i < DEMO_TEXT.length) {
+        typeTimer.current = setTimeout(type, 38 + Math.random() * 28);
+      }
+    };
+    typeTimer.current = setTimeout(type, 260);
+    return () => { if (typeTimer.current) clearTimeout(typeTimer.current); };
+  }, [popoverOpen]);
 
   const pressKeys = () => {
     setKeysPressed(true);
@@ -71,10 +94,9 @@ export default function JottLanding() {
     setTimeout(() => setPopoverOpen(true), 1040);
   };
 
-  // Auto-run popover demo on loop
   useEffect(() => {
     playDemo();
-    const interval = setInterval(playDemo, 6400);
+    const interval = setInterval(playDemo, 7000);
     return () => clearInterval(interval);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -98,7 +120,10 @@ export default function JottLanding() {
                 </span>
               </div>
               <div className="jott-popover-input">
-                <span>What&apos;s on your mind?</span>
+                <span>
+                  {typedText || <span className="jott-placeholder">What&apos;s on your mind?</span>}
+                </span>
+                {popoverOpen && <span className="jott-cursor" aria-hidden />}
               </div>
             </div>
             <div className="jott-floating-actions">
@@ -123,13 +148,13 @@ export default function JottLanding() {
             <p className="jott-lede">One keystroke. Nothing in your way.</p>
 
             <div className="jott-ctas">
-              <a href="#" className="jott-btn jott-btn-primary">
-                <AppleIcon />
-                Download for Mac
-              </a>
-              <a href="#" className="jott-btn jott-btn-secondary">
-                Mac App Store
-              </a>
+              <button type="button" className="jott-btn jott-btn-primary" disabled>
+                <span className="jott-brew-dot" aria-hidden />
+                Brewing
+              </button>
+              <button type="button" className="jott-btn jott-btn-secondary" disabled>
+                Mac App Store · soon
+              </button>
             </div>
 
             <div className="jott-meta">macOS 13+ · Apple silicon &amp; Intel</div>
