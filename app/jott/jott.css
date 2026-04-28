@@ -1,12 +1,18 @@
 .jott-root {
-  --sans: "SF Pro Rounded", "SF Pro Text", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --editor: "SF Pro Text", "SF Pro Display", "SF Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --bg: #f7f4ff;
-  --accent: #8b78e0;
-  --accent-soft: #ede8ff;
+  /* DM Sans (web font, loaded globally) is the reliable cross-platform fallback.
+     SF Pro Rounded only exists on macOS — Windows falls back to DM Sans. */
+  --sans: "SF Pro Rounded", "SF Pro Text", var(--font-dm-sans), -apple-system, BlinkMacSystemFont, sans-serif;
+  --mono: "SF Mono", ui-monospace, "Cascadia Code", "Consolas", monospace;
+
+  --bg: #f4f1fc;
+  --accent: #7c68d4;
+  --accent-mid: #b8abee;
+  --accent-soft: #ddd8f8;
+  --accent-solid: #c9c0f4;
   --text: #1c1828;
-  --text-soft: rgba(28, 24, 40, 0.42);
+  --text-soft: rgba(28, 24, 40, 0.44);
   --text-faint: rgba(28, 24, 40, 0.24);
+
   background: var(--bg);
   color: var(--text);
   font-family: var(--sans);
@@ -103,8 +109,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
 }
 
 .jott-top-mark-image {
@@ -116,14 +122,14 @@
 
 .jott-popover-input {
   display: flex;
-  min-height: 58px;
+  min-height: 64px;
   align-items: center;
   background: #131313;
-  padding: 0 16px;
-  font-family: var(--editor);
-  font-size: 16px;
+  padding: 0 18px;
+  font-family: var(--sans);
+  font-size: 17px;
   font-weight: 300;
-  color: rgba(255, 255, 255, 0.28);
+  color: rgba(255, 255, 255, 0.26);
   letter-spacing: 0.01em;
 }
 
@@ -139,22 +145,21 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border: none;
   border-radius: 999px;
-  background: rgba(14, 14, 16, 0.88);
+  background: rgba(14, 14, 16, 0.92);
   color: rgba(255, 255, 255, 0.45);
   appearance: none;
   cursor: pointer;
 }
 
 .jott-tool-pill-text {
-  width: 56px;
+  width: 58px;
   font-family: var(--sans);
   font-size: 15px;
   font-weight: 400;
-  letter-spacing: 0;
 }
 
 .jott-tool-pill svg {
@@ -162,51 +167,52 @@
   height: 17px;
 }
 
-/* main hero */
+/* hero */
 .jott-main {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 140px 24px 100px;
+  padding: 140px 24px 110px;
   text-align: center;
 }
 
-.jott-logo {
-  margin-bottom: 28px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--sans);
-  font-size: 14px;
-  font-weight: 400;
-  letter-spacing: 0.04em;
-  color: var(--text-soft);
+/* big standalone app icon */
+.jott-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 18px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 24px rgba(124, 104, 212, 0.18), 0 1px 4px rgba(124, 104, 212, 0.1);
 }
 
-.jott-logo-mark {
-  width: 22px;
-  height: 22px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.jott-logo-mark-image {
+.jott-icon img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
+}
+
+/* small app name label */
+.jott-label {
+  margin-bottom: 20px;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  color: var(--text-soft);
 }
 
 .jott-main h1 {
   margin: 0;
   max-width: 13ch;
   font-family: var(--sans);
-  font-size: 64px;
+  font-size: 72px;
   font-weight: 300;
-  line-height: 1.04;
-  letter-spacing: -0.015em;
+  line-height: 1.03;
+  letter-spacing: -0.02em;
   color: var(--text);
 }
 
@@ -219,18 +225,18 @@
 .jott-lede {
   margin: 16px 0 0;
   font-family: var(--sans);
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 300;
-  line-height: 1.6;
+  line-height: 1.55;
   color: var(--text-soft);
   letter-spacing: 0.01em;
 }
 
-/* cta buttons */
+/* solid cta buttons */
 .jott-ctas {
   display: flex;
-  gap: 8px;
-  margin-top: 28px;
+  gap: 10px;
+  margin-top: 32px;
 }
 
 .jott-btn {
@@ -238,35 +244,36 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  height: 44px;
-  padding: 0 22px;
-  border-radius: 12px;
+  height: 46px;
+  padding: 0 24px;
+  border-radius: 13px;
   font-family: var(--sans);
   font-size: 14px;
   font-weight: 400;
   text-decoration: none;
-  transition: opacity 180ms ease;
+  transition: opacity 160ms ease, transform 160ms ease;
 }
 
 .jott-btn:hover {
-  opacity: 0.8;
+  opacity: 0.82;
+  transform: translateY(-1px);
 }
 
 .jott-btn-primary {
-  border: 1px solid rgba(139, 120, 224, 0.22);
-  background: var(--accent-soft);
-  color: #3a2f72;
+  border: 1px solid #b5a9e8;
+  background: var(--accent-solid);
+  color: #2a1f5c;
 }
 
 .jott-btn-secondary {
-  border: 1px solid rgba(28, 24, 40, 0.08);
-  background: rgba(255, 255, 255, 0.72);
-  color: var(--text-soft);
+  border: 1px solid rgba(28, 24, 40, 0.1);
+  background: #ffffff;
+  color: rgba(28, 24, 40, 0.58);
 }
 
 .jott-meta {
-  margin-top: 16px;
-  font-family: "SF Mono", "SFMono-Regular", ui-monospace, monospace;
+  margin-top: 18px;
+  font-family: var(--mono);
   font-size: 10px;
   color: var(--text-faint);
   letter-spacing: 0.08em;
@@ -277,7 +284,7 @@
   position: fixed;
   bottom: 44px;
   left: 50%;
-  transform: translateX(-50%) translateY(6px);
+  transform: translateX(-50%) translateY(8px);
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -288,7 +295,7 @@
   cursor: pointer;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 400ms ease, transform 400ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 500ms ease, transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
   z-index: 30;
 }
 
@@ -300,18 +307,18 @@
 
 .jott-keycap {
   display: inline-flex;
-  min-width: 82px;
-  height: 36px;
+  min-width: 86px;
+  height: 38px;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(28, 24, 40, 0.09);
-  border-bottom-width: 2px;
+  border: 1px solid rgba(28, 24, 40, 0.1);
+  border-bottom-width: 2.5px;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.82);
-  box-shadow: 0 1px 0 rgba(28, 24, 40, 0.05);
+  background: #ffffff;
+  box-shadow: 0 1px 0 rgba(28, 24, 40, 0.04);
   padding: 0 12px;
   color: var(--text-soft);
-  font-family: "SF Mono", "SFMono-Regular", ui-monospace, monospace;
+  font-family: var(--mono);
   font-size: 11px;
   font-weight: 400;
   letter-spacing: 0.01em;
@@ -320,64 +327,62 @@
 
 .jott-keycap.press {
   transform: translateY(2px);
-  border-color: rgba(139, 120, 224, 0.3);
-  background: #ede8ff;
-  color: #6b59b8;
+  border-color: rgba(124, 104, 212, 0.32);
+  background: var(--accent-soft);
+  color: var(--accent);
 }
 
+/* large screens */
 @media (min-width: 1200px) {
   .jott-main h1 {
-    font-size: 84px;
+    font-size: 96px;
   }
 
   .jott-lede {
-    font-size: 18px;
+    font-size: 19px;
   }
 
-  .jott-logo {
-    font-size: 15px;
-    margin-bottom: 32px;
-  }
-
-  .jott-logo-mark {
-    width: 26px;
-    height: 26px;
+  .jott-icon {
+    width: 88px;
+    height: 88px;
+    border-radius: 22px;
+    margin-bottom: 24px;
   }
 
   .jott-btn {
-    height: 48px;
-    padding: 0 26px;
+    height: 50px;
+    padding: 0 28px;
     font-size: 15px;
   }
 
   .jott-keycap {
-    min-width: 92px;
-    height: 40px;
+    min-width: 96px;
+    height: 42px;
     font-size: 12px;
-    border-radius: 11px;
   }
 
   .jott-trigger {
     gap: 12px;
-    bottom: 52px;
+    bottom: 56px;
   }
 
   .jott-popover {
-    width: min(620px, calc(100vw - 260px));
+    width: min(640px, calc(100vw - 260px));
   }
 
   .jott-popover-input {
-    font-size: 18px;
-    min-height: 68px;
-    padding: 0 20px;
+    font-size: 19px;
+    min-height: 72px;
+    padding: 0 22px;
   }
 
   .jott-popover-top {
-    min-height: 44px;
+    min-height: 46px;
     padding: 0 16px;
   }
 }
 
+/* mobile */
 @media (max-width: 680px) {
   .jott-popover {
     width: calc(100vw - 40px);
@@ -389,9 +394,9 @@
   }
 
   .jott-popover-input {
-    min-height: 54px;
+    min-height: 56px;
     padding: 0 14px;
-    font-size: 15px;
+    font-size: 16px;
     border-radius: 0 0 16px 16px;
   }
 
@@ -400,25 +405,28 @@
   }
 
   .jott-main {
-    padding: 120px 20px 90px;
+    padding: 120px 20px 100px;
   }
 
   .jott-main h1 {
-    font-size: 46px;
+    font-size: 50px;
   }
 
   .jott-lede {
-    font-size: 14px;
+    font-size: 15px;
   }
 
-  .jott-logo {
-    font-size: 13px;
+  .jott-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 15px;
+    margin-bottom: 16px;
   }
 
   .jott-keycap {
-    min-width: 74px;
-    height: 33px;
-    font-size: 10px;
+    min-width: 76px;
+    height: 34px;
+    font-size: 10.5px;
   }
 
   .jott-ctas {
@@ -428,6 +436,7 @@
 
   .jott-btn {
     width: 100%;
+    height: 48px;
   }
 
   .jott-trigger {

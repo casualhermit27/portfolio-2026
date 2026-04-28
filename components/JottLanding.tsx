@@ -113,13 +113,11 @@ export default function JottLanding() {
 
           {/* hero */}
           <div className="jott-main">
-            <div className="jott-logo">
-              <span className="jott-logo-mark">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/logos/jott.png" alt="Jott icon" className="jott-logo-mark-image" />
-              </span>
-              <span>jott</span>
+            <div className="jott-icon">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logos/jott.png" alt="Jott icon" />
             </div>
+            <p className="jott-label">jott</p>
 
             <h1>Capture a <em>thought.</em></h1>
             <p className="jott-lede">One keystroke. Nothing in your way.</p>
