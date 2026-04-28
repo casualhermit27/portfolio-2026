@@ -1,8 +1,14 @@
 .jott-root {
   --sans: "SF Pro Rounded", "SF Pro Text", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --editor: "SF Pro Text", "SF Pro Display", "SF Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #f5f5f3;
-  color: #181715;
+  --bg: #f7f4ff;
+  --accent: #8b78e0;
+  --accent-soft: #ede8ff;
+  --text: #1c1828;
+  --text-soft: rgba(28, 24, 40, 0.42);
+  --text-faint: rgba(28, 24, 40, 0.24);
+  background: var(--bg);
+  color: var(--text);
   font-family: var(--sans);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
@@ -12,51 +18,50 @@
 
 .jott-bezel {
   min-height: 100vh;
-  background: #f5f5f3;
-  padding: 0;
+  background: var(--bg);
 }
 
 .jott-screen {
   position: relative;
   min-height: 100vh;
   overflow: hidden;
-  background: #f5f5f3;
-  border-radius: 0;
-  box-shadow: none;
+  background: var(--bg);
 }
 
+/* notch */
 .jott-notch {
   position: absolute;
   top: 0;
   left: 50%;
   z-index: 40;
-  height: 30px;
-  width: 220px;
+  height: 28px;
+  width: 200px;
   transform: translateX(-50%);
-  border-radius: 0 0 18px 18px;
-  background: #080808;
+  border-radius: 0 0 16px 16px;
+  background: #0a0a0a;
 }
 
 .jott-notch::after {
   content: "";
   position: absolute;
-  top: 11px;
-  right: 30px;
+  top: 10px;
+  right: 28px;
   height: 7px;
   width: 7px;
   border-radius: 999px;
-  background: #141418;
+  background: #161618;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
 }
 
+/* popover */
 .jott-popover {
   position: absolute;
   top: 0;
   left: 50%;
-  width: min(560px, calc(100vw - 260px));
+  width: min(520px, calc(100vw - 220px));
   opacity: 0;
   transform: translate(-50%, -100%);
-  transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1), opacity 220ms ease;
+  transition: transform 480ms cubic-bezier(0.22, 1, 0.36, 1), opacity 200ms ease;
   will-change: transform, opacity;
 }
 
@@ -66,31 +71,30 @@
 }
 
 .jott-popover-shell {
-  border-radius: 0 0 22px 22px;
-  background: #080808;
-  padding: 0;
-  box-shadow: none;
+  border-radius: 0 0 20px 20px;
+  background: #0d0d0d;
+  overflow: hidden;
 }
 
 .jott-popover-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 40px;
+  min-height: 38px;
   padding: 0 12px;
-  background: #000;
+  background: #080808;
 }
 
 .jott-help-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   border: none;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.42);
+  color: rgba(255, 255, 255, 0.35);
   appearance: none;
   cursor: pointer;
 }
@@ -107,21 +111,20 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-  filter: brightness(1.15);
+  filter: brightness(1.1);
 }
 
 .jott-popover-input {
   display: flex;
-  min-height: 62px;
+  min-height: 58px;
   align-items: center;
-  border-radius: 0 0 22px 22px;
-  background: #151515;
+  background: #131313;
   padding: 0 16px;
-  text-align: left;
   font-family: var(--editor);
-  font-size: 17px;
-  font-weight: 400;
-  color: rgba(255, 255, 255, 0.32);
+  font-size: 16px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.28);
+  letter-spacing: 0.01em;
 }
 
 .jott-floating-actions {
@@ -129,60 +132,62 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin-top: 12px;
+  margin-top: 10px;
 }
 
 .jott-tool-pill {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: 42px;
+  height: 42px;
   border: none;
   border-radius: 999px;
-  background: #111;
-  color: rgba(255, 255, 255, 0.54);
+  background: rgba(14, 14, 16, 0.88);
+  color: rgba(255, 255, 255, 0.45);
   appearance: none;
   cursor: pointer;
 }
 
 .jott-tool-pill-text {
-  width: 58px;
+  width: 56px;
   font-family: var(--sans);
   font-size: 15px;
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: 0;
 }
 
 .jott-tool-pill svg {
-  width: 18px;
-  height: 18px;
+  width: 17px;
+  height: 17px;
 }
 
+/* main hero */
 .jott-main {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 150px 24px 56px;
+  padding: 140px 24px 100px;
   text-align: center;
 }
 
 .jott-logo {
-  margin-bottom: 22px;
+  margin-bottom: 24px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
   font-family: var(--sans);
-  font-size: 16px;
-  font-weight: 600;
-  color: rgba(24, 23, 21, 0.58);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: var(--text-soft);
 }
 
 .jott-logo-mark {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -196,189 +201,183 @@
 
 .jott-main h1 {
   margin: 0;
-  max-width: 12ch;
+  max-width: 13ch;
   font-family: var(--sans);
-  font-size: 52px;
-  font-weight: 600;
-  line-height: 1.02;
-  letter-spacing: 0;
-  color: #181715;
+  font-size: 54px;
+  font-weight: 300;
+  line-height: 1.04;
+  letter-spacing: -0.01em;
+  color: var(--text);
 }
 
 .jott-main h1 em {
-  color: #7b6bc8;
+  color: var(--accent);
   font-style: normal;
-  font-weight: 600;
+  font-weight: 300;
 }
 
 .jott-lede {
-  margin: 12px 0 0;
+  margin: 14px 0 0;
   font-family: var(--sans);
-  font-size: 15px;
-  font-weight: 400;
-  line-height: 1.55;
-  color: rgba(24, 23, 21, 0.56);
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.6;
+  color: var(--text-soft);
+  letter-spacing: 0.01em;
 }
 
-.jott-trigger {
-  margin-top: 22px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  border: none;
-  background: transparent;
-  padding: 0;
-  appearance: none;
-  cursor: pointer;
-  opacity: 0;
-  transform: translateY(4px);
-  pointer-events: none;
-  transition: opacity 240ms ease, transform 240ms ease;
-}
-
-.jott-trigger.visible {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-
-.jott-keycap {
-  display: inline-flex;
-  min-width: 74px;
-  height: 34px;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid rgba(24, 23, 21, 0.1);
-  border-bottom-width: 2px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.82);
-  box-shadow: 0 1px 0 rgba(24, 23, 21, 0.05);
-  padding: 0 10px;
-  color: rgba(24, 23, 21, 0.58);
-  font-family: "SF Mono", "SFMono-Regular", ui-monospace, monospace;
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0;
-  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease, color 120ms ease;
-}
-
-.jott-keycap.press {
-  transform: translateY(2px);
-  border-color: rgba(123, 107, 200, 0.35);
-  background: #eee9ff;
-  color: #6d5cbc;
-}
-
+/* cta buttons */
 .jott-ctas {
   display: flex;
-  gap: 10px;
-  margin-top: 22px;
+  gap: 8px;
+  margin-top: 28px;
 }
 
 .jott-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  height: 42px;
+  gap: 8px;
+  height: 40px;
   padding: 0 18px;
   border-radius: 11px;
   font-family: var(--sans);
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 400;
   text-decoration: none;
+  transition: opacity 180ms ease;
+}
+
+.jott-btn:hover {
+  opacity: 0.8;
 }
 
 .jott-btn-primary {
-  border: 1px solid #f0eafe;
-  background: #f3ecff;
-  color: #2f2842;
+  border: 1px solid rgba(139, 120, 224, 0.22);
+  background: var(--accent-soft);
+  color: #3a2f72;
 }
 
 .jott-btn-secondary {
-  border: 1px solid rgba(24, 23, 21, 0.1);
-  background: rgba(255, 255, 255, 0.66);
-  color: rgba(24, 23, 21, 0.72);
+  border: 1px solid rgba(28, 24, 40, 0.08);
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--text-soft);
 }
 
 .jott-meta {
-  margin-top: 18px;
+  margin-top: 16px;
   font-family: "SF Mono", "SFMono-Regular", ui-monospace, monospace;
   font-size: 10px;
-  color: rgba(24, 23, 21, 0.28);
+  color: var(--text-faint);
   letter-spacing: 0.08em;
+}
+
+/* keycap trigger — fixed bottom center */
+.jott-trigger {
+  position: fixed;
+  bottom: 44px;
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background: transparent;
+  padding: 0;
+  appearance: none;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 400ms ease, transform 400ms cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 30;
+}
+
+.jott-trigger.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+.jott-keycap {
+  display: inline-flex;
+  min-width: 70px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(28, 24, 40, 0.09);
+  border-bottom-width: 2px;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 1px 0 rgba(28, 24, 40, 0.04);
+  padding: 0 10px;
+  color: var(--text-soft);
+  font-family: "SF Mono", "SFMono-Regular", ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  transition: transform 100ms ease, background 100ms ease, border-color 100ms ease, color 100ms ease;
+}
+
+.jott-keycap.press {
+  transform: translateY(2px);
+  border-color: rgba(139, 120, 224, 0.3);
+  background: #ede8ff;
+  color: #6b59b8;
 }
 
 @media (max-width: 680px) {
   .jott-popover {
-    width: calc(100vw - 42px);
+    width: calc(100vw - 40px);
   }
 
   .jott-popover-top {
-    min-height: 38px;
-    padding: 0 12px;
+    min-height: 36px;
+    padding: 0 11px;
   }
 
-.jott-popover-input {
-    min-height: 58px;
+  .jott-popover-input {
+    min-height: 54px;
     padding: 0 14px;
-    font-size: 16px;
-    border-radius: 0 0 18px 18px;
+    font-size: 15px;
+    border-radius: 0 0 16px 16px;
   }
 
   .jott-popover-shell {
-    border-radius: 0 0 18px 18px;
-  }
-
-  .jott-floating-actions {
-    margin-top: 12px;
-  }
-
-  .jott-tool-pill {
-    width: 42px;
-    height: 42px;
-  }
-
-  .jott-tool-pill-text {
-    width: 54px;
-    font-size: 14px;
+    border-radius: 0 0 16px 16px;
   }
 
   .jott-main {
-    padding: 132px 18px 46px;
-  }
-
-  .jott-logo {
-    margin-bottom: 22px;
-    font-size: 15px;
-  }
-
-  .jott-lede {
-    font-size: 14px;
+    padding: 120px 20px 90px;
   }
 
   .jott-main h1 {
-    font-size: 38px;
+    font-size: 40px;
+  }
+
+  .jott-lede {
+    font-size: 13px;
+  }
+
+  .jott-logo {
+    font-size: 12px;
   }
 
   .jott-keycap {
-    min-width: 68px;
-    height: 32px;
+    min-width: 64px;
+    height: 30px;
     font-size: 9.5px;
-  }
-
-  .jott-trigger {
-    flex-wrap: wrap;
-    justify-content: center;
   }
 
   .jott-ctas {
     flex-direction: column;
-    width: min(320px, 100%);
+    width: min(300px, 100%);
   }
 
   .jott-btn {
     width: 100%;
+  }
+
+  .jott-trigger {
+    bottom: 36px;
   }
 }
