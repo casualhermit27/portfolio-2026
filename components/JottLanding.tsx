@@ -236,9 +236,9 @@ export default function JottLanding() {
                 className="jott-trigger"
                 onClick={playDemo}
                 aria-label="See double-Option shortcut demo"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 6 }}
+                initial={{ x: "-50%", opacity: 0, y: 10 }}
+                animate={{ x: "-50%", opacity: 1, y: 0 }}
+                exit={{ x: "-50%", opacity: 0, y: 6 }}
                 transition={{ duration: 0.44, ease: [0.22, 1, 0.36, 1] }}
               >
                 <span className={`jott-keycap${keysPressed ? " press" : ""}`}>⌥</span>
