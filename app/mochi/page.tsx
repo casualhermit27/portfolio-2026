@@ -30,10 +30,10 @@ export default function MochiPage() {
       ]}
       bullets={[
         "Log expenses in **under two taps** with a calm daily flow",
-        "Timeline and reflection views reveal **patterns over time**",
-        "**Widget-first** reminders keep the habit visible each day",
+        "Set up **recurring payments** for subscriptions, bills, and repeat expenses",
+        "Refined **analytics and insights** make spending patterns easier to understand",
+        "Search and filter History to find **past expenses faster**",
         "Minimal interface designed for **clarity**, not noise",
-        "Thoughtful weekly history makes **trends easy to notice**",
         "**Private by default** with a focused single-user experience",
         "Built to feel **light and fast** across everyday iPhone use",
       ]}
