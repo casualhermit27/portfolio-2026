@@ -1,29 +1,41 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
 
-// Treat positions as fractions of the line width (0–1)
-const TREAT_POSITIONS = [0.13, 0.27, 0.44, 0.59, 0.74, 0.87];
-const WALK_DURATION = 9000; // ms for one full left→right crossing
+// Sprite: 800×100px, 8 frames of 100×100 each
+const FRAME_COUNT = 8;
+const SRC_W = 100; // source frame width
+const SRC_H = 100; // source frame height
+
+// Main divider dog — 2× upscale for crisp pixel art
+const FULL_W = SRC_W * 2; // 200px per frame display width
+const FULL_H = SRC_H * 2; // 200px display height
+
+// Progress bar dog — 0.7× of original
+const BAR_W = Math.round(SRC_W * 0.7); // 70px
+const BAR_H = Math.round(SRC_H * 0.7); // 70px
+
+// How long it takes the dog to cross the full screen width
+const WALK_DURATION = 11000; // ms
+
+// Where the dog's feet hit inside the sprite frame (as a fraction of frame height)
+// The Saint Bernard feet land around 88% down the 100px frame
+const FEET_FRACTION = 0.88;
 
 export default function DogDivider() {
   const [scrollY, setScrollY] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
 
-  // Refs for direct DOM manipulation (avoids 60fps React re-renders)
   const dogRef = useRef<HTMLDivElement>(null);
-  const treatRefs = useRef<(HTMLDivElement | null)[]>([]);
   const animRef = useRef<number | undefined>(undefined);
   const startRef = useRef<number | null>(null);
-  const lastProgressRef = useRef(0);
 
-  // Track scroll position + progress
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY;
       setScrollY(y);
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const maxScroll =
+        document.documentElement.scrollHeight - window.innerHeight;
       setScrollProgress(maxScroll > 0 ? Math.min(y / maxScroll, 1) : 0);
     };
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -32,56 +44,24 @@ export default function DogDivider() {
 
   const isScrollMode = scrollY > 10;
 
-  // Walking animation: runs only when not scrolled
+  // Walking animation — direct DOM to avoid 60fps React re-renders
   useEffect(() => {
     if (isScrollMode) {
       if (animRef.current !== undefined) cancelAnimationFrame(animRef.current);
       startRef.current = null;
-      lastProgressRef.current = 0;
       return;
     }
 
-    // Reset all treats to visible when returning to idle
-    for (const el of treatRefs.current) {
-      if (!el) continue;
-      el.dataset.eaten = "0";
-      el.style.opacity = "1";
-      el.style.transform = "translate(-50%, -50%) scale(1)";
-    }
+    if (dogRef.current) dogRef.current.style.left = "-4%";
 
     const tick = (t: number) => {
       if (!startRef.current) startRef.current = t;
       const elapsed = (t - startRef.current) % WALK_DURATION;
       const progress = elapsed / WALK_DURATION;
-
-      // Move dog directly via DOM
+      // Walk from off-screen left (−4%) to off-screen right (104%)
       if (dogRef.current) {
-        dogRef.current.style.left = `${progress * 100}%`;
+        dogRef.current.style.left = `${-4 + progress * 108}%`;
       }
-
-      // Detect loop reset (progress jumped back to ~0)
-      const looped = progress < lastProgressRef.current - 0.5;
-      if (looped) {
-        for (const el of treatRefs.current) {
-          if (!el) continue;
-          el.dataset.eaten = "0";
-          el.style.opacity = "1";
-          el.style.transform = "translate(-50%, -50%) scale(1)";
-        }
-      }
-
-      // Eat treats as dog passes them
-      for (let i = 0; i < TREAT_POSITIONS.length; i++) {
-        const el = treatRefs.current[i];
-        if (!el || el.dataset.eaten === "1") continue;
-        if (TREAT_POSITIONS[i] < progress - 0.005) {
-          el.dataset.eaten = "1";
-          el.style.opacity = "0";
-          el.style.transform = "translate(-50%, -50%) scale(0)";
-        }
-      }
-
-      lastProgressRef.current = progress;
       animRef.current = requestAnimationFrame(tick);
     };
 
@@ -93,18 +73,30 @@ export default function DogDivider() {
 
   return (
     <>
+      {/* ── CSS keyframes for sprite cycling ── */}
+      <style>{`
+        @keyframes sb-walk-full {
+          from { background-position: 0px 0px; }
+          to   { background-position: -${FULL_W * FRAME_COUNT}px 0px; }
+        }
+        @keyframes sb-walk-bar {
+          from { background-position: 0px 0px; }
+          to   { background-position: -${BAR_W * FRAME_COUNT}px 0px; }
+        }
+      `}</style>
+
       {/* ── Fixed scroll progress bar (visible when scrolled) ── */}
       {isScrollMode && (
         <div
           className="fixed top-0 left-0 right-0"
           style={{ height: 2, zIndex: 999 }}
         >
-          {/* Track */}
+          {/* track */}
           <div
             className="absolute inset-0"
             style={{ background: "var(--border)" }}
           />
-          {/* Filled portion */}
+          {/* filled */}
           <div
             className="absolute top-0 left-0 h-full"
             style={{
@@ -113,83 +105,81 @@ export default function DogDivider() {
               opacity: 0.45,
             }}
           />
-          {/* Dog as scroll indicator */}
+          {/* dog riding the bar */}
           <div
             style={{
               position: "absolute",
-              left: `${scrollProgress * 100}%`,
-              top: "50%",
-              transform: "translate(-50%, -50%)",
-              fontSize: 14,
-              lineHeight: 1,
+              // clamp so dog never clips at screen edges
+              left: `clamp(${BAR_W / 2}px, ${scrollProgress * 100}%, calc(100% - ${BAR_W / 2}px))`,
+              top: 2,
+              transform: "translateX(-50%)",
               pointerEvents: "none",
-              // Flip to face right
-              display: "inline-block",
             }}
           >
-            <span style={{ display: "inline-block", transform: "scaleX(-1)" }}>🐕</span>
+            <div
+              style={{
+                width: BAR_W,
+                height: BAR_H,
+                backgroundImage: "url('/saint-bernard-walk.png')",
+                backgroundSize: `${BAR_W * FRAME_COUNT}px ${BAR_H}px`,
+                backgroundRepeat: "no-repeat",
+                imageRendering: "pixelated",
+                animation: `sb-walk-bar 0.65s steps(${FRAME_COUNT}) infinite`,
+              }}
+            />
           </div>
         </div>
       )}
 
       {/* ── Inline walking divider (visible when at top) ── */}
       <div
-        className="relative w-full"
         style={{
-          height: 56,
+          position: "relative",
+          width: "100%",
+          height: 80,
+          overflow: "visible",
           opacity: isScrollMode ? 0 : 1,
-          transition: "opacity 0.3s ease",
+          transition: "opacity 0.35s ease",
           pointerEvents: isScrollMode ? "none" : "auto",
         }}
       >
-        {/* The line */}
+        {/* The divider line — dog walks on top of it */}
         <div
-          className="absolute top-1/2 left-0 right-0 -translate-y-1/2"
-          style={{ height: 1, background: "var(--border)" }}
+          style={{
+            position: "absolute",
+            bottom: 14,
+            left: 0,
+            right: 0,
+            height: 1,
+            background: "var(--border)",
+          }}
         />
 
-        {/* Treats (small bones) */}
-        {TREAT_POSITIONS.map((pos, i) => (
-          <div
-            key={pos}
-            ref={(el) => { treatRefs.current[i] = el; }}
-            style={{
-              position: "absolute",
-              left: `${pos * 100}%`,
-              top: "50%",
-              transform: "translate(-50%, -50%)",
-              transition: "opacity 0.12s ease, transform 0.12s ease",
-              fontSize: 10,
-              lineHeight: 1,
-              pointerEvents: "none",
-              userSelect: "none",
-            }}
-          >
-            🦴
-          </div>
-        ))}
-
-        {/* Dog — positioned via direct DOM, bobbing via Framer Motion */}
+        {/* Dog — feet pinned to the line via transform */}
         <div
           ref={dogRef}
           style={{
             position: "absolute",
-            top: "50%",
-            left: "0%",
-            transform: "translate(-50%, -62%)",
+            // bottom: 14 = same as the line
+            bottom: 14,
+            left: "-4%",
+            // shift left by 50% of sprite width to center it on the position,
+            // shift down by (1 - FEET_FRACTION) of sprite height so feet sit on the line
+            transform: `translateX(-50%) translateY(${(1 - FEET_FRACTION) * 100}%)`,
             pointerEvents: "none",
           }}
         >
-          {/* Flip wrapper so dog faces right */}
-          <div style={{ transform: "scaleX(-1)" }}>
-            <motion.span
-              style={{ fontSize: 20, lineHeight: 1, display: "inline-block" }}
-              animate={{ y: [0, -4, 0] }}
-              transition={{ duration: 0.38, repeat: Infinity, ease: "easeInOut" }}
-            >
-              🐕
-            </motion.span>
-          </div>
+          <div
+            style={{
+              width: FULL_W,
+              height: FULL_H,
+              backgroundImage: "url('/saint-bernard-walk.png')",
+              backgroundSize: `${FULL_W * FRAME_COUNT}px ${FULL_H}px`,
+              backgroundRepeat: "no-repeat",
+              imageRendering: "pixelated",
+              animation: `sb-walk-full 0.65s steps(${FRAME_COUNT}) infinite`,
+            }}
+          />
         </div>
       </div>
     </>
