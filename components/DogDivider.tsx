@@ -2,242 +2,254 @@
 
 import { useEffect, useRef, useState } from "react";
 
-// ── Sprite config ────────────────────────────────────────────────────────────
-// All source frames are 100×100px. Feet hit at y=64 (64%) in every animation.
-const FEET_PX = 64; // pixel row of feet in source frame
-const SRC_SIZE = 100;
+// ── Constants ─────────────────────────────────────────────────────────────────
+// Source frames are all 100×100px. Feet land at y=64 in every animation.
+const SRC   = 100;   // source frame size (px)
+const SCALE = 2;     // display scale (2× for crisp pixel art)
+const DISP  = SRC * SCALE; // 200px — one displayed frame side
+const FEET  = 64 * SCALE;  // 128px — feet offset from sprite top at display scale
 
-// Display at 2× for crisp pixel art
-const SCALE = 2;
-const DISP = SRC_SIZE * SCALE; // 200px — display size of one frame square
+// Small version for the scroll progress bar
+const BAR_SCALE = 0.55;
+const BAR_W     = Math.round(DISP * BAR_SCALE); // 110px
+
+// All @keyframes pre-built as a static string → injected once, never re-injected
+const KEYFRAMES = `
+  @keyframes sb-walk    { from{background-position:0 0} to{background-position:-${DISP  *  8}px 0} }
+  @keyframes sb-idle    { from{background-position:0 0} to{background-position:-${DISP  * 10}px 0} }
+  @keyframes sb-lick    { from{background-position:0 0} to{background-position:-${DISP  *  4}px 0} }
+  @keyframes sb-bar-walk{ from{background-position:0 0} to{background-position:-${BAR_W *  8}px 0} }
+`;
 
 const SPRITES = {
-  walk: { src: "/saint-bernard-walk.png", frames: 8,  fps: 10 },
-  idle: { src: "/saint-bernard-idle.png", frames: 10, fps: 10 },
-  lick: { src: "/saint-bernard-lick.png", frames: 4,  fps:  8 },
+  walk: { src: "/saint-bernard-walk.png", frames: 8,  dur: "0.8s",  kf: "sb-walk" },
+  idle: { src: "/saint-bernard-idle.png", frames: 10, dur: "1.0s",  kf: "sb-idle" },
+  lick: { src: "/saint-bernard-lick.png", frames: 4,  dur: "0.5s",  kf: "sb-lick" },
 } as const;
 
 type AnimType = keyof typeof SPRITES;
 
-// How long the dog takes to cross the full screen width (walk-time only)
-const WALK_DURATION = 11000; // ms
+// ms the dog takes to cross the full viewport width (walk time only, excludes pauses)
+const WALK_MS = 12000;
 
-// ── Sprite display component ─────────────────────────────────────────────────
-function SaintBernard({
-  anim,
-  scale = 1,
-}: {
-  anim: AnimType;
-  scale?: number;
-}) {
+// ── Sprite renderer ───────────────────────────────────────────────────────────
+// No style injection here — keyframes are global, set once above.
+function SaintBernard({ anim, bar = false }: { anim: AnimType; bar?: boolean }) {
   const s = SPRITES[anim];
-  const w = Math.round(DISP * scale);
-  const h = Math.round(DISP * scale);
-  const keyframe = `sb-${anim}-${w}`;
+  const w = bar ? BAR_W : DISP;
+  const h = w;
+  const kf = bar ? "sb-bar-walk" : s.kf;
+  const dur = bar ? "0.8s" : s.dur;
 
   return (
-    <>
-      <style>{`
-        @keyframes ${keyframe} {
-          from { background-position: 0px 0px; }
-          to   { background-position: -${w * s.frames}px 0px; }
-        }
-      `}</style>
-      <div
-        style={{
-          width: w,
-          height: h,
-          backgroundImage: `url('${s.src}')`,
-          backgroundSize: `${w * s.frames}px ${h}px`,
-          backgroundRepeat: "no-repeat",
-          imageRendering: "pixelated",
-          animation: `${keyframe} ${(s.frames / s.fps).toFixed(3)}s steps(${s.frames}) infinite`,
-        }}
-      />
-    </>
+    <div
+      style={{
+        width:            w,
+        height:           h,
+        backgroundImage:  `url('${s.src}')`,
+        backgroundSize:   `${w * s.frames}px ${h}px`,
+        backgroundRepeat: "no-repeat",
+        imageRendering:   "pixelated",
+        animation:        `${kf} ${dur} steps(${s.frames}) infinite`,
+      }}
+    />
   );
 }
 
-// ── Main component ───────────────────────────────────────────────────────────
+// ── Main component ────────────────────────────────────────────────────────────
 export default function DogDivider() {
-  const [scrollY, setScrollY]       = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [anim, setAnim]             = useState<AnimType>("walk");
+  const [isScrollMode,   setIsScrollMode]   = useState(false);
+  const [anim,           setAnim]           = useState<AnimType>("walk");
 
-  // Refs for the RAF loop — avoids stale closures
-  const dogRef          = useRef<HTMLDivElement>(null);
-  const animRef         = useRef<number | undefined>(undefined);
-  const startedRef      = useRef(false);
-  const lastTRef        = useRef(0);
-  const walkElapsedRef  = useRef(0);  // ms actually spent walking
-  const animStateRef    = useRef<AnimType>("walk");
-  const nextSwitchRef   = useRef(0);  // RAF timestamp for next state switch
+  const containerRef   = useRef<HTMLDivElement>(null);
+  const dogRef         = useRef<HTMLDivElement>(null);
+  const rafRef         = useRef<number | undefined>(undefined);
+  const lastTRef       = useRef(0);
+  const walkMsRef      = useRef(0);      // ms spent walking in current crossing
+  const animStateRef   = useRef<AnimType>("walk");
+  const nextSwitchRef  = useRef(0);      // RAF timestamp for next state switch
+  const freshLoopRef   = useRef(true);   // true right after a loop reset
 
-  // Scroll tracking
+  // ── Scroll tracking ───────────────────────────────────────────────────────
   useEffect(() => {
     const onScroll = () => {
-      const y = window.scrollY;
-      setScrollY(y);
+      const y   = window.scrollY;
       const max = document.documentElement.scrollHeight - window.innerHeight;
       setScrollProgress(max > 0 ? Math.min(y / max, 1) : 0);
+      setIsScrollMode(y > 10);
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const isScrollMode = scrollY > 10;
-
-  // ── Walking + idle state machine ──────────────────────────────────────────
+  // ── Walking / idle state machine ──────────────────────────────────────────
   useEffect(() => {
     if (isScrollMode) {
-      if (animRef.current !== undefined) cancelAnimationFrame(animRef.current);
-      startedRef.current = false;
-      lastTRef.current   = 0;
+      if (rafRef.current !== undefined) cancelAnimationFrame(rafRef.current);
+      lastTRef.current = 0;
       return;
     }
 
-    // Reset dog to off-screen left and show walking sprite
-    if (dogRef.current) dogRef.current.style.left = "-4%";
-    animStateRef.current = "walk";
+    // Reset state when coming back from scroll mode
+    walkMsRef.current     = 0;
+    freshLoopRef.current  = true;
+    animStateRef.current  = "walk";
     setAnim("walk");
 
     const tick = (t: number) => {
-      if (!startedRef.current) {
-        startedRef.current   = true;
-        lastTRef.current     = t;
-        walkElapsedRef.current = 0;
-        // First walk: 3–6 seconds before first pause
+      const dt = lastTRef.current ? Math.min(t - lastTRef.current, 50) : 0;
+      lastTRef.current = t;
+
+      // Seed the first switch timer
+      if (nextSwitchRef.current === 0) {
         nextSwitchRef.current = t + 3000 + Math.random() * 3000;
       }
 
-      const dt = Math.min(t - lastTRef.current, 50); // cap to avoid time-warp jumps
-      lastTRef.current = t;
+      const cw = containerRef.current?.offsetWidth ?? window.innerWidth;
+      // Off-screen margins in px — ensures dog is fully hidden before/after crossing
+      const margin  = DISP / 2 + 30; // 130px
+      const startPx = -margin;
+      const endPx   = cw + margin;
 
       const state = animStateRef.current;
 
       if (state === "walk") {
-        walkElapsedRef.current += dt;
+        walkMsRef.current += dt;
 
-        // Loop the walk back to the start (happens off-screen)
-        if (walkElapsedRef.current >= WALK_DURATION) {
-          walkElapsedRef.current = 0;
+        if (walkMsRef.current >= WALK_MS) {
+          // Dog has crossed — reset fully off-screen left and re-walk
+          walkMsRef.current    = 0;
+          freshLoopRef.current = true;
+          // Don't allow a pause for the first 35% of the next crossing
+          nextSwitchRef.current = t + WALK_MS * 0.35 + Math.random() * (WALK_MS * 0.25);
         }
 
-        const progress = walkElapsedRef.current / WALK_DURATION;
+        const progress = walkMsRef.current / WALK_MS;
+        const leftPx   = startPx + progress * (endPx - startPx);
+
         if (dogRef.current) {
-          dogRef.current.style.left = `${-4 + progress * 108}%`;
+          dogRef.current.style.left = `${leftPx}px`;
         }
 
-        // Only pause when dog is visibly on screen (25–75% of journey)
-        if (progress > 0.25 && progress < 0.75 && t >= nextSwitchRef.current) {
+        // Clear "fresh loop" flag once dog is 15% into its crossing
+        if (freshLoopRef.current && progress > 0.15) {
+          freshLoopRef.current = false;
+        }
+
+        // Pause only when: dog is in mid-screen (30–70%), not freshly looped, timer ready
+        if (!freshLoopRef.current && progress > 0.30 && progress < 0.70 && t >= nextSwitchRef.current) {
           const next: AnimType = Math.random() < 0.55 ? "idle" : "lick";
           animStateRef.current = next;
           setAnim(next);
-          // Pause for 1.5–3s
           nextSwitchRef.current = t + 1500 + Math.random() * 1500;
         }
       } else {
-        // Paused (idle or lick) — don't advance position
+        // Paused — don't move dog
         if (t >= nextSwitchRef.current) {
-          animStateRef.current = "walk";
+          animStateRef.current  = "walk";
           setAnim("walk");
-          // Walk for 4–8s before next pause
-          nextSwitchRef.current = t + 4000 + Math.random() * 4000;
+          nextSwitchRef.current = t + WALK_MS * 0.35 + Math.random() * (WALK_MS * 0.3);
         }
       }
 
-      animRef.current = requestAnimationFrame(tick);
+      rafRef.current = requestAnimationFrame(tick);
     };
 
-    animRef.current = requestAnimationFrame(tick);
+    rafRef.current = requestAnimationFrame(tick);
     return () => {
-      if (animRef.current !== undefined) cancelAnimationFrame(animRef.current);
+      if (rafRef.current !== undefined) cancelAnimationFrame(rafRef.current);
+      nextSwitchRef.current = 0; // reset so it re-seeds next time
     };
   }, [isScrollMode]);
 
   // ── Geometry ──────────────────────────────────────────────────────────────
-  // Feet are at FEET_PX/SRC_SIZE of the source frame = same fraction at 2× scale.
-  // We want feet to sit exactly on the divider line.
-  // dogRef top = lineY - (FEET_PX * SCALE)
-  const feetOffsetPx = FEET_PX * SCALE; // 128px — feet from sprite top at 2×
-  const containerH   = 80;              // px
-  const lineY        = 70;              // px from container top
-  const dogTop       = lineY - feetOffsetPx; // -58px — sprite starts above container
+  // Container: 80px tall. Line near bottom. Dog top = lineY - FEET.
+  const containerH = 80;
+  const lineY      = 72;            // px from container top
+  const dogTopPx   = lineY - FEET;  // –56px — sprite top sits above container
 
-  // For the scroll bar dog (0.6× of DISP)
-  const barScale     = 0.55;
-  const barFeetPx    = Math.round(feetOffsetPx * barScale); // feet offset at bar scale
+  // Progress bar dog: feet at bottom of the 3px bar → translateY(-barFeet)
+  const barFeetPx = Math.round(FEET * BAR_SCALE); // 70px
 
   return (
     <>
-      {/* ── Fixed scroll progress bar ─────────────────────────────────────── */}
-      {isScrollMode && (
-        <div
-          className="fixed top-0 left-0 right-0"
-          style={{ height: 2, zIndex: 999 }}
-        >
-          {/* track */}
-          <div className="absolute inset-0" style={{ background: "var(--border)" }} />
-          {/* fill */}
-          <div
-            className="absolute top-0 left-0 h-full"
-            style={{
-              width: `${scrollProgress * 100}%`,
-              background: "var(--text-primary)",
-              opacity: 0.45,
-            }}
-          />
-          {/* dog riding the bar — feet on the 2px line */}
-          <div
-            style={{
-              position: "absolute",
-              left: `clamp(${Math.round(DISP * barScale * 0.5)}px, ${scrollProgress * 100}%, calc(100% - ${Math.round(DISP * barScale * 0.5)}px))`,
-              top: 2, // just below the 2px bar
-              transform: `translateX(-50%) translateY(-${barFeetPx}px)`,
-              pointerEvents: "none",
-            }}
-          >
-            <SaintBernard anim="walk" scale={barScale} />
-          </div>
-        </div>
-      )}
+      {/* ── Global keyframes — injected exactly once ─────────────────────── */}
+      <style>{KEYFRAMES}</style>
 
-      {/* ── Inline walking divider ─────────────────────────────────────────── */}
+      {/* ── Scroll progress bar (fixed, top of page) ─────────────────────── */}
       <div
+        className="fixed top-0 left-0 right-0"
         style={{
-          position: "relative",
-          width: "100%",
-          height: containerH,
-          overflow: "visible",
-          opacity: isScrollMode ? 0 : 1,
-          transition: "opacity 0.35s ease",
+          height:  3,
+          zIndex:  999,
+          opacity: isScrollMode ? 1 : 0,
+          transition: "opacity 0.3s ease",
+          pointerEvents: "none",
+        }}
+      >
+        {/* track */}
+        <div className="absolute inset-0" style={{ background: "var(--border)" }} />
+        {/* fill */}
+        <div
+          className="absolute top-0 left-0 h-full"
+          style={{
+            width:      `${scrollProgress * 100}%`,
+            background: "var(--text-primary)",
+            opacity:    0.6,
+            transition: "width 0.05s linear",
+          }}
+        />
+        {/* dog riding the bar */}
+        <div
+          style={{
+            position:  "absolute",
+            // clamp so dog center never clips at either edge
+            left:      `clamp(${BAR_W / 2}px, ${scrollProgress * 100}%, calc(100% - ${BAR_W / 2}px))`,
+            top:       3,                                    // just below bar surface
+            transform: `translateX(-50%) translateY(-${barFeetPx}px)`,
+          }}
+        >
+          <SaintBernard anim="walk" bar />
+        </div>
+      </div>
+
+      {/* ── Inline walking divider ────────────────────────────────────────── */}
+      <div
+        ref={containerRef}
+        style={{
+          position:  "relative",
+          width:     "100%",
+          height:    containerH,
+          overflow:  "visible",
+          opacity:   isScrollMode ? 0 : 1,
+          transition:"opacity 0.35s ease",
           pointerEvents: isScrollMode ? "none" : "auto",
         }}
       >
-        {/* The divider line */}
+        {/* Divider line */}
         <div
           style={{
-            position: "absolute",
-            top: lineY,
-            left: 0,
-            right: 0,
-            height: 1,
+            position:   "absolute",
+            top:        lineY,
+            left:       0,
+            right:      0,
+            height:     1,
             background: "var(--border)",
           }}
         />
 
-        {/* Dog — left managed by RAF; top is fixed so feet land on the line */}
+        {/* Dog — `left` owned entirely by RAF, never set in JSX */}
         <div
           ref={dogRef}
           style={{
-            position: "absolute",
-            top: dogTop,        // -58px: sprite top above container
-            // left: NOT set here — owned entirely by the RAF loop
-            transform: "translateX(-50%)",
+            position:  "absolute",
+            top:       dogTopPx,           // feet land exactly on lineY
+            transform: "translateX(-50%)", // center sprite on left position
             pointerEvents: "none",
           }}
         >
-          <SaintBernard anim={anim} scale={1} />
+          <SaintBernard anim={anim} />
         </div>
       </div>
     </>
