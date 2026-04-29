@@ -10,8 +10,8 @@ const DISP  = SRC * SCALE; // 200px — one displayed frame side
 const FEET  = 64 * SCALE;  // 128px — feet offset from sprite top at display scale
 
 // Small version for the scroll progress bar
-const BAR_SCALE = 0.55;
-const BAR_W     = Math.round(DISP * BAR_SCALE); // 110px
+const BAR_SCALE = 0.42;
+const BAR_W     = Math.round(DISP * BAR_SCALE); // 84px
 
 // All @keyframes pre-built as a static string → injected once, never re-injected
 const KEYFRAMES = `
@@ -32,7 +32,15 @@ const WALK_MS = 12000;
 
 // ── Sprite renderer ───────────────────────────────────────────────────────────
 // No style injection here — keyframes are global, set once above.
-function SaintBernard({ anim, bar = false }: { anim: AnimType; bar?: boolean }) {
+function SaintBernard({
+  anim,
+  bar = false,
+  playing = true,
+}: {
+  anim: AnimType;
+  bar?: boolean;
+  playing?: boolean;
+}) {
   const s = SPRITES[anim];
   const w = bar ? BAR_W : DISP;
   const h = w;
@@ -49,6 +57,7 @@ function SaintBernard({ anim, bar = false }: { anim: AnimType; bar?: boolean }) 
         backgroundRepeat: "no-repeat",
         imageRendering:   "pixelated",
         animation:        `${kf} ${dur} steps(${s.frames}) infinite`,
+        animationPlayState: playing ? "running" : "paused",
       }}
     />
   );
@@ -58,10 +67,12 @@ function SaintBernard({ anim, bar = false }: { anim: AnimType; bar?: boolean }) 
 export default function DogDivider() {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isScrollMode,   setIsScrollMode]   = useState(false);
+  const [isScrolling,    setIsScrolling]    = useState(false);
   const [anim,           setAnim]           = useState<AnimType>("walk");
 
   const containerRef   = useRef<HTMLDivElement>(null);
   const dogRef         = useRef<HTMLDivElement>(null);
+  const scrollStopRef  = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const rafRef         = useRef<number | undefined>(undefined);
   const lastTRef       = useRef(0);
   const walkMsRef      = useRef(0);      // ms spent walking in current crossing
@@ -84,9 +95,22 @@ export default function DogDivider() {
       const max = document.documentElement.scrollHeight - window.innerHeight;
       setScrollProgress(max > 0 ? Math.min(y / max, 1) : 0);
       setIsScrollMode(y > 10);
+      setIsScrolling(true);
+
+      if (scrollStopRef.current !== undefined) {
+        clearTimeout(scrollStopRef.current);
+      }
+      scrollStopRef.current = setTimeout(() => {
+        setIsScrolling(false);
+      }, 140);
     };
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (scrollStopRef.current !== undefined) {
+        clearTimeout(scrollStopRef.current);
+      }
+    };
   }, []);
 
   // ── Walking / stretching state machine ───────────────────────────────────
@@ -175,8 +199,8 @@ export default function DogDivider() {
   const lineY      = 72;            // px from container top
   const dogTopPx   = lineY - FEET;  // –56px — sprite top sits above container
 
-  // Progress bar dog: feet at bottom of the 3px bar → translateY(-barFeet)
-  const barFeetPx = Math.round(FEET * BAR_SCALE); // 70px
+  // Scroll dog sits just inside the viewport instead of riding above it.
+  const scrollDogLiftPx = Math.round(BAR_W * 0.14);
 
   return (
     <>
@@ -187,7 +211,7 @@ export default function DogDivider() {
       <div
         className="fixed top-0 left-0 right-0"
         style={{
-          height:  3,
+          height:  48,
           zIndex:  999,
           opacity: isScrollMode ? 1 : 0,
           transition: "opacity 0.3s ease",
@@ -212,11 +236,11 @@ export default function DogDivider() {
             position:  "absolute",
             // clamp so dog center never clips at either edge
             left:      `clamp(${BAR_W / 2}px, ${scrollProgress * 100}%, calc(100% - ${BAR_W / 2}px))`,
-            top:       3,                                    // just below bar surface
-            transform: `translateX(-50%) translateY(-${barFeetPx}px)`,
+            top:       3,
+            transform: `translateX(-50%) translateY(-${scrollDogLiftPx}px)`,
           }}
         >
-          <SaintBernard anim="walk" bar />
+          <SaintBernard anim="walk" bar playing={isScrolling} />
         </div>
       </div>
 
