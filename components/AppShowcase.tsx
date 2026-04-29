@@ -174,53 +174,6 @@ export default function AppShowcase({ app, comingSoon }: AppShowcaseProps) {
             )}
           </div>
         </div>
-        {app.update && (
-          <div
-            className="mt-7 rounded-[18px] border px-4 py-4 sm:px-5 sm:py-5"
-            style={{
-              borderColor: "var(--border)",
-              background: "color-mix(in srgb, var(--pill-bg) 72%, transparent)",
-            }}
-          >
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-              <div>
-                <p
-                  className="text-[10px] font-semibold tracking-[0.16em] uppercase"
-                  style={{ color: "var(--text-muted)" }}
-                >
-                  What&apos;s new
-                </p>
-                <h2
-                  className="mt-1 text-[18px] sm:text-[20px] font-medium tracking-[-0.02em]"
-                  style={{ color: "var(--text-primary)" }}
-                >
-                  {app.update.title}
-                </h2>
-              </div>
-              <p
-                className="max-w-[620px] text-[12px] sm:text-[13px] leading-relaxed font-light"
-                style={{ color: "var(--text-secondary)" }}
-              >
-                {app.update.body}
-              </p>
-            </div>
-            <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-              {app.update.items.map((item) => (
-                <div
-                  key={item}
-                  className="rounded-[12px] border px-3 py-2 text-[11px] sm:text-[12px]"
-                  style={{
-                    borderColor: "var(--border)",
-                    color: "var(--text-secondary)",
-                    background: "var(--bg)",
-                  }}
-                >
-                  {item}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Divider */}

@@ -21,6 +21,7 @@ export default function MochiPage() {
       logoSrc="/logos/mochi.jpg.jpeg"
       screens={[
         "/open-log-close-screen1 (1).png",
+        "/mochi-insights-2.png",
         "/reflection-screen2 (1).png",
         "/ocr-screen3.png",
         "/history-screen3 (1).png",
@@ -35,26 +36,34 @@ export default function MochiPage() {
         "**Private by default** with a focused single-user experience",
         "Built to feel **light and fast** across everyday iPhone use",
       ]}
-      latestDate="March 14, 2026"
-      latestDateIso="2026-03-14"
-      changelogTitle="Changelog"
-      changelogSubtitle="New in this release"
+      latestDate="April 29, 2026"
+      latestDateIso="2026-04-29"
+      changelogTitle="Mochi 2.0"
+      changelogSubtitle="A major refinement of the app."
       changelog={[
         {
-          title: "Speed Dial Payment Types",
-          body: "Assign specific payment methods to speed dial presets. Long press a number in Settings > Speed Dial to edit.",
+          title: "Recurring expenses",
+          body: "Plan repeating costs and keep recurring spending visible.",
         },
         {
-          title: "Purple Theme",
-          body: "A new purple theme is now available in Themes.",
+          title: "Refined insights and analytics",
+          body: "A clearer view of what you spend, where it goes, and how patterns change over time.",
         },
         {
-          title: "Receipt Scanning",
-          body: "Effortlessly add transactions by scanning receipts directly from the Keypad.",
+          title: "Better History search and filtering",
+          body: "Find past expenses faster with improved search and cleaner filters.",
         },
         {
-          title: "Payment Method Icons",
-          body: "See exactly how you paid with visual indicators in History.",
+          title: "Cleaner settings and membership screens",
+          body: "Settings and membership flows have been simplified and polished.",
+        },
+        {
+          title: "Improved visual polish",
+          body: "Animations, spacing, and interaction details have been refined across the app.",
+        },
+        {
+          title: "Bug fixes and performance improvements",
+          body: "General stability and performance improvements throughout Mochi.",
         },
       ]}
       ctaUrl="https://apps.apple.com/us/app/mochi-spent-tracker/id6758880826"
