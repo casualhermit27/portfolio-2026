@@ -10,7 +10,7 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   title: "Harsha Chaganti",
-  description: "iOS apps by Harsha Chaganti",
+  description: "macOS and iOS apps by Harsha Chaganti",
 };
 
 export default function RootLayout({

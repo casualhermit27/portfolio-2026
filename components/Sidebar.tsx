@@ -18,7 +18,7 @@ export default function Sidebar({ apps, activeApp, onSelect }: SidebarProps) {
           Harsha Chaganti
         </p>
         <p className="text-[11px] text-[#A09A93] mt-0.5 tracking-wide">
-          iOS Developer
+          macOS & iOS Developer
         </p>
       </div>
 

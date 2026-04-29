@@ -303,7 +303,7 @@ export default function Home() {
             className="text-[13px] tracking-wide"
             style={{ color: "var(--text-secondary)" }}
           >
-            iOS Developer
+            macOS & iOS Developer
           </p>
           <a
             href="https://apps.apple.com/developer/harsha-chaganti"
