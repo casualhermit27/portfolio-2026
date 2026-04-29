@@ -16,19 +16,13 @@ const BAR_W     = Math.round(DISP * BAR_SCALE); // 110px
 // All @keyframes pre-built as a static string → injected once, never re-injected
 const KEYFRAMES = `
   @keyframes sb-walk    { from{background-position:0 0} to{background-position:-${DISP  *  8}px 0} }
-  @keyframes sb-idle    { from{background-position:0 0} to{background-position:-${DISP  * 10}px 0} }
-  @keyframes sb-lick    { from{background-position:0 0} to{background-position:-${DISP  *  4}px 0} }
   @keyframes sb-stretch { from{background-position:0 0} to{background-position:-${DISP  * 10}px 0} }
-  @keyframes sb-bark    { from{background-position:0 0} to{background-position:-${DISP  *  3}px 0} }
   @keyframes sb-bar-walk{ from{background-position:0 0} to{background-position:-${BAR_W *  8}px 0} }
 `;
 
 const SPRITES = {
-  walk:    { src: "/saint-bernard-walk.png",    frames: 8,  dur: "0.8s",  durMs: 800,  kf: "sb-walk",    cycleMs: 800 },
-  idle:    { src: "/saint-bernard-idle.png",    frames: 10, dur: "1.0s",  durMs: 1000, kf: "sb-idle",    cycleMs: 1000 },
-  lick:    { src: "/saint-bernard-lick.png",    frames: 4,  dur: "0.6s",  durMs: 600,  kf: "sb-lick",    cycleMs: 600, startFrame: 2 },
-  stretch: { src: "/saint-bernard-stretch.png", frames: 10, dur: "1.1s",  durMs: 1100, kf: "sb-stretch", cycleMs: 1100 },
-  bark:    { src: "/saint-bernard-bark.png",    frames: 3,  dur: "0.45s", durMs: 450,  kf: "sb-bark",   cycleMs: 900, startFrame: 2 },
+  walk:    { src: "/saint-bernard-walk.png",    frames: 8,  dur: "0.8s", kf: "sb-walk",    cycleMs: 800 },
+  stretch: { src: "/saint-bernard-stretch.png", frames: 10, dur: "1.1s", kf: "sb-stretch", cycleMs: 1100 },
 } as const;
 
 type AnimType = keyof typeof SPRITES;
@@ -44,8 +38,6 @@ function SaintBernard({ anim, bar = false }: { anim: AnimType; bar?: boolean }) 
   const h = w;
   const kf = bar ? "sb-bar-walk" : s.kf;
   const dur = bar ? "0.8s" : s.dur;
-  const startFrame = !bar && "startFrame" in s ? s.startFrame : 0;
-  const animationDelay = startFrame ? `${-(s.durMs / s.frames) * startFrame}ms` : undefined;
 
   return (
     <div
@@ -57,7 +49,6 @@ function SaintBernard({ anim, bar = false }: { anim: AnimType; bar?: boolean }) 
         backgroundRepeat: "no-repeat",
         imageRendering:   "pixelated",
         animation:        `${kf} ${dur} steps(${s.frames}) infinite`,
-        animationDelay,
       }}
     />
   );
@@ -75,7 +66,6 @@ export default function DogDivider() {
   const lastTRef       = useRef(0);
   const walkMsRef      = useRef(0);      // ms spent walking in current crossing
   const animStateRef   = useRef<AnimType>("walk");
-  const actionQueueRef = useRef<AnimType[]>([]);
   const nextSwitchRef  = useRef(0);      // RAF timestamp for next state switch
   const freshLoopRef   = useRef(true);   // true right after a loop reset
 
@@ -99,7 +89,7 @@ export default function DogDivider() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // ── Walking / idle state machine ──────────────────────────────────────────
+  // ── Walking / stretching state machine ───────────────────────────────────
   useEffect(() => {
     if (isScrollMode) {
       if (rafRef.current !== undefined) cancelAnimationFrame(rafRef.current);
@@ -111,7 +101,6 @@ export default function DogDivider() {
     walkMsRef.current     = 0;
     freshLoopRef.current  = true;
     animStateRef.current  = "walk";
-    actionQueueRef.current = [];
     setAnim("walk");
 
     const tick = (t: number) => {
@@ -156,13 +145,7 @@ export default function DogDivider() {
 
         // Pause only when: dog is in mid-screen (30–70%), not freshly looped, timer ready
         if (!freshLoopRef.current && progress > 0.30 && progress < 0.70 && t >= nextSwitchRef.current) {
-          const sequence: AnimType[] =
-            Math.random() < 0.5
-              ? ["idle", "lick", "bark", "stretch", "idle"]
-              : ["idle", "stretch", "bark", "lick", "idle"];
-          const [next, ...rest] = sequence;
-
-          actionQueueRef.current = rest;
+          const next: AnimType = "stretch";
           animStateRef.current = next;
           setAnim(next);
           nextSwitchRef.current = t + SPRITES[next].cycleMs;
@@ -170,17 +153,9 @@ export default function DogDivider() {
       } else {
         // Paused — don't move dog. Complete each sprite cycle before switching.
         if (t >= nextSwitchRef.current) {
-          const next = actionQueueRef.current.shift();
-
-          if (next) {
-            animStateRef.current = next;
-            setAnim(next);
-            nextSwitchRef.current = t + SPRITES[next].cycleMs;
-          } else {
-            animStateRef.current  = "walk";
-            setAnim("walk");
-            nextSwitchRef.current = t + WALK_MS * 0.35 + Math.random() * (WALK_MS * 0.3);
-          }
+          animStateRef.current  = "walk";
+          setAnim("walk");
+          nextSwitchRef.current = t + WALK_MS * 0.35 + Math.random() * (WALK_MS * 0.3);
         }
       }
 
@@ -191,7 +166,6 @@ export default function DogDivider() {
     return () => {
       if (rafRef.current !== undefined) cancelAnimationFrame(rafRef.current);
       nextSwitchRef.current = 0; // reset so it re-seeds next time
-      actionQueueRef.current = [];
     };
   }, [isScrollMode]);
 
