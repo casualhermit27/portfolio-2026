@@ -13,6 +13,11 @@ export type App = {
   screens: string[];
   platform?: "ios" | "mac";
   liveUrl?: string;
+  update?: {
+    title: string;
+    body: string;
+    items: string[];
+  };
 };
 
 const apps: App[] = [
@@ -25,10 +30,23 @@ const apps: App[] = [
     liveUrl: "https://mochi.harshachaganti.com",
     screens: [
       "/open-log-close-screen1 (1).png",
+      "/mochi-insights-2.png",
       "/reflection-screen2 (1).png",
       "/history-screen3 (1).png",
       "/widget-screen4 (1).png",
     ],
+    update: {
+      title: "Mochi 2.0",
+      body: "A major refinement focused on recurring expenses, clearer insights, faster history workflows, and a cleaner overall experience.",
+      items: [
+        "Recurring expenses",
+        "Refined insights and analytics",
+        "Better search and filtering in History",
+        "Cleaner settings and membership screens",
+        "Improved animations, spacing, and visual polish",
+        "Bug fixes and performance improvements",
+      ],
+    },
   },
   {
     id: "jott",
