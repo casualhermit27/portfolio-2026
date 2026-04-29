@@ -24,11 +24,11 @@ const KEYFRAMES = `
 `;
 
 const SPRITES = {
-  walk:    { src: "/saint-bernard-walk.png",    frames: 8,  dur: "0.8s", kf: "sb-walk",    cycleMs: 800 },
-  idle:    { src: "/saint-bernard-idle.png",    frames: 10, dur: "1.0s", kf: "sb-idle",    cycleMs: 1000 },
-  lick:    { src: "/saint-bernard-lick.png",    frames: 4,  dur: "0.6s", kf: "sb-lick",    cycleMs: 600 },
-  stretch: { src: "/saint-bernard-stretch.png", frames: 10, dur: "1.1s", kf: "sb-stretch", cycleMs: 1100 },
-  bark:    { src: "/saint-bernard-bark.png",    frames: 3,  dur: "0.45s", kf: "sb-bark",   cycleMs: 900 },
+  walk:    { src: "/saint-bernard-walk.png",    frames: 8,  dur: "0.8s",  durMs: 800,  kf: "sb-walk",    cycleMs: 800 },
+  idle:    { src: "/saint-bernard-idle.png",    frames: 10, dur: "1.0s",  durMs: 1000, kf: "sb-idle",    cycleMs: 1000 },
+  lick:    { src: "/saint-bernard-lick.png",    frames: 4,  dur: "0.6s",  durMs: 600,  kf: "sb-lick",    cycleMs: 600, startFrame: 2 },
+  stretch: { src: "/saint-bernard-stretch.png", frames: 10, dur: "1.1s",  durMs: 1100, kf: "sb-stretch", cycleMs: 1100 },
+  bark:    { src: "/saint-bernard-bark.png",    frames: 3,  dur: "0.45s", durMs: 450,  kf: "sb-bark",   cycleMs: 900, startFrame: 2 },
 } as const;
 
 type AnimType = keyof typeof SPRITES;
@@ -44,6 +44,8 @@ function SaintBernard({ anim, bar = false }: { anim: AnimType; bar?: boolean }) 
   const h = w;
   const kf = bar ? "sb-bar-walk" : s.kf;
   const dur = bar ? "0.8s" : s.dur;
+  const startFrame = !bar && "startFrame" in s ? s.startFrame : 0;
+  const animationDelay = startFrame ? `${-(s.durMs / s.frames) * startFrame}ms` : undefined;
 
   return (
     <div
@@ -55,6 +57,7 @@ function SaintBernard({ anim, bar = false }: { anim: AnimType; bar?: boolean }) 
         backgroundRepeat: "no-repeat",
         imageRendering:   "pixelated",
         animation:        `${kf} ${dur} steps(${s.frames}) infinite`,
+        animationDelay,
       }}
     />
   );
