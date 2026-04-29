@@ -31,21 +31,21 @@ const apps: App[] = [
     ],
   },
   {
-    id: "can",
-    name: "can",
-    tagline: "convert anything now — drop to dock",
-    logo: "/logos/can 2.jpg",
-    platform: "mac",
-    liveUrl: "https://can.harshachaganti.com",
-    screens: [],
-  },
-  {
     id: "jott",
     name: "jott",
     tagline: "capture a thought, anywhere",
     logo: "/logos/jott.png",
     platform: "mac",
     liveUrl: "https://jott.harshachaganti.com",
+    screens: [],
+  },
+  {
+    id: "can",
+    name: "can",
+    tagline: "convert anything now — drop to dock",
+    logo: "/logos/can 2.jpg",
+    platform: "mac",
+    liveUrl: "https://can.harshachaganti.com",
     screens: [],
   },
   {
@@ -323,7 +323,7 @@ export default function Home() {
       {/* ── All app sections ── */}
       <main className="px-5 sm:px-8 md:px-12 lg:px-16 pb-14">
         {apps.map((app, i) => {
-          const comingSoon = i > 1; // everything after "can"
+          const comingSoon = i >= 2; // can and everything after it
           return (
             <div key={app.id}>
               {i > 0 && (
