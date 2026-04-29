@@ -13,6 +13,7 @@ export type App = {
   screens: string[];
   platform?: "ios" | "mac";
   liveUrl?: string;
+  version?: string;
 };
 
 const apps: App[] = [
@@ -23,6 +24,7 @@ const apps: App[] = [
     logo: "/logos/mochi.jpg.jpeg",
     platform: "ios",
     liveUrl: "https://mochi.harshachaganti.com",
+    version: "v2.0",
     screens: [
       "/open-log-close-screen1 (1).png",
       "/mochi-insights-2.png",

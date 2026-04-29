@@ -19,6 +19,7 @@ export default function MochiPage() {
       tagline="Mindful spending, without the noise."
       description="A quiet, mindful way to track spending, check patterns, and reflect on habits."
       logoSrc="/logos/mochi.jpg.jpeg"
+      versionLabel="v2.0"
       screens={[
         "/open-log-close-screen1 (1).png",
         "/mochi-insights-2.png",

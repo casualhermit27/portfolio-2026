@@ -20,6 +20,7 @@ type SubdomainLandingProps = {
   description: string;
   platform: "iOS" | "macOS";
   logoSrc: string;
+  versionLabel?: string;
   screens?: string[];
   bullets: string[];
   ctaUrl?: string;
@@ -123,6 +124,7 @@ export default function SubdomainLanding({
   description,
   platform,
   logoSrc,
+  versionLabel,
   screens = [],
   bullets,
   ctaUrl,
@@ -291,6 +293,14 @@ export default function SubdomainLanding({
               >
                 {platform}
               </span>
+              {versionLabel && (
+                <span
+                  className="text-[10px] font-medium uppercase tracking-[0.12em] border rounded-full px-2.5 py-1 mb-1"
+                  style={{ color: accent.buttonText, borderColor: accent.buttonBorder, background: accent.buttonBg }}
+                >
+                  {versionLabel}
+                </span>
+              )}
             </div>
             {tagline && (
               <p

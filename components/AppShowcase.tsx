@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import PhoneMockup from "@/components/PhoneMockup";
 import MacMockup from "@/components/MacMockup";
 import type { App } from "@/app/page";
-import SupportedConversions from "@/components/SupportedConversions";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -156,6 +155,18 @@ export default function AppShowcase({ app, comingSoon }: AppShowcaseProps) {
               >
                 {isMac ? "macOS" : "iOS"}
               </span>
+              {app.version && (
+                <span
+                  className="text-[9px] sm:text-[10px] font-medium tracking-[0.1em] uppercase border rounded-full px-2 sm:px-2.5 py-0.5 sm:py-1 mt-1 self-end mb-1 sm:mb-2"
+                  style={{
+                    color: goToButtonPalette.text,
+                    borderColor: goToButtonPalette.border,
+                    background: goToButtonPalette.bg,
+                  }}
+                >
+                  {app.version}
+                </span>
+              )}
             </div>
             <p
               className="text-[12px] sm:text-[13px] mt-1.5 sm:mt-2.5 font-light tracking-wide"
@@ -163,15 +174,6 @@ export default function AppShowcase({ app, comingSoon }: AppShowcaseProps) {
             >
               {app.tagline}
             </p>
-            {app.id === "can" && (
-              <div className="mt-4">
-                <SupportedConversions accent={{
-                  highlightBg: goToButtonPalette.bg,
-                  highlightText: goToButtonPalette.text,
-                  buttonBorder: goToButtonPalette.border
-                }} />
-              </div>
-            )}
           </div>
         </div>
       </div>
@@ -257,27 +259,29 @@ export default function AppShowcase({ app, comingSoon }: AppShowcaseProps) {
           </div>
 
           {/* Mockups — stagger on mount */}
-          <motion.div
-            className="flex gap-3 sm:gap-4 md:gap-5 flex-wrap pt-2"
-            variants={phoneContainer}
-            initial="hidden"
-            animate="show"
-          >
-            {hasScreens
-              ? app.screens.map((src, i) => (
-                <motion.div key={src} variants={phoneItem}>
-                  {isMac
-                    ? <MacMockup src={src} alt={`${app.name} screen ${i + 1}`} />
-                    : <PhoneMockup src={src} alt={`${app.name} screen ${i + 1}`} />
-                  }
-                </motion.div>
-              ))
-              : Array.from({ length: emptyCount }).map((_, i) => (
-                <motion.div key={i} variants={phoneItem}>
-                  {isMac ? <MacMockup empty /> : <PhoneMockup empty />}
-                </motion.div>
-              ))}
-          </motion.div>
+          <div className="overflow-x-auto scrollbar-hide pb-3">
+            <motion.div
+              className="flex w-max snap-x snap-mandatory items-start gap-3 sm:gap-4 md:gap-5 pt-2"
+              variants={phoneContainer}
+              initial="hidden"
+              animate="show"
+            >
+              {hasScreens
+                ? app.screens.map((src, i) => (
+                  <motion.div key={src} variants={phoneItem} className="snap-center flex-shrink-0">
+                    {isMac
+                      ? <MacMockup src={src} alt={`${app.name} screen ${i + 1}`} />
+                      : <PhoneMockup src={src} alt={`${app.name} screen ${i + 1}`} />
+                    }
+                  </motion.div>
+                ))
+                : Array.from({ length: emptyCount }).map((_, i) => (
+                  <motion.div key={i} variants={phoneItem} className="snap-center flex-shrink-0">
+                    {isMac ? <MacMockup empty /> : <PhoneMockup empty />}
+                  </motion.div>
+                ))}
+            </motion.div>
+          </div>
         </>
       )}
     </div>
