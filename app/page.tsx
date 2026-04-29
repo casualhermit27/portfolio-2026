@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import AppShowcase from "@/components/AppShowcase";
+import DogDivider from "@/components/DogDivider";
 
 export type App = {
   id: string;
@@ -209,57 +210,7 @@ export default function Home() {
         style={{ background: "var(--bg-sticky)" }}
       >
         <header className="backdrop-blur-xl">
-          {/* top row */}
-          <div
-            className="px-5 sm:px-8 md:px-12 lg:px-16 pt-5 sm:pt-6 pb-3 flex items-end justify-between"
-          >
-            <div>
-              <p
-                className="text-[13px] font-medium tracking-tight"
-                style={{ color: "var(--text-primary)" }}
-              >
-                Harsha Chaganti
-              </p>
-              <div className="flex items-center gap-2 mt-0.5">
-                <p
-                  className="text-[11px] tracking-wide"
-                  style={{ color: "var(--text-secondary)" }}
-                >
-                  iOS Developer
-                </p>
-                <a
-                  href="https://apps.apple.com/developer/harsha-chaganti"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="opacity-50 hover:opacity-100 transition-opacity duration-200"
-                  title="App Store"
-                >
-                  <AppStoreIcon />
-                </a>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 pb-0.5">
-              <p className="text-[11px] tracking-wide" style={{ color: "var(--text-faint)" }}>
-                © 2026
-              </p>
-              <button
-                onClick={() => setDark((d) => !d)}
-                className="flex items-center justify-center w-7 h-7 rounded-full border transition-all duration-200 hover:opacity-80"
-                style={{
-                  borderColor: "var(--border)",
-                  background: "var(--pill-bg)",
-                  color: "var(--text-secondary)",
-                }}
-                title={dark ? "Switch to light mode" : "Switch to dark mode"}
-                aria-label="Toggle dark mode"
-              >
-                {dark ? <SunIcon /> : <MoonIcon />}
-              </button>
-            </div>
-          </div>
-
-          {/* app tab strip */}
+          {/* app tab strip + dark mode toggle */}
           <nav
             className="px-5 sm:px-8 md:px-12 lg:px-16 flex items-center gap-6 sm:gap-8 border-b"
             aria-label="App navigation"
@@ -300,9 +251,74 @@ export default function Home() {
                 </button>
               );
             })}
+
+            {/* Dark mode toggle + copyright pushed to the right */}
+            <div className="ml-auto flex items-center gap-3 py-3">
+              <p className="text-[11px] tracking-wide" style={{ color: "var(--text-faint)" }}>
+                © 2026
+              </p>
+              <button
+                onClick={() => setDark((d) => !d)}
+                className="flex items-center justify-center w-7 h-7 rounded-full border transition-all duration-200 hover:opacity-80"
+                style={{
+                  borderColor: "var(--border)",
+                  background: "var(--pill-bg)",
+                  color: "var(--text-secondary)",
+                }}
+                title={dark ? "Switch to light mode" : "Switch to dark mode"}
+                aria-label="Toggle dark mode"
+              >
+                {dark ? <SunIcon /> : <MoonIcon />}
+              </button>
+            </div>
           </nav>
         </header>
       </div>
+
+      {/* ── Hero: centered name ── */}
+      <motion.div
+        className="flex flex-col items-center justify-center px-5 text-center"
+        style={{ paddingTop: "clamp(3rem, 8vw, 6rem)", paddingBottom: "clamp(2rem, 5vw, 4rem)" }}
+        initial={{ opacity: 0, y: 14 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <h1
+          className="font-light tracking-tight"
+          style={{
+            fontSize: "clamp(2.2rem, 6vw, 4.5rem)",
+            color: "var(--text-primary)",
+            lineHeight: 1.1,
+          }}
+        >
+          Harsha Chaganti
+        </h1>
+        <motion.div
+          className="flex items-center gap-2 mt-3"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.18, duration: 0.5 }}
+        >
+          <p
+            className="text-[13px] tracking-wide"
+            style={{ color: "var(--text-secondary)" }}
+          >
+            iOS Developer
+          </p>
+          <a
+            href="https://apps.apple.com/developer/harsha-chaganti"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="opacity-40 hover:opacity-90 transition-opacity duration-200"
+            title="App Store"
+          >
+            <AppStoreIcon />
+          </a>
+        </motion.div>
+      </motion.div>
+
+      {/* ── Dog divider ── */}
+      <DogDivider />
 
       {/* ── All app sections ── */}
       <main className="px-5 sm:px-8 md:px-12 lg:px-16 pb-14">
