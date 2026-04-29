@@ -5,9 +5,9 @@ import { useEffect, useRef, useState } from "react";
 // ── Constants ─────────────────────────────────────────────────────────────────
 // Source frames are all 100×100px. Feet land at y=64 in every animation.
 const SRC   = 100;   // source frame size (px)
-const SCALE = 2;     // display scale (2× for crisp pixel art)
-const DISP  = SRC * SCALE; // 200px — one displayed frame side
-const FEET  = 64 * SCALE;  // 128px — feet offset from sprite top at display scale
+const SCALE = 1.7;   // display scale
+const DISP  = SRC * SCALE; // 170px — one displayed frame side
+const FEET  = 64 * SCALE;  // 108.8px — feet offset from sprite top at display scale
 
 // All @keyframes pre-built as a static string → injected once, never re-injected
 const KEYFRAMES = `
@@ -133,10 +133,10 @@ export default function DogDivider() {
   }, []);
 
   // ── Geometry ──────────────────────────────────────────────────────────────
-  // Container: 80px tall. Line near bottom. Dog top = lineY - FEET.
-  const containerH = 80;
-  const lineY      = 72;            // px from container top
-  const dogTopPx   = lineY - FEET;  // –56px — sprite top sits above container
+  // Container: 72px tall. Line near bottom. Dog top = lineY - FEET.
+  const containerH = 72;
+  const lineY      = 64;            // px from container top
+  const dogTopPx   = lineY - FEET;  // sprite top sits above container
 
   return (
     <>
