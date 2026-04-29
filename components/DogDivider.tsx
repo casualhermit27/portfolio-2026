@@ -18,13 +18,17 @@ const KEYFRAMES = `
   @keyframes sb-walk    { from{background-position:0 0} to{background-position:-${DISP  *  8}px 0} }
   @keyframes sb-idle    { from{background-position:0 0} to{background-position:-${DISP  * 10}px 0} }
   @keyframes sb-lick    { from{background-position:0 0} to{background-position:-${DISP  *  4}px 0} }
+  @keyframes sb-stretch { from{background-position:0 0} to{background-position:-${DISP  * 10}px 0} }
+  @keyframes sb-bark    { from{background-position:0 0} to{background-position:-${DISP  *  3}px 0} }
   @keyframes sb-bar-walk{ from{background-position:0 0} to{background-position:-${BAR_W *  8}px 0} }
 `;
 
 const SPRITES = {
-  walk: { src: "/saint-bernard-walk.png", frames: 8,  dur: "0.8s",  kf: "sb-walk" },
-  idle: { src: "/saint-bernard-idle.png", frames: 10, dur: "1.0s",  kf: "sb-idle" },
-  lick: { src: "/saint-bernard-lick.png", frames: 4,  dur: "0.5s",  kf: "sb-lick" },
+  walk:    { src: "/saint-bernard-walk.png",    frames: 8,  dur: "0.8s", kf: "sb-walk",    cycleMs: 800 },
+  idle:    { src: "/saint-bernard-idle.png",    frames: 10, dur: "1.0s", kf: "sb-idle",    cycleMs: 1000 },
+  lick:    { src: "/saint-bernard-lick.png",    frames: 4,  dur: "0.6s", kf: "sb-lick",    cycleMs: 600 },
+  stretch: { src: "/saint-bernard-stretch.png", frames: 10, dur: "1.1s", kf: "sb-stretch", cycleMs: 1100 },
+  bark:    { src: "/saint-bernard-bark.png",    frames: 3,  dur: "0.45s", kf: "sb-bark",   cycleMs: 900 },
 } as const;
 
 type AnimType = keyof typeof SPRITES;
@@ -68,8 +72,17 @@ export default function DogDivider() {
   const lastTRef       = useRef(0);
   const walkMsRef      = useRef(0);      // ms spent walking in current crossing
   const animStateRef   = useRef<AnimType>("walk");
+  const actionQueueRef = useRef<AnimType[]>([]);
   const nextSwitchRef  = useRef(0);      // RAF timestamp for next state switch
   const freshLoopRef   = useRef(true);   // true right after a loop reset
+
+  // Warm sprite sheets before the first pause so image swaps do not flash.
+  useEffect(() => {
+    Object.values(SPRITES).forEach(({ src }) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
 
   // ── Scroll tracking ───────────────────────────────────────────────────────
   useEffect(() => {
@@ -95,6 +108,7 @@ export default function DogDivider() {
     walkMsRef.current     = 0;
     freshLoopRef.current  = true;
     animStateRef.current  = "walk";
+    actionQueueRef.current = [];
     setAnim("walk");
 
     const tick = (t: number) => {
@@ -132,24 +146,38 @@ export default function DogDivider() {
           dogRef.current.style.left = `${leftPx}px`;
         }
 
-        // Clear "fresh loop" flag once dog is 15% into its crossing
-        if (freshLoopRef.current && progress > 0.15) {
+        // Clear "fresh loop" flag once dog is safely into the crossing.
+        if (freshLoopRef.current && progress > 0.35) {
           freshLoopRef.current = false;
         }
 
         // Pause only when: dog is in mid-screen (30–70%), not freshly looped, timer ready
         if (!freshLoopRef.current && progress > 0.30 && progress < 0.70 && t >= nextSwitchRef.current) {
-          const next: AnimType = Math.random() < 0.55 ? "idle" : "lick";
+          const sequence: AnimType[] =
+            Math.random() < 0.5
+              ? ["idle", "lick", "bark", "stretch", "idle"]
+              : ["idle", "stretch", "bark", "lick", "idle"];
+          const [next, ...rest] = sequence;
+
+          actionQueueRef.current = rest;
           animStateRef.current = next;
           setAnim(next);
-          nextSwitchRef.current = t + 1500 + Math.random() * 1500;
+          nextSwitchRef.current = t + SPRITES[next].cycleMs;
         }
       } else {
-        // Paused — don't move dog
+        // Paused — don't move dog. Complete each sprite cycle before switching.
         if (t >= nextSwitchRef.current) {
-          animStateRef.current  = "walk";
-          setAnim("walk");
-          nextSwitchRef.current = t + WALK_MS * 0.35 + Math.random() * (WALK_MS * 0.3);
+          const next = actionQueueRef.current.shift();
+
+          if (next) {
+            animStateRef.current = next;
+            setAnim(next);
+            nextSwitchRef.current = t + SPRITES[next].cycleMs;
+          } else {
+            animStateRef.current  = "walk";
+            setAnim("walk");
+            nextSwitchRef.current = t + WALK_MS * 0.35 + Math.random() * (WALK_MS * 0.3);
+          }
         }
       }
 
@@ -160,6 +188,7 @@ export default function DogDivider() {
     return () => {
       if (rafRef.current !== undefined) cancelAnimationFrame(rafRef.current);
       nextSwitchRef.current = 0; // reset so it re-seeds next time
+      actionQueueRef.current = [];
     };
   }, [isScrollMode]);
 
