@@ -76,7 +76,7 @@
   width: 7px;
   transform: translateX(-50%);
   border-radius: 999px;
-  background: #0f0f0f;
+  background: #090909;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
@@ -97,7 +97,7 @@
   min-height: 42px;
   padding: 0 12px;
   background: #000000;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 .jott-help-btn {
@@ -108,7 +108,7 @@
   height: 26px;
   border: none;
   border-radius: 999px;
-  background: #0f0f0f;
+  background: #111111;
   color: #616161;
   appearance: none;
   cursor: pointer;
@@ -131,9 +131,9 @@
 
 .jott-popover-input {
   display: flex;
-  min-height: 76px;
+  min-height: 90px;
   align-items: center;
-  background: #0f0f0f;
+  background: #000000;
   padding: 0 22px;
   font-family: var(--sans);
   font-size: 17px;
@@ -165,7 +165,7 @@
 
 .jott-floating-actions {
   position: absolute;
-  top: 184px;
+  top: 154px;
   left: 50%;
   z-index: 41;
   display: flex;
@@ -205,33 +205,6 @@
 .jott-tool-pill svg {
   width: 17px;
   height: 17px;
-}
-
-.jott-panel-status {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  min-height: 46px;
-  padding: 0 22px;
-  border-top: 1px solid rgba(255, 255, 255, 0.07);
-  background: #000000;
-  color: #616161;
-  font-family: var(--mono);
-  font-size: 12px;
-  letter-spacing: 0.03em;
-}
-
-.jott-panel-status kbd {
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 6px;
-  background: #0f0f0f;
-  padding: 3px 8px;
-  color: #616161;
-  font: inherit;
-}
-
-.jott-save-hint {
-  margin-left: auto;
 }
 
 /* hero */
@@ -443,7 +416,7 @@
 
   .jott-popover-input {
     font-size: 19px;
-    min-height: 76px;
+    min-height: 90px;
     padding: 0 22px;
   }
 
@@ -466,15 +439,8 @@
     font-size: 16px;
   }
 
-  .jott-panel-status {
-    min-height: 40px;
-    padding: 0 14px;
-    font-size: 10px;
-    gap: 6px;
-  }
-
   .jott-floating-actions {
-    top: 176px;
+    top: 146px;
   }
 
   .jott-main {

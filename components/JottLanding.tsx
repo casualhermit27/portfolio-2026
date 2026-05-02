@@ -140,9 +140,9 @@ export default function JottLanding() {
             initial={false}
             animate={{
               width: popoverOpen ? 460 : 178,
-              height: popoverOpen ? 170 : 32,
-              borderBottomLeftRadius: popoverOpen ? 12 : 16,
-              borderBottomRightRadius: popoverOpen ? 12 : 16,
+              height: popoverOpen ? 132 : 32,
+              borderBottomLeftRadius: popoverOpen ? 8 : 12,
+              borderBottomRightRadius: popoverOpen ? 8 : 12,
             }}
             transition={popoverOpen ? notchOpenTransition : notchCloseTransition}
           >
@@ -159,15 +159,9 @@ export default function JottLanding() {
               </div>
               <div className="jott-popover-input">
                 <span>
-                  {typedText || <span className="jott-placeholder">What&apos;s on your mind?</span>}
+                  {typedText || <span className="jott-placeholder">Add a meeting note...</span>}
                 </span>
                 <span className="jott-cursor" aria-hidden />
-              </div>
-              <div className="jott-panel-status">
-                <span>type</span>
-                <kbd>/search</kbd>
-                <span>to find a note</span>
-                <span className="jott-save-hint">↵ save</span>
               </div>
             </div>
           </motion.div>
